@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'screens/welcome/welcome_screen.dart';
+import 'constants.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,8 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Social Habit App',
-      home: BottomNavigator(),
+      //home: BottomNavigator(),
+      home: WelcomeScreen(),
+      theme: ThemeData(
+        primaryColor: kPrimaryColor,
+        scaffoldBackgroundColor: Colors.white,
+      ),
     );
   }
 }
@@ -34,27 +42,33 @@ class BottomNavigator extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<BottomNavigator> {
-
-
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text('Search',style: optionStyle,),
-    Text('Create',style: optionStyle,),
-    Text('My Groups',style: optionStyle,),
-    Text('Profile',style: optionStyle,),
-
+    Text(
+      'Search',
+      style: optionStyle,
+    ),
+    Text(
+      'Create',
+      style: optionStyle,
+    ),
+    Text(
+      'My Groups',
+      style: optionStyle,
+    ),
+    Text(
+      'Profile',
+      style: optionStyle,
+    ),
   ];
 
-
-  void onItemTapped(int index){
+  void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,37 +80,38 @@ class _MyHomePageState extends State<BottomNavigator> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-
-          title: const Text('BottomNavigationBar Sample'),
+        title: const Text('BottomNavigationBar Sample'),
       ),
       body: Center(
-
         child: _widgetOptions.elementAt(_selectedIndex),
-      ),bottomNavigationBar: BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+            icon: Icon(Icons.home),
             title: Text('Search'),
           ),
           BottomNavigationBarItem(
-          icon: Icon(Icons.business),
-          title: Text('Create'),
+            icon: Icon(Icons.business),
+            title: Text('Create'),
           ),
           BottomNavigationBarItem(
-          icon: Icon(Icons.school),
-          title: Text('My Groups'),
+            icon: Icon(Icons.school),
+            title: Text('My Groups'),
           ),
           BottomNavigationBarItem(
-          icon: Icon(Icons.business),
-          title: Text('Profile'),
+            icon: Icon(Icons.business),
+            title: Text('Profile'),
           ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blue[800],
-      unselectedItemColor: Colors.grey[800],
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue[800],
+        unselectedItemColor: Colors.grey[800],
 
-      onTap: onItemTapped,// This trailing comma makes auto-formatting nicer for build methods.
-    ),);
+        onTap:
+            onItemTapped, // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+    );
   }
 }
