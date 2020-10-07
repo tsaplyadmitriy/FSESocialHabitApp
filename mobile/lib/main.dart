@@ -14,7 +14,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Social Habit App',
       //home: BottomNavigator(),
-      home: WelcomeScreen(),
+      home: ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: WelcomeScreen()),
+
       theme: ThemeData(
         primaryColor:  constants.kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
