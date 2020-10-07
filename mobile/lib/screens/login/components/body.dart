@@ -42,7 +42,7 @@ class Body extends StatelessWidget {
           text: "LOGIN",
           textColor: Colors.white,
           press: () async{
-            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => sBottomNavigator()));
+            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => BottomNavigator()));
 
 
           },
