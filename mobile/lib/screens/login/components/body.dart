@@ -4,6 +4,7 @@ import 'package:social_habit_app/components/existing_account_check.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
 import 'package:social_habit_app/components/rounded_password_field.dart';
+import 'package:social_habit_app/screens/bottomnav/bottomnav.dart';
 import 'package:social_habit_app/screens/login/components/background.dart';
 import 'package:social_habit_app/screens/signup/signup_screen.dart';
 
@@ -40,7 +41,11 @@ class Body extends StatelessWidget {
         RoundedButton(
           text: "LOGIN",
           textColor: Colors.white,
-          press: () {},
+          press: () async{
+            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => sBottomNavigator()));
+
+
+          },
         ),
         ExistingAccountCheck(
           press: () {
