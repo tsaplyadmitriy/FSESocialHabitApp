@@ -21,10 +21,18 @@ class _FindGroupScreen extends State<FindGroupScreen> {
     testList.clear();
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
-          "Group" + i.toString(),
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-          ["smoking", "addiction"],
-          ["IT", "swimming"],
+          "Meme " + i.toString(),
+          "Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать ",
+          [
+            "porn",
+            "masturbation",
+            "anime",
+            "heroin",
+            "videogames",
+            "movie",
+            "series"
+          ],
+          ["IT", "JS", "SU"],
           3,
           7));
     }
@@ -37,90 +45,171 @@ class _FindGroupScreen extends State<FindGroupScreen> {
             return Container(
                 width: double.infinity,
                 //height: 100,
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    margin:
-                        EdgeInsets.only(bottom: 5, top: 5, right: 10, left: 10),
-                    child: InkWell(
-                        onTap: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (BuildContext buildContext) =>
-                                  GroupCardDialog(group));
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(
-                                bottom: 10, top: 7, right: 10, left: 10),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                      children: group.tags.map((String string) {
-                                    return Container(
-                                        margin: EdgeInsets.only(right: 5),
-                                        decoration: BoxDecoration(
-                                            gradient: constants.gradient(),
-                                            borderRadius:
-                                                BorderRadius.circular(10.0)),
-                                        child: Card(
-                                            margin: EdgeInsets.only(
-                                                bottom: 3,
-                                                top: 3,
-                                                right: 8,
-                                                left: 8),
-                                            color: Colors.transparent,
-                                            elevation: 0,
-                                            child: Container(
-                                              // decoration: BoxDecoration(gradient: constants.gradient()),
-                                              child: Text(
-                                                string,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white),
-                                              ),
-                                            )));
-                                  }).toList()),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Container(
-                                      //margin: EdgeInsets.only(left:5),
-                                      child: Text(
-                                    group.groupName,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  )),
-                                  Text(
-                                      "Free places: " +
-                                          (group.maxParticipants -
-                                                  group.participants)
-                                              .toString() +
-                                          " / " +
-                                          group.maxParticipants.toString(),
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300)),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    children:
-                                        group.preferences.map((String pref) {
-                                      return Text(
-                                        "#" + pref + " ",
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
-                                      );
-                                    }).toList(),
-                                  )
-                                ])))));
+                child: GroupCard(
+                    group: group,
+                    function: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext buildContext) =>
+                              GroupCardDialog(group));
+                    }));
           }).toList()),
         ));
+  }
+}
+
+class GroupCard extends StatelessWidget {
+  final Group group;
+  final Function function;
+  const GroupCard({
+    Key key,
+    this.group,
+    this.function,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size; // h and w of s    return Card(
+
+    return Card(
+      elevation: 15,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      child: InkWell(
+        onTap: function,
+        borderRadius: BorderRadius.circular(20.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            TagsHorizontalScroll(group: group),
+            Row(children: [
+              Container(
+                width: size.width * 0.65,
+                alignment: Alignment.centerLeft,
+                child: Column(children: [
+                  // SizedBox(
+                  //   height: size.height * 0.005,
+                  // ),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      //margin: EdgeInsets.only(left:5),
+                      child: Text(
+                        group.groupName,
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      )),
+                  Row(children: [
+                    AvatarRound(size: size),
+                    AvatarRound(size: size),
+                    AvatarRound(size: size),
+                    AvatarRound(size: size),
+                    AvatarRound(size: size),
+                    AvatarRound(size: size),
+                    AvatarRound(size: size),
+                  ])
+                  // Text(
+                  //     "Free places: " +
+                  //         (group.maxParticipants - group.participants)
+                  //             .toString() +
+                  //         " / " +
+                  //         group.maxParticipants.toString(),
+                  //     style:
+                  //         TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+                  // SizedBox(
+                  //   height: size.height * 0.005,
+                  // ),
+                ]),
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                width: size.width * 0.2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    "assets/images/grey.png",
+                    width: size.width * 0.2,
+                    alignment: Alignment.centerRight,
+                  ),
+                ),
+              ),
+            ]),
+
+            /*  Row(
+              children: group.preferences.map((String pref) {
+                return Text(
+                  "#" + pref + " ",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300),
+                );
+              }).toList(),
+            ) */
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+class TagsHorizontalScroll extends StatelessWidget {
+  const TagsHorizontalScroll({
+    Key key,
+    @required this.group,
+  }) : super(key: key);
+
+  final Group group;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+          children: group.tags.map((String string) {
+        return Container(
+            margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+            decoration: BoxDecoration(
+                gradient: constants.gradient(),
+                borderRadius: BorderRadius.circular(8.0)),
+            child: Card(
+                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                color: Colors.transparent,
+                elevation: 0,
+                child: Container(
+                  // decoration: BoxDecoration(gradient: constants.gradient()),
+                  child: Text(
+                    string,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white),
+                  ),
+                )));
+      }).toList()),
+    );
+  }
+}
+
+class AvatarRound extends StatelessWidget {
+  const AvatarRound({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(100),
+      child: Image.asset(
+        "assets/images/avatar.jpg",
+        width: size.width * 0.07,
+        //alignment: Alignment.centerRight,
+      ),
+    );
   }
 }
