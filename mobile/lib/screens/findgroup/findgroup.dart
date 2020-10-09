@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/screens/findgroup/group_card_page.dart';
 import 'package:social_habit_app/group.dart';
@@ -22,9 +23,9 @@ class _FindGroupScreen extends State<FindGroupScreen> {
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
           "Meme " + i.toString(),
-          "Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать ",
+          "Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать ",
           [
-            "porn",
+            "corn",
             "masturbation",
             "anime",
             "heroin",
@@ -81,60 +82,13 @@ class GroupCard extends StatelessWidget {
         onTap: function,
         borderRadius: BorderRadius.circular(20.0),
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TagsHorizontalScroll(group: group),
             Row(children: [
-              Container(
-                width: size.width * 0.65,
-                alignment: Alignment.centerLeft,
-                child: Column(children: [
-                  // SizedBox(
-                  //   height: size.height * 0.005,
-                  // ),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      //margin: EdgeInsets.only(left:5),
-                      child: Text(
-                        group.groupName,
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      )),
-                  Row(children: [
-                    AvatarRound(size: size),
-                    AvatarRound(size: size),
-                    AvatarRound(size: size),
-                    AvatarRound(size: size),
-                    AvatarRound(size: size),
-                    AvatarRound(size: size),
-                    AvatarRound(size: size),
-                  ])
-                  // Text(
-                  //     "Free places: " +
-                  //         (group.maxParticipants - group.participants)
-                  //             .toString() +
-                  //         " / " +
-                  //         group.maxParticipants.toString(),
-                  //     style:
-                  //         TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
-                  // SizedBox(
-                  //   height: size.height * 0.005,
-                  // ),
-                ]),
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                width: size.width * 0.2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
-                    "assets/images/grey.png",
-                    width: size.width * 0.2,
-                    alignment: Alignment.centerRight,
-                  ),
-                ),
-              ),
+              GroupCard_NameAndAvatars(size: size, group: group),
+              GroupCard_Image(size: size),
             ]),
 
             /*  Row(
@@ -155,40 +109,78 @@ class GroupCard extends StatelessWidget {
   }
 }
 
-class TagsHorizontalScroll extends StatelessWidget {
-  const TagsHorizontalScroll({
+class GroupCard_Image extends StatelessWidget {
+  const GroupCard_Image({
     Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerRight,
+      width: size.width * 0.2,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Image.asset(
+          "assets/images/inno_campus.png",
+          width: size.width * 0.2,
+          alignment: Alignment.centerRight,
+        ),
+      ),
+    );
+  }
+}
+
+class GroupCard_NameAndAvatars extends StatelessWidget {
+  const GroupCard_NameAndAvatars({
+    Key key,
+    @required this.size,
     @required this.group,
   }) : super(key: key);
 
+  final Size size;
   final Group group;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-          children: group.tags.map((String string) {
-        return Container(
-            margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-            decoration: BoxDecoration(
-                gradient: constants.gradient(),
-                borderRadius: BorderRadius.circular(8.0)),
-            child: Card(
-                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                color: Colors.transparent,
-                elevation: 0,
-                child: Container(
-                  // decoration: BoxDecoration(gradient: constants.gradient()),
-                  child: Text(
-                    string,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
-                  ),
-                )));
-      }).toList()),
+    return Container(
+      width: size.width * 0.65,
+      alignment: Alignment.centerLeft,
+      child: Column(children: [
+        // SizedBox(
+        //   height: size.height * 0.005,
+        // ),
+        Container(
+            alignment: Alignment.centerLeft,
+            //margin: EdgeInsets.only(left:5),
+            child: Text(
+              group.groupName,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            )),
+        Row(children: [
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+        ])
+        // Text(
+        //     "Free places: " +
+        //         (group.maxParticipants - group.participants)
+        //             .toString() +
+        //         " / " +
+        //         group.maxParticipants.toString(),
+        //     style:
+        //         TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+        // SizedBox(
+        //   height: size.height * 0.005,
+        // ),
+      ]),
     );
   }
 }
@@ -203,12 +195,15 @@ class AvatarRound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(100),
-      child: Image.asset(
-        "assets/images/avatar.jpg",
-        width: size.width * 0.07,
-        //alignment: Alignment.centerRight,
+    return Container(
+      margin: EdgeInsets.only(right: 2),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(300.0),
+        child: Image.asset(
+          "assets/images/avatar.png",
+          width: size.width * 0.07,
+          //alignment: Alignment.centerRight,
+        ),
       ),
     );
   }
