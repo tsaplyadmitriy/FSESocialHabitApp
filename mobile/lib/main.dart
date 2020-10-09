@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 
       theme: ThemeData(
         primaryColor:  constants.kPrimaryColor,
-        scaffoldBackgroundColor: Colors.white,
+       // scaffoldBackgroundColor: constants.backgroundColor,
       ),
     );
   }
