@@ -5,17 +5,17 @@ import 'package:social_habit_app/constants.dart';
 class TagsHorizontalScroll extends StatelessWidget {
   const TagsHorizontalScroll({
     Key key,
-    @required this.group,
+    @required this.list,
   }) : super(key: key);
 
-  final Group group;
+  final List<String> list;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-          children: group.tags.map((String string) {
+          children: list.map((String string) {
         return Container(
             margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
             decoration: BoxDecoration(
