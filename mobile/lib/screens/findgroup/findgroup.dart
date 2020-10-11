@@ -22,16 +22,12 @@ class _FindGroupScreen extends State<FindGroupScreen> {
     testList.clear();
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
-          "Meme " + i.toString(),
-          "Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать ",
+          "Group " + i.toString(),
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent congue interdum dolor, et ultricies urna ullamcorper eget. Morbi tempor, odio sit amet suscipit posuere, mi lacus condimentum nisl, vitae sagittis velit arcu eu nunc. Curabitur fringilla tortor ac eros iaculis placerat. Maecenas ultricies accumsan turpis, et cursus neque ullamcorper nec. Proin ut fringilla magna, eget sodales lacus. Donec massa erat, interdum vel ultrices ut, ullamcorper eget velit. Pellentesque tincidunt quam ut lorem laoreet, ac cursus mauris dignissim. Proin sit amet dignissim eros. Vestibulum ut ex sit amet arcu finibus posuere. Duis vestibulum dignissim mauris, convallis faucibus metus feugiat et. Sed venenatis mauris id nibh mattis imperdiet. Curabitur posuere imperdiet tempus. Donec pretium ipsum nisi.",
           [
-            "corn",
-            "masturbation",
-            "anime",
-            "heroin",
-            "videogames",
-            "movie",
-            "series"
+            "smoking",
+            "alcohol",
+            "junk food",
           ],
           ["IT", "JS", "SU"],
           3,
