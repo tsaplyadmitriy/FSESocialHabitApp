@@ -2,7 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/constants.dart';
+import 'package:social_habit_app/screens/creategroup/creategroup.dart';
 import 'package:social_habit_app/screens/findgroup/findgroup.dart';
+import 'package:social_habit_app/screens/mygroups/mygroups.dart';
+import 'package:social_habit_app/screens/profile/profile.dart';
 
 class BottomNavigator extends StatefulWidget {
   BottomNavigator({Key key, this.title}) : super(key: key);
@@ -22,18 +25,10 @@ class _MyHomePageState extends State<BottomNavigator> {
   static  List<Widget> _widgetOptions = <Widget>[
 
     FindGroupScreen(),
-    Text(
-      'Create',
-      style: optionStyle,
-    ),
-    Text(
-      'My Groups',
-      style: optionStyle,
-    ),
-    Text(
-      'Profile',
-      style: optionStyle,
-    ),
+    CreateGroupScreen(),
+    MyGroupsScreen(),
+    ProfileScreen()
+
   ];
 
   void onItemTapped(int index) {
@@ -51,6 +46,7 @@ class _MyHomePageState extends State<BottomNavigator> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+
       appBar: AppBar(
 
         title:  Text(pageHeaders.elementAt(_selectedIndex)),

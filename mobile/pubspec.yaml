@@ -39,6 +39,14 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  fonts:
+    - family: ProductSans
+      fonts:
+        - asset: assets/fonts/ProductSans-Regular.ttf
+        - asset: assets/fonts/ProductSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/ProductSans-Italic.ttf
+          style: italic
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

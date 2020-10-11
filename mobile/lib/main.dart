@@ -15,14 +15,13 @@ class MyApp extends StatelessWidget {
       title: 'Social Habit App',
       //home: BottomNavigator(),
       home: ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: WelcomeScreen()),
+          borderRadius: BorderRadius.circular(20.0), child: WelcomeScreen()),
 
       theme: ThemeData(
-        primaryColor:  constants.kPrimaryColor,
-        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'ProductSans',
+        primaryColor: constants.kPrimaryColor,
+        // scaffoldBackgroundColor: constants.backgroundColor,
       ),
     );
   }
 }
-
