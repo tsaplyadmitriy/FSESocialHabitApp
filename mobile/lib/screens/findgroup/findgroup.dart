@@ -34,7 +34,7 @@ class _FindGroupScreen extends State<FindGroupScreen> {
           7));
     }
     return Container(
-        color: constants.backgroundColor,
+        color: Constants.backgroundColor,
         // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
         child: SingleChildScrollView(
           child: Column(
@@ -83,8 +83,8 @@ class GroupCard extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TagsHorizontalScroll(group: group),
             Row(children: [
-              GroupCard_NameAndAvatars(size: size, group: group),
-              GroupCard_Image(size: size),
+              GroupCardNameAndAvatars(size: size, group: group),
+              GroupCardImage(size: size),
             ]),
 
             /*  Row(
@@ -105,8 +105,8 @@ class GroupCard extends StatelessWidget {
   }
 }
 
-class GroupCard_Image extends StatelessWidget {
-  const GroupCard_Image({
+class GroupCardImage extends StatelessWidget {
+  const GroupCardImage({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -130,8 +130,8 @@ class GroupCard_Image extends StatelessWidget {
   }
 }
 
-class GroupCard_NameAndAvatars extends StatelessWidget {
-  const GroupCard_NameAndAvatars({
+class GroupCardNameAndAvatars extends StatelessWidget {
+  const GroupCardNameAndAvatars({
     Key key,
     @required this.size,
     @required this.group,

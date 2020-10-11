@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/constants.dart';
@@ -19,16 +18,19 @@ class BottomNavigator extends StatefulWidget {
 class _MyHomePageState extends State<BottomNavigator> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  static List<String>pageHeaders = ["Search","Create","My groups","Profile"];
-  static  List<Widget> _widgetOptions = <Widget>[
-
+  static List<String> pageHeaders = [
+    "Search",
+    "Create",
+    "My groups",
+    "Profile"
+  ];
+  static List<Widget> _widgetOptions = <Widget>[
     FindGroupScreen(),
     CreateGroupScreen(),
     MyGroupsScreen(),
     ProfileScreen()
-
   ];
 
   void onItemTapped(int index) {
@@ -46,25 +48,24 @@ class _MyHomePageState extends State<BottomNavigator> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-
       appBar: AppBar(
-
-        title:  Text(pageHeaders.elementAt(_selectedIndex)),
+        title: Text(pageHeaders.elementAt(_selectedIndex)),
         shape: ContinuousRectangleBorder(
             borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))),
-        actions: (_selectedIndex==0)
-            ?<Widget>[
-          IconButton(icon: Icon(Icons.filter_list_alt), onPressed: (){
-
-            //filter
-          })
-        ]   :   [],
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10))),
+        actions: (_selectedIndex == 0)
+            ? <Widget>[
+                IconButton(
+                    icon: Icon(Icons.filter_list_alt),
+                    onPressed: () {
+                      //filter
+                    })
+              ]
+            : [],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
-
       bottomNavigationBar: BottomNavigationBar(
-
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -85,13 +86,12 @@ class _MyHomePageState extends State<BottomNavigator> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: constants.kPrimaryColor,
+        selectedItemColor: Constants.kPrimaryColor,
         unselectedItemColor: Colors.grey[800],
 
         onTap:
-        onItemTapped, // This trailing comma makes auto-formatting nicer for build methods.
+            onItemTapped, // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
   }
 }
-

@@ -19,7 +19,7 @@ class TagsHorizontalScroll extends StatelessWidget {
         return Container(
             margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
             decoration: BoxDecoration(
-                gradient: constants.gradient(),
+                gradient: Constants.gradient(),
                 borderRadius: BorderRadius.circular(8.0)),
             child: Card(
                 margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),

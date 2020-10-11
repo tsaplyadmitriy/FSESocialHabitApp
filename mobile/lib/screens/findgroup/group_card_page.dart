@@ -55,7 +55,7 @@ class GroupCardDialog extends StatelessWidget {
               ),
               SizedBox(height: size.height * 0.01),
               GroupCardPage_preferences(group: group),
-              GroupCardPage_description(group: group),
+              GroupCardPagedescription(group: group),
               Container(
                   alignment: Alignment.bottomCenter,
                   child: RoundedButton(
@@ -63,7 +63,7 @@ class GroupCardDialog extends StatelessWidget {
                     press: () {
                       Navigator.of(context).pop(true);
                     },
-                    color: constants.kPrimaryColor,
+                    color: Constants.kPrimaryColor,
                   )
                   // child: FlatButton(
                   //   // borderSide: BorderSide(color: Constants.primary, width: 2),
@@ -94,8 +94,8 @@ class GroupCardDialog extends StatelessWidget {
   }
 }
 
-class GroupCardPage_description extends StatelessWidget {
-  const GroupCardPage_description({
+class GroupCardPagedescription extends StatelessWidget {
+  const GroupCardPagedescription({
     Key key,
     @required this.group,
   }) : super(key: key);
