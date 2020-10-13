@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
 
       theme: ThemeData(
         fontFamily: 'ProductSans',
-        primaryColor: constants.kPrimaryColor,
+
+        primaryColor: Constants.kPrimaryColor,
         // scaffoldBackgroundColor: constants.backgroundColor,
       ),
     );

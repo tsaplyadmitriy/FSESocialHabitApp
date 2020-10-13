@@ -22,22 +22,25 @@ class _FindGroupScreen extends State<FindGroupScreen> {
     testList.clear();
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
+
           "Group # " + i.toString(),
           "Description of this particular group, in this textfield some large text should be produced, but i don't know what to write, so I will just write some words that have no sense on general and in particular.",
           [
             "smoking",
             "addiction",
 
-            "videogames",
+            "videogames",],
 
-          ],
+
           ["IT", "hashtag", "not_a_hashtag"],
           3,
           7));
     }
     return Container(
-        color: constants.backgroundColor,
-         margin: EdgeInsets.only(bottom: 0, top: 10, right: 0, left: 0),
+
+        color: Constants.backgroundColor,
+        // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
+
         child: SingleChildScrollView(
           child: Column(
               children: testList.map((Group group) {
@@ -83,10 +86,10 @@ class GroupCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            TagsHorizontalScroll(group: group),
+            TagsHorizontalScroll(list: group.tags),
             Row(children: [
-              GroupCard_NameAndAvatars(size: size, group: group),
-              GroupCard_Image(size: size),
+              GroupCardNameAndAvatars(size: size, group: group),
+              GroupCardImage(size: size),
             ]),
 
             /*  Row(
@@ -107,8 +110,8 @@ class GroupCard extends StatelessWidget {
   }
 }
 
-class GroupCard_Image extends StatelessWidget {
-  const GroupCard_Image({
+class GroupCardImage extends StatelessWidget {
+  const GroupCardImage({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -132,8 +135,8 @@ class GroupCard_Image extends StatelessWidget {
   }
 }
 
-class GroupCard_NameAndAvatars extends StatelessWidget {
-  const GroupCard_NameAndAvatars({
+class GroupCardNameAndAvatars extends StatelessWidget {
+  const GroupCardNameAndAvatars({
     Key key,
     @required this.size,
     @required this.group,
