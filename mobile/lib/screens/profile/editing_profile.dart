@@ -12,6 +12,7 @@ class ProfileEditing extends StatefulWidget {
 }
 
 class _ProfileEditing extends State<ProfileEditing> {
+  // TODO: integrate this with API so the tags are being passed here
   ProfileData profile =
       new ProfileData.withtags("", "", "", ["item1", "item2"]);
 
@@ -22,7 +23,6 @@ class _ProfileEditing extends State<ProfileEditing> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
-              // TODO: integrate this with API
               profile = null;
 
               Navigator.pop(context, profile);
@@ -79,8 +79,8 @@ class _ProfileEditing extends State<ProfileEditing> {
                                   child: Chip(
                                     backgroundColor:
                                         Constants.kPrimaryLightColor,
-                                    //label: Text(tag),
-                                    label: Text("test"),
+                                    label: Text(tag),
+                                    //label: Text("test"),
                                     onDeleted: () {
                                       setState(() {
                                         profile.tags.remove(tag);
@@ -99,7 +99,8 @@ class _ProfileEditing extends State<ProfileEditing> {
                               String newTag = await _newTag(context);
                               print(newTag);
                               setState(() {
-                                profile.tags.add(newTag);
+                                if (newTag != "" && newTag != null)
+                                  profile.tags.add(newTag);
                               });
                             },
                           )
@@ -166,7 +167,7 @@ class ProfileEditingTextFields extends StatelessWidget {
   }
 }
 */
-_newTag(BuildContext context) async {
+Future<String> _newTag(BuildContext context) async {
   String editTag;
   await showDialog<String>(
     context: context,
@@ -202,4 +203,5 @@ _newTag(BuildContext context) async {
       ],
     ),
   );
+  return editTag;
 }

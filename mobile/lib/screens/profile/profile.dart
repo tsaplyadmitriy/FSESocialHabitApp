@@ -25,27 +25,16 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreen createState() => _ProfileScreen();
 }
 
-List<Group> testList = [];
-ProfileData profile = new ProfileData("Pavel Durov", "@durov",
-    "As I’m turning 36, some people ask how I manage to look younger than my age. I’ve asked the same question of many people who age well (from Jared Leto to a random fitness trainer who looks like 25 at 50). Here’s what all of these young-looking individuals do (and don’t):");
+//List<Group> testList = [];
+ProfileData profile = new ProfileData.withtags(
+    "Pavel Durov",
+    "@durov",
+    "As I’m turning 36, some people ask how I manage to look younger than my age. I’ve asked the same question of many people who age well (from Jared Leto to a random fitness trainer who looks like 25 at 50). Here’s what all of these young-looking individuals do (and don’t):",
+    ["tag1", "tag2"]);
 
 class _ProfileScreen extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    testList.clear();
-    for (int i = 0; i < 10; i++) {
-      testList.add(new Group(
-          "Group " + i.toString(),
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent congue interdum dolor, et ultricies urna ullamcorper eget. Morbi tempor, odio sit amet suscipit posuere, mi lacus condimentum nisl, vitae sagittis velit arcu eu nunc. Curabitur fringilla tortor ac eros iaculis placerat. Maecenas ultricies accumsan turpis, et cursus neque ullamcorper nec. Proin ut fringilla magna, eget sodales lacus. Donec massa erat, interdum vel ultrices ut, ullamcorper eget velit. Pellentesque tincidunt quam ut lorem laoreet, ac cursus mauris dignissim. Proin sit amet dignissim eros. Vestibulum ut ex sit amet arcu finibus posuere. Duis vestibulum dignissim mauris, convallis faucibus metus feugiat et. Sed venenatis mauris id nibh mattis imperdiet. Curabitur posuere imperdiet tempus. Donec pretium ipsum nisi.",
-          [
-            "smoking",
-            "alcohol",
-            "junk food",
-          ],
-          ["IT", "JS", "SU"],
-          3,
-          7));
-    }
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
       body: Column(
@@ -81,14 +70,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                     width: size.width,
                     child: Center(
                       child: TagsHorizontalScroll(
-                        list: [
-                          "test",
-                          "test",
-                          "test",
-                          "test",
-                          "test",
-                          "test",
-                        ],
+                        list: profile.tags,
                       ),
                     ),
                   ),
@@ -197,21 +179,17 @@ _editingResult(BuildContext context) async {
   } else {
     if (profile.name == "") {
       profile.name = saved.name;
-      print("backup1");
+      // print("backup1");
     }
     if (profile.telegram == "") {
       profile.telegram = saved.telegram;
-      print("backup2");
+      //  print("backup2");
     }
     if (profile.aboutMe == "") {
       profile.aboutMe = saved.aboutMe;
-      print("backup3");
+      // print("backup3");
     }
   }
-  if (profile != saved)
-    print(profile.name + " " + profile.telegram + " " + profile.aboutMe);
-  else
-    print("no changes");
 
   //  print(profile.name + " " + profile.telegram + " " + profile.aboutMe);
 }
