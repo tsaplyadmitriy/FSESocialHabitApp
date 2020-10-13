@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const kPrimaryColor = Color(0xFF5B9A86);
-  static const kPrimaryLightColor = Color(0xFFA5CABE);
-  static const kSecondaryColor = Color(0xff4a517d);
-  static const anotherColor = Color(0xff1A535C);
+  static const kAccentColor = Color(0xFFe63946);
+  static const kPrimaryColor = Color(0xFF1d3557);
+  static const kPrimaryLightColor = Color(0xFFa8dadc);
+  static const kSecondaryColor = Color(0xff457b9d);
+
   static Color backgroundColor = Color.fromARGB(100, 242, 242, 242);
   static LinearGradient gradient() {
     return LinearGradient(colors: [
-      anotherColor,
       kSecondaryColor,
+      kPrimaryColor,
     ], begin: Alignment.topLeft, end: Alignment.bottomRight);
   }
 }

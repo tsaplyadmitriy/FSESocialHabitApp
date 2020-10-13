@@ -46,13 +46,8 @@ class _ProfileScreen extends State<ProfileScreen> {
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 30),
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                  Constants.kPrimaryColor,
-                  Constants.kSecondaryColor
-                ])),
+              gradient: Constants.gradient(),
+            ),
             child: Center(
               child: Wrap(
                 direction: Axis.vertical,
@@ -90,7 +85,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   Text(
                     "About me:",
                     style: TextStyle(
-                        color: Colors.redAccent,
+                        color: Constants.kAccentColor,
                         fontStyle: FontStyle.normal,
                         fontSize: 28.0),
                   ),
