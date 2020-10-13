@@ -22,24 +22,22 @@ class _FindGroupScreen extends State<FindGroupScreen> {
     testList.clear();
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
-          "Meme " + i.toString(),
-          "Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать Сижу значит в джунглях Вьетнама, и вдруг деревья начинают по вьетконговски разговаривать ",
+          "Group # " + i.toString(),
+          "Description of this particular group, in this textfield some large text should be produced, but i don't know what to write, so I will just write some words that have no sense on general and in particular.",
           [
-            "corn",
-            "masturbation",
-            "anime",
-            "heroin",
+            "smoking",
+            "addiction",
+
             "videogames",
-            "movie",
-            "series"
+
           ],
-          ["IT", "JS", "SU"],
+          ["IT", "hashtag", "not_a_hashtag"],
           3,
           7));
     }
     return Container(
         color: constants.backgroundColor,
-        // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
+         margin: EdgeInsets.only(bottom: 0, top: 10, right: 0, left: 0),
         child: SingleChildScrollView(
           child: Column(
               children: testList.map((Group group) {
@@ -164,10 +162,7 @@ class GroupCard_NameAndAvatars extends StatelessWidget {
           AvatarRound(size: size),
           AvatarRound(size: size),
           AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
+
         ])
         // Text(
         //     "Free places: " +
