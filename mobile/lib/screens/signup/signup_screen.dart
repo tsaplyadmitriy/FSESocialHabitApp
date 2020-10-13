@@ -19,7 +19,7 @@ class SignUpScreen extends StatelessWidget {
             children: <Widget>[
               Text(
                 "SIGN UP",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline1,
               ),
               SizedBox(height: size.height * 0.03),
               SvgPicture.asset(

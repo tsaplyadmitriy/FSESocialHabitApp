@@ -22,7 +22,7 @@ class TagsHorizontalScroll extends StatelessWidget {
           ),
           child: Chip(
               elevation: 3,
-              backgroundColor: Constants.kPrimaryLightColor,
+              backgroundColor: Theme.of(context).primaryColorLight,
               label: Text(string,
                   style: TextStyle(
                     color: Colors.black,

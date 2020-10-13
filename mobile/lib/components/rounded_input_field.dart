@@ -42,9 +42,10 @@ class RoundedInputField extends StatelessWidget {
             maxLines: resizable ? null : exactLines,
             onChanged: onChanged,
             decoration: InputDecoration(
+              hintStyle: Theme.of(context).textTheme.headline4,
               icon: Icon(
                 icon,
-                color: Constants.kPrimaryColor,
+                color: Theme.of(context).primaryColor,
               ),
               hintText: hintText,
               border: InputBorder.none,

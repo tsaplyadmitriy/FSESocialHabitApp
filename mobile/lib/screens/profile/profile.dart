@@ -84,23 +84,16 @@ class _ProfileScreen extends State<ProfileScreen> {
                 children: <Widget>[
                   Text(
                     "About me:",
-                    style: TextStyle(
-                        color: Constants.kAccentColor,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 28.0),
+                    style: Theme.of(context).textTheme.headline1.apply(
+                          color: Theme.of(context).accentColor,
+                        ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
                   Text(
                     "${profile.aboutMe}",
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      //fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black,
-                      //letterSpacing: 2.0,
-                    ),
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ],
               ),
@@ -110,7 +103,7 @@ class _ProfileScreen extends State<ProfileScreen> {
             alignment: Alignment.bottomCenter,
             child: SmallButton(
               text: "Edit",
-              color: Constants.kPrimaryColor,
+              color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               press: () async {
                 await _editingResult(context);
@@ -139,10 +132,7 @@ class ProfileNameTelegramCard extends StatelessWidget {
         child: Column(children: [
           Text(
             "${profile.name}",
-            style: TextStyle(
-              fontSize: 22.0,
-              color: Colors.black,
-            ),
+            style: Theme.of(context).textTheme.headline1,
           ),
           SizedBox(
             height: 5,
@@ -156,7 +146,10 @@ class ProfileNameTelegramCard extends StatelessWidget {
                   height: 25,
                 ),
                 SizedBox(width: 5),
-                Text("${profile.telegram}"),
+                Text(
+                  "${profile.telegram}",
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
               ]),
         ]),
       ),
