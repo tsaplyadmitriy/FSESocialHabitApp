@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
+import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/screens/profile/profile.dart';
 
@@ -18,7 +19,9 @@ class _ProfileEditing extends State<ProfileEditing> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -51,6 +54,7 @@ class _ProfileEditing extends State<ProfileEditing> {
                       hintText: "telegram",
                       icon: Icons.message,
                       width: 0.9,
+                      maxCharacters: 30,
                       onChanged: (telegram) {
                         profile.telegram = telegram;
                       },
@@ -61,40 +65,52 @@ class _ProfileEditing extends State<ProfileEditing> {
                       resizable: true,
                       exactLines: 10,
                       width: 0.9,
+                      maxCharacters: 300,
                       onChanged: (aboutMe) {
                         profile.aboutMe = aboutMe;
                       },
                     ),
-                    Container(
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: [
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: profile.tags.map((String tag) {
-                                return Container(
-                                  margin: EdgeInsets.only(
-                                    right: 5,
-                                  ),
-                                  child: Chip(
-                                    backgroundColor:
-                                        Constants.kPrimaryLightColor,
-                                    label: Text(tag),
-                                    //label: Text("test"),
-                                    onDeleted: () {
-                                      setState(() {
-                                        profile.tags.remove(tag);
-                                        print(profile.tags.length);
-                                      });
-                                    },
-                                  ),
-                                );
-                              }).toList(),
+                        children: profile.tags.map((String tag) {
+                          return Container(
+                            margin: EdgeInsets.only(
+                              right: 5,
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.add_circle),
-                            color: Colors.black,
+                            child: Chip(
+                              backgroundColor: Constants.kPrimaryLightColor,
+                              label: Text(tag),
+                              //label: Text("test"),
+                              onDeleted: () {
+                                setState(() {
+                                  profile.tags.remove(tag);
+                                  print(profile.tags.length);
+                                });
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Container(
+                      width: size.width * 0.8,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton.icon(
+                            style: TextButton.styleFrom(
+                              //backgroundColor: Constants.kPrimaryColor,
+                              shape: StadiumBorder(),
+                            ),
+                            label: Text("New tag",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                )),
+                            icon: Icon(
+                              Icons.add_circle,
+                              color: Colors.black,
+                            ),
                             onPressed: () async {
                               String newTag = await _newTag(context);
                               print(newTag);
@@ -103,26 +119,56 @@ class _ProfileEditing extends State<ProfileEditing> {
                                   profile.tags.add(newTag);
                               });
                             },
-                          )
+                          ),
+                          SizedBox(width: size.width * 0.05),
+                          OutlinedButton.icon(
+                            style: TextButton.styleFrom(
+                              shape: StadiumBorder(),
+                            ),
+                            label: Text("New avatar",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                )),
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                            ),
+                            onPressed: () async {},
+                          ),
                         ],
                       ),
                     ),
                   ]),
-              Container(
-                alignment: Alignment.bottomCenter,
-                child: RoundedButton(
-                  text: "Save",
-                  press: () {
-                    print(profile.name);
-                    // TODO: integrate this with API
-
-                    Navigator.pop(context, profile);
-                  },
-                ),
-              ),
+              ProfileEditingSaveButton(profile: profile),
             ],
           ),
         ));
+  }
+}
+
+class ProfileEditingSaveButton extends StatelessWidget {
+  const ProfileEditingSaveButton({
+    Key key,
+    @required this.profile,
+  }) : super(key: key);
+
+  final ProfileData profile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      child: SmallButton(
+        text: "Save",
+        widthModifier: 0.6,
+        press: () {
+          print(profile.name);
+          // TODO: integrate this with API
+
+          Navigator.pop(context, profile);
+        },
+      ),
+    );
   }
 }
 
@@ -189,13 +235,29 @@ Future<String> _newTag(BuildContext context) async {
         ],
       ),
       actions: <Widget>[
-        new FlatButton(
-            child: const Text('Cancel'),
+        new OutlinedButton(
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.black),
+            ),
+            style: OutlinedButton.styleFrom(
+              shape: StadiumBorder(),
+            ),
             onPressed: () {
               Navigator.pop(context);
             }),
-        new FlatButton(
-            child: const Text('Ok'),
+        new OutlinedButton(
+            child: const Text(
+              'Ok',
+              style: TextStyle(color: Colors.black),
+            ),
+            style: OutlinedButton.styleFrom(
+              shape: StadiumBorder(),
+              side: BorderSide(
+                width: 2,
+                color: Constants.kPrimaryColor,
+              ),
+            ),
             onPressed: () {
               //print(editTag);
               Navigator.pop(context, editTag);

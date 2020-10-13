@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
+import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/group.dart';
@@ -112,16 +113,17 @@ class _ProfileScreen extends State<ProfileScreen> {
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            child: RoundedButton(
+            child: SmallButton(
               text: "Edit",
               color: Constants.kPrimaryColor,
+              textColor: Colors.white,
               press: () async {
                 await _editingResult(context);
                 setState(() {});
               },
-              textColor: Colors.black,
             ),
           ),
+          SizedBox(height: 5),
         ],
       ),
     );

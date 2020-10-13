@@ -17,47 +17,48 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; // h and w of screen
     return Background(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          "LOGIN",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: size.height * 0.03),
-        SvgPicture.asset(
-          "assets/icons/login.svg",
-          height: size.height * 0.35,
-        ),
-        SizedBox(height: size.height * 0.03),
-        RoundedInputField(
-          hintText: "Email",
-          onChanged: (value) {},
-        ),
-        RoundedPasswordField(
-          onChanged: (value) {},
-          hintText: "Password",
-        ),
-        RoundedButton(
-          text: "LOGIN",
-          textColor: Colors.white,
-          press: () async{
-            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => BottomNavigator()));
-
-
-          },
-        ),
-        ExistingAccountCheck(
-          press: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return SignUpScreen();
-              }),
-            );
-          },
-        ),
-      ],
+        child: SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            "LOGIN",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: size.height * 0.03),
+          SvgPicture.asset(
+            "assets/icons/login.svg",
+            height: size.height * 0.35,
+          ),
+          SizedBox(height: size.height * 0.03),
+          RoundedInputField(
+            hintText: "Email",
+            onChanged: (value) {},
+          ),
+          RoundedPasswordField(
+            onChanged: (value) {},
+            hintText: "Password",
+          ),
+          RoundedButton(
+            text: "LOGIN",
+            textColor: Colors.white,
+            press: () async {
+              await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => BottomNavigator()));
+            },
+          ),
+          ExistingAccountCheck(
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return SignUpScreen();
+                }),
+              );
+            },
+          ),
+        ],
+      ),
     ));
   }
 }

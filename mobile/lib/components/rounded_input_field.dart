@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
 import 'package:social_habit_app/constants.dart';
 
@@ -10,6 +11,7 @@ class RoundedInputField extends StatelessWidget {
   final bool resizable;
   final double width;
   final double maxHeight;
+  final int maxCharacters;
   const RoundedInputField({
     Key key,
     this.hintText,
@@ -19,6 +21,7 @@ class RoundedInputField extends StatelessWidget {
     this.exactLines = 1,
     this.width = 0.8,
     this.maxHeight = 0.1,
+    this.maxCharacters = 50,
   }) : super(key: key);
 
   @override
@@ -32,6 +35,10 @@ class RoundedInputField extends StatelessWidget {
             maxHeight: size.height * maxHeight,
           ),
           child: TextField(
+            textInputAction: TextInputAction.next,
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(maxCharacters),
+            ],
             maxLines: resizable ? null : exactLines,
             onChanged: onChanged,
             decoration: InputDecoration(
