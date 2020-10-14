@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  percent_indicator: "^2.1.7+2"
+  marquee: ^1.6.1
 
 
   # The following adds the Cupertino Icons font to your application.
