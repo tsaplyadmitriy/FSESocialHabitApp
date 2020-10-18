@@ -1,70 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:social_habit_app/components/group_card.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
-import 'package:social_habit_app/constants.dart';
-import 'package:social_habit_app/screens/findgroup/group_card_page.dart';
 import 'package:social_habit_app/group.dart';
-
-class FindGroupScreen extends StatefulWidget {
-  FindGroupScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _FindGroupScreen createState() => _FindGroupScreen();
-}
-
-List<Group> testList = [];
-
-class _FindGroupScreen extends State<FindGroupScreen> {
-  @override
-  Widget build(BuildContext context) {
-    testList.clear();
-    for (int i = 0; i < 10; i++) {
-      testList.add(new Group(
-
-
-          "Group # " + i.toString(),
-          "Description of this particular group, in this textfield some large text should be produced, but i don't know what to write, so I will just write some words that have no sense on general and in particular.",
-            "telega",
-          [
-            "smoking",
-            "addiction",
-
-            "videogames",],
-
-
-          ["IT", "hashtag", "not_a_hashtag"],
-          3,
-          7));
-    }
-    return Container(
-
-        //color: Constants.backgroundColor,
-
-        // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
-
-        child: SingleChildScrollView(
-
-          child: Column(
-              children: testList.map((Group group) {
-            return Container(
-              padding: EdgeInsets.only(top: 5),
-                width: double.infinity,
-                //height: 100,
-                child: GroupCard(
-                    group: group,
-                    function: () async {
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext buildContext) =>
-                              GroupCardDialog(group));
-                    }));
-          }).toList()),
-        ));
-  }
-}
 
 class GroupCard extends StatelessWidget {
   final Group group;
@@ -80,7 +16,7 @@ class GroupCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size; // h and w of s    return Card(
 
     return Card(
-      elevation: 3,
+      elevation: 15,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -89,7 +25,7 @@ class GroupCard extends StatelessWidget {
         onTap: function,
         borderRadius: BorderRadius.circular(20.0),
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TagsHorizontalScroll(list: group.tags),
@@ -171,7 +107,10 @@ class GroupCardNameAndAvatars extends StatelessWidget {
           AvatarRound(size: size),
           AvatarRound(size: size),
           AvatarRound(size: size),
-
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+          AvatarRound(size: size),
+          AvatarRound(size: size),
         ])
         // Text(
         //     "Free places: " +
@@ -210,6 +149,5 @@ class AvatarRound extends StatelessWidget {
         ),
       ),
     );
-
   }
 }

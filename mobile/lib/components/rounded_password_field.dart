@@ -20,14 +20,15 @@ class RoundedPasswordField extends StatelessWidget {
         onChanged: onChanged,
         obscureText: true,
         decoration: InputDecoration(
+          hintStyle: Theme.of(context).textTheme.headline4,
           hintText: hintText,
           icon: Icon(
             Icons.lock,
-            color: Constants.kPrimaryColor,
+            color: Theme.of(context).primaryColor,
           ),
           suffixIcon: Icon(
             Icons.visibility,
-            color: Constants.kPrimaryColor,
+            color: Theme.of(context).primaryColor,
           ),
           border: InputBorder.none,
         ),

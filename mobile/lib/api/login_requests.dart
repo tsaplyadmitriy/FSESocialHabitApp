@@ -51,7 +51,7 @@ class APIRequests{
 
   void signUpUser(){
 
-    
+
   }
 
 }

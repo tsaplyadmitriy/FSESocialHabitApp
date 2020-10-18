@@ -25,6 +25,8 @@ class GroupCardDialog extends StatelessWidget {
   }
 
   dialogContent(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     Size size = MediaQuery.of(context).size; // h and w of s
     //print("test "+entity.preferences.length.toString());
     return Stack(
@@ -41,7 +43,7 @@ class GroupCardDialog extends StatelessWidget {
                 offset: const Offset(0.0, 10.0),
               ),
             ],
-            color: Colors.white,
+            color: darkModeOn ? Constants.kInactiveColor : Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(15),
           ),

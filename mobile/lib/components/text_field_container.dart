@@ -3,9 +3,11 @@ import 'package:social_habit_app/constants.dart';
 
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
+  final double width;
   const TextFieldContainer({
     Key key,
     this.child,
+    this.width = 0.8,
   }) : super(key: key);
 
   @override
@@ -15,9 +17,9 @@ class TextFieldContainer extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      width: size.width * 0.8,
+      width: size.width * width,
       decoration: BoxDecoration(
-        color: Constants.kPrimaryLightColor,
+        color: Theme.of(context).primaryColorLight,
         borderRadius: BorderRadius.circular(29),
       ),
       child: child,

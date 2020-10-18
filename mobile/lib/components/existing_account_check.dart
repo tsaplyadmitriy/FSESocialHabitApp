@@ -15,17 +15,14 @@ class ExistingAccountCheck extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(login ? "Don't have an account? " : "Already have an account? ",
-            style: TextStyle(
-              color: Constants.kPrimaryColor,
-            )),
+        Text(
+          login ? "Don't have an account? " : "Already have an account? ",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
         GestureDetector(
           onTap: press,
           child: Text(login ? "Sign Up" : "Sign in",
-              style: TextStyle(
-                color: Constants.kPrimaryColor,
-                fontWeight: FontWeight.bold,
-              )),
+              style: Theme.of(context).textTheme.bodyText2),
         )
       ],
     );

@@ -19,6 +19,8 @@ class _ProfileEditing extends State<ProfileEditing> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -79,8 +81,12 @@ class _ProfileEditing extends State<ProfileEditing> {
                               right: 5,
                             ),
                             child: Chip(
-                              backgroundColor: Constants.kPrimaryLightColor,
-                              label: Text(tag),
+                              backgroundColor:
+                                  Theme.of(context).primaryColorLight,
+                              label: Text(
+                                tag,
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
                               //label: Text("test"),
                               onDeleted: () {
                                 setState(() {
@@ -104,15 +110,14 @@ class _ProfileEditing extends State<ProfileEditing> {
                               shape: StadiumBorder(),
                             ),
                             label: Text("New tag",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                )),
+                                style: Theme.of(context).textTheme.bodyText1),
                             icon: Icon(
                               Icons.add_circle,
-                              color: Colors.black,
+                              color: Theme.of(context).unselectedWidgetColor,
                             ),
                             onPressed: () async {
-                              String newTag = await _newTag(context);
+                              String newTag =
+                                  await _newTag(context, darkModeOn);
                               print(newTag);
                               setState(() {
                                 if (newTag != "" && newTag != null)
@@ -126,12 +131,10 @@ class _ProfileEditing extends State<ProfileEditing> {
                               shape: StadiumBorder(),
                             ),
                             label: Text("New avatar",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                )),
+                                style: Theme.of(context).textTheme.bodyText1),
                             icon: Icon(
                               Icons.edit,
-                              color: Colors.black,
+                              color: Theme.of(context).unselectedWidgetColor,
                             ),
                             onPressed: () async {},
                           ),
@@ -213,7 +216,7 @@ class ProfileEditingTextFields extends StatelessWidget {
   }
 }
 */
-Future<String> _newTag(BuildContext context) async {
+Future<String> _newTag(BuildContext context, bool dark) async {
   String editTag;
   await showDialog<String>(
     context: context,
@@ -236,9 +239,9 @@ Future<String> _newTag(BuildContext context) async {
       ),
       actions: <Widget>[
         new OutlinedButton(
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: dark ? Colors.white : Colors.black),
             ),
             style: OutlinedButton.styleFrom(
               shape: StadiumBorder(),
@@ -247,15 +250,17 @@ Future<String> _newTag(BuildContext context) async {
               Navigator.pop(context);
             }),
         new OutlinedButton(
-            child: const Text(
+            child: Text(
               'Ok',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: dark ? Colors.white : Colors.black),
             ),
             style: OutlinedButton.styleFrom(
               shape: StadiumBorder(),
               side: BorderSide(
                 width: 2,
-                color: Constants.kPrimaryColor,
+                color: dark
+                    ? Constants.kPrimaryLightColor
+                    : Constants.kPrimaryColor,
               ),
             ),
             onPressed: () {

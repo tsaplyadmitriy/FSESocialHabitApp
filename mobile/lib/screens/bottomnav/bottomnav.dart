@@ -88,8 +88,8 @@ class _MyHomePageState extends State<BottomNavigator> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Constants.kPrimaryColor,
-        unselectedItemColor: Colors.grey[800],
+        selectedItemColor: Theme.of(context).accentColor,
+        unselectedItemColor: Theme.of(context).unselectedWidgetColor,
 
         onTap:
             onItemTapped, // This trailing comma makes auto-formatting nicer for build methods.
