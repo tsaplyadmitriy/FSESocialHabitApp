@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/screens/creategroup/creategroup.dart';
+import 'package:social_habit_app/screens/findgroup/filter.dart';
 import 'package:social_habit_app/screens/findgroup/findgroup.dart';
 import 'package:social_habit_app/screens/mygroups/mygroups.dart';
 import 'package:social_habit_app/screens/profile/profile.dart';
@@ -47,19 +48,20 @@ class _MyHomePageState extends State<BottomNavigator> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
+    return new WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
       appBar: AppBar(
+
         title: Text(pageHeaders.elementAt(_selectedIndex)),
-        shape: ContinuousRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10))),
+
         actions: (_selectedIndex == 0)
             ? <Widget>[
                 IconButton(
                     icon: Icon(Icons.filter_list_alt),
-                    onPressed: () {
-                      //filter
+                    onPressed: () async{
+                      await Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => FilterTab()));
                     })
               ]
             : [],
@@ -92,6 +94,6 @@ class _MyHomePageState extends State<BottomNavigator> {
         onTap:
             onItemTapped, // This trailing comma makes auto-formatting nicer for build methods.
       ),
-    );
+    ));
   }
 }

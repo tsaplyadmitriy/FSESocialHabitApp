@@ -30,9 +30,9 @@ class GroupCardDialog extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           margin: EdgeInsets.symmetric(
-              vertical: size.height * 0.05, horizontal: 15),
+              vertical: size.height * 0.05, horizontal: 0),
           decoration: new BoxDecoration(
             boxShadow: [
               BoxShadow(

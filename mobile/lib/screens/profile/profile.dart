@@ -75,9 +75,11 @@ class _ProfileScreen extends State<ProfileScreen> {
             ),
           ),
           Container(
+
             child: Padding(
+
               padding:
-                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,23 +87,29 @@ class _ProfileScreen extends State<ProfileScreen> {
                   Text(
                     "About me:",
                     style: TextStyle(
-                        color: Constants.kAccentColor,
+                        color: Constants.kPrimaryColor,
                         fontStyle: FontStyle.normal,
-                        fontSize: 28.0),
+                        fontSize: 24.0),
                   ),
                   SizedBox(
-                    height: 10.0,
+                    height: 5.0,
                   ),
-                  Text(
+
+                   SizedBox(
+                     height: 170,
+                   child:
+                  SingleChildScrollView(
+                    child:
+                   Text(
                     "${profile.aboutMe}",
                     style: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: 18.0,
                       //fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.w300,
                       color: Colors.black,
                       //letterSpacing: 2.0,
                     ),
-                  ),
+                  ))),
                 ],
               ),
             ),

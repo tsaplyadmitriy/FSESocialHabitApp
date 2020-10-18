@@ -46,13 +46,9 @@ class SignUpScreen extends StatelessWidget {
               ExistingAccountCheck(
                 login: false,
                 press: () {
-                  Navigator.push(
+                  Navigator.pushReplacementNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return LoginScreen();
-                      },
-                    ),
+                   "/log_in"
                   );
                 },
               ),

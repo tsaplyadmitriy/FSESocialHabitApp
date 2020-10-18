@@ -6,6 +6,8 @@ class Constants {
   static const kPrimaryLightColor = Color(0xFFa8dadc);
   static const kSecondaryColor = Color(0xff457b9d);
 
+  static const apiLink = 'https://fsesocialhabitapp.herokuapp.com';
+
   static Color backgroundColor = Color.fromARGB(100, 242, 242, 242);
   static LinearGradient gradient() {
     return LinearGradient(colors: [

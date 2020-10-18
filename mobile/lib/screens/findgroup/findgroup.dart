@@ -45,6 +45,7 @@ class _FindGroupScreen extends State<FindGroupScreen> {
           child: Column(
               children: testList.map((Group group) {
             return Container(
+              padding: EdgeInsets.only(top: 5),
                 width: double.infinity,
                 //height: 100,
                 child: GroupCard(
@@ -74,7 +75,7 @@ class GroupCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size; // h and w of s    return Card(
 
     return Card(
-      elevation: 15,
+      elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -83,7 +84,7 @@ class GroupCard extends StatelessWidget {
         onTap: function,
         borderRadius: BorderRadius.circular(20.0),
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TagsHorizontalScroll(list: group.tags),
