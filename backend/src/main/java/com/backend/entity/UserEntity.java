@@ -2,27 +2,35 @@ package com.backend.entity;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.Objects;
-
+import java.util.*;
 
 public class UserEntity {
-    private @Id String login;
+    @Id
+    private String login;
     private String password;
     private String token;
     private String firstName = "DefaultFirstName";
     private String lastName = "DefaultLastName";
     private int age = 18;
-
-
+    private List<String> userGroups;
     public UserEntity(String login, String password, String firstName, String lastName, int age) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        token = Objects.toString(31 * (Objects
-                .hashCode(this.login + this.password + this.firstName + this.lastName) + age));
+        token = UUID.randomUUID().toString();
+        userGroups = new ArrayList<>();
     }
+
+    public void addGroup(String groupId) {
+        userGroups.add(groupId);
+    }
+
+    public boolean isMemberOfGroup(String groupId) {
+        return userGroups.contains(groupId);
+    }
+
     public void setLogin(String login) {
         this.login = login;
     }
@@ -58,4 +66,8 @@ public class UserEntity {
     public int getAge(){return age;}
 
     public void setAge(int age){this.age = age;}
+
+    public List<String> getUserGroups(){return userGroups;}
+
+    public void setUserGroups(List<String> userGroups) {this.userGroups = userGroups;}
 }
