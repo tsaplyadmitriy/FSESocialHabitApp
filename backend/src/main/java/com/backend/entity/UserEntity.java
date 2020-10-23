@@ -9,15 +9,15 @@ public class UserEntity {
     private String login;
     private String password;
     private String token;
-    private String firstName = "DefaultFirstName";
-    private String lastName = "DefaultLastName";
+    private String name = "DefaultName";
+    private String tgAlias = "DefaulTg";
     private int age = 18;
     private List<String> userGroups;
-    public UserEntity(String login, String password, String firstName, String lastName, int age) {
+    public UserEntity(String login, String password, String name, String tgAlias, int age) {
         this.login = login;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
+        this.tgAlias = tgAlias;
         this.age = age;
         token = UUID.randomUUID().toString();
         userGroups = new ArrayList<>();
@@ -55,13 +55,13 @@ public class UserEntity {
         this.token = token;
     }
 
-    public String getFirstName(){return firstName;}
+    public String name(){return name;}
 
-    public void setFirstName(String firstName){this.firstName = firstName;}
+    public void name(String name){this.name = name;}
 
-    public String getLastName(){return lastName;}
+    public String getTgAlias(){return tgAlias;}
 
-    public void setLastName(String lastName){this.lastName = lastName;}
+    public void setTgAlias(String tgAlias){this.tgAlias = tgAlias;}
 
     public int getAge(){return age;}
 

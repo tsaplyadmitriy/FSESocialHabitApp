@@ -31,8 +31,8 @@ public class LoginUserEntityController {
     }
 
     @GetMapping(value = "/api/user")
-    EntityModel<UserEntity> getOne(@RequestParam("login") String login) {
-        UserEntity user = repository.findUserByToken(login);
+    EntityModel<UserEntity> getOne(@RequestParam("token") String token) {
+        UserEntity user = repository.findUserByToken(token);
         if (user == null) {
             throw new TokenNotFoundException(new LoginResponse(1, null,  "User not found!"));
         }
