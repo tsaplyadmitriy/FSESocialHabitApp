@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/components/group_card.dart';
+import 'package:social_habit_app/components/my_sliver.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/screens/findgroup/group_card_page.dart';
@@ -21,6 +22,8 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
   @override
   Widget build(BuildContext context) {
     testList.clear();
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     for (int i = 0; i < 3; i++) {
       testList.add(new Group(
           "Group " + i.toString(),
@@ -43,25 +46,33 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
     return Container(
 
         // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
-        child: SingleChildScrollView(
-      child: Column(
-          children: testList.map((Group group) {
-        return Container(
-            width: double.infinity,
-            //height: 100,
-            child: GroupCard(
-                group: group,
-                function: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return MyGroupPage(group: group);
-                      },
-                    ),
-                  );
-                }));
-      }).toList()),
+        child: CustomScrollView(
+      slivers: [
+        MySliverAppBar(
+          darkModeOn: darkModeOn,
+          text: "My groups",
+          imagePath: "assets/images/inno_campus.png",
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(testList.map((Group group) {
+            return Container(
+                width: double.infinity,
+                //height: 100,
+                child: GroupCard(
+                    group: group,
+                    function: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MyGroupPage(group: group);
+                          },
+                        ),
+                      );
+                    }));
+          }).toList()),
+        )
+      ],
     ));
   }
 }

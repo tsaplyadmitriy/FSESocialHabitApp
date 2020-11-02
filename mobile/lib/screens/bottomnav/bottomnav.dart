@@ -48,22 +48,22 @@ class _MyHomePageState extends State<BottomNavigator> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        title: Text(pageHeaders.elementAt(_selectedIndex)),
-        shape: ContinuousRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10))),
-        actions: (_selectedIndex == 0)
-            ? <Widget>[
-                IconButton(
-                    icon: Icon(Icons.filter_list_alt),
-                    onPressed: () {
-                      //filter
-                    })
-              ]
-            : [],
-      ),
+      // appBar: AppBar(
+      //   title: Text(pageHeaders.elementAt(_selectedIndex)),
+      //   shape: ContinuousRectangleBorder(
+      //       borderRadius: BorderRadius.only(
+      //           bottomLeft: Radius.circular(10),
+      //           bottomRight: Radius.circular(10))),
+      //   actions: (_selectedIndex == 0)
+      //       ? <Widget>[
+      //           IconButton(
+      //               icon: Icon(Icons.filter_list_alt),
+      //               onPressed: () {
+      //                 //filter
+      //               })
+      //         ]
+      //       : [],
+      // ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

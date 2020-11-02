@@ -30,6 +30,13 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
     bool darkModeOn = brightness == Brightness.dark;
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Create group"),
+          shape: ContinuousRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10))),
+        ),
         //backgroundColor: Colors.transparent,
         resizeToAvoidBottomPadding: false,
         body: Column(
