@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/screens/bottomnav/bottomnav.dart';
 import 'package:social_habit_app/screens/login/login_screen.dart';
+import 'package:social_habit_app/screens/login/splash_login.dart';
 import 'package:social_habit_app/screens/signup/signup_screen.dart';
 import 'screens/welcome/welcome_screen.dart';
 import 'constants.dart';
@@ -23,6 +24,8 @@ class MyApp extends StatelessWidget {
         "/leave_welcome": (_) => new SignUpScreen(),
         "/log_in": (_) => new LoginScreen(),
         "/sign_up": (_) => new SignUpScreen(),
+
+
       },
       theme: ThemeData(
         fontFamily: 'ProductSans',

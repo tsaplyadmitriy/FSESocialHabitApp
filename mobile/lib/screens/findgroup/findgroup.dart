@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:social_habit_app/api/api_requests.dart';
+import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/group_card.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/constants.dart';
@@ -18,8 +21,30 @@ class FindGroupScreen extends StatefulWidget {
 List<Group> testList = [];
 
 class _FindGroupScreen extends State<FindGroupScreen> {
+  RefreshController controller = RefreshController();
+
+  List<GroupEntity> groupList = [];
+
+  @override
+  void initState() {
+
+    super.initState();
+    refreshGroups();
+  }
+
+  refreshGroups() async{
+    setState(() {});
+    groupList = await APIRequests().getGroupList(UserSession().getUserentity.token);
+    print("groupl"+groupList.toString());
+    if (mounted) {
+      setState(() {});
+    }
+  }
   @override
   Widget build(BuildContext context) {
+
+
+
     testList.clear();
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
@@ -28,18 +53,32 @@ class _FindGroupScreen extends State<FindGroupScreen> {
           "Group # " + i.toString(),
           "Description of this particular group, in this textfield some large text should be produced, but i don't know what to write, so I will just write some words that have no sense on general and in particular.",
             "telega",
-          [
-            "smoking",
-            "addiction",
-
-            "videogames",],
+          "smoking",
 
 
-          ["IT", "hashtag", "not_a_hashtag"],
+          ["IT", "hashtag", "not_a_hashtag"],[],
           3,
           7));
     }
-    return Container(
+    return SmartRefresher(
+
+        enablePullUp: true,
+        controller: controller,
+        enablePullDown: true,
+        onRefresh: () async {
+      print("ref");
+      await refreshGroups();
+      if (mounted) {
+        controller.refreshCompleted();
+      }
+    },
+    onLoading: () async {
+    setState(() {
+
+    });
+    controller.loadComplete();
+    },
+    child: Container(
 
         //color: Constants.backgroundColor,
 
@@ -47,8 +86,11 @@ class _FindGroupScreen extends State<FindGroupScreen> {
 
         child: SingleChildScrollView(
 
-          child: Column(
-              children: testList.map((Group group) {
+          child: groupList.length>0 ? Column(
+              children: groupList.map((GroupEntity groupEnt) {
+                Group group = new Group(groupEnt.groupName, groupEnt.groupDescription, groupEnt.groupTgLink,
+                    groupEnt.groupCategory, List<String>.from(groupEnt.groupTags), List<String>.from(groupEnt.members),
+                    5, groupEnt.membersLimit);
             return Container(
               padding: EdgeInsets.only(top: 5),
                 width: double.infinity,
@@ -61,8 +103,11 @@ class _FindGroupScreen extends State<FindGroupScreen> {
                           builder: (BuildContext buildContext) =>
                               GroupCardDialog(group));
                     }));
-          }).toList()),
-        ));
+          }).toList()):
+          Container(child:Center(child: Text("Loading...",textAlign: TextAlign.center,)))
+
+          ,
+        )));
   }
 }
 
@@ -92,7 +137,7 @@ class GroupCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            TagsHorizontalScroll(list: group.tags),
+            TagsHorizontalScroll(list: [group.category]),
             Row(children: [
               GroupCardNameAndAvatars(size: size, group: group),
               GroupCardImage(size: size),

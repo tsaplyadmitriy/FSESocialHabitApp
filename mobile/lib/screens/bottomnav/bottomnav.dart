@@ -6,7 +6,7 @@ import 'package:social_habit_app/screens/findgroup/filter.dart';
 import 'package:social_habit_app/screens/findgroup/findgroup.dart';
 import 'package:social_habit_app/screens/mygroups/mygroups.dart';
 import 'package:social_habit_app/screens/profile/profile.dart';
-
+import 'package:social_habit_app/constants.dart' as constants;
 class BottomNavigator extends StatefulWidget {
   BottomNavigator({Key key, this.title}) : super(key: key);
 
@@ -64,6 +64,19 @@ class _MyHomePageState extends State<BottomNavigator> {
                           MaterialPageRoute(builder: (context) => FilterTab()));
                     })
               ]
+            : (_selectedIndex == 3)
+            ? <Widget>[
+              Row(
+                children:[
+                  Text("Log out"),
+                   IconButton(
+
+
+                    icon: Icon(Icons.arrow_forward),
+                    onPressed: () async{
+                      await Navigator.pushReplacementNamed(context, constants.Constants.logIn);
+                 })
+             ] )]
             : [],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),

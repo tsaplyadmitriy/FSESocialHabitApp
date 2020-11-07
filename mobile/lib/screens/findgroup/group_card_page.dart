@@ -53,7 +53,7 @@ class GroupCardDialog extends StatelessWidget {
               NameOfGroup(group: group),
               SizedBox(height: size.height * 0.01),
               TagsHorizontalScroll(
-                list: group.tags,
+                list: [group.category],
               ),
               SizedBox(height: size.height * 0.01),
               GroupCardPage_preferences(group: group),

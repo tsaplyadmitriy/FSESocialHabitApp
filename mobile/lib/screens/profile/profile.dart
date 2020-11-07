@@ -1,12 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:social_habit_app/api/api_requests.dart';
+import 'package:social_habit_app/api/user_session.dart';
+
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/screens/profile/editing_profile.dart';
+
+
+class ProfileDataKeeper{
+
+  static ProfileData profile = new ProfileData.withtags(
+      UserSession().getUserentity.name,
+      UserSession().getUserentity.tgAlias,
+      UserSession().getUserentity.login,
+      List<String>.from(UserSession().getUserentity.tags));
+}
+
 
 class ProfileData {
   String name;
@@ -27,15 +41,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 //List<Group> testList = [];
-ProfileData profile = new ProfileData.withtags(
-    "Pavel Durov",
-    "@durov",
-    "As I’m turning 36, some people ask how I manage to look younger than my age. I’ve asked the same question of many people who age well (from Jared Leto to a random fitness trainer who looks like 25 at 50). Here’s what all of these young-looking individuals do (and don’t):",
-    ["tag1", "tag2"]);
+
+
 
 class _ProfileScreen extends State<ProfileScreen> {
+
+
   @override
   Widget build(BuildContext context) {
+    print("tags:"+UserSession().getUserentity.tags.toString());
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
       body: Column(
@@ -66,7 +80,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                     width: size.width,
                     child: Center(
                       child: TagsHorizontalScroll(
-                        list: profile.tags,
+                        list:  List<String>.from(UserSession().getUserentity.tags),
                       ),
                     ),
                   ),
@@ -103,7 +117,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   SingleChildScrollView(
                     child:
                    Text(
-                    "${profile.aboutMe}",
+                    "${ProfileDataKeeper.profile.aboutMe}",
 
                     style: Theme.of(context).textTheme.headline5,
                   ),
@@ -119,6 +133,7 @@ class _ProfileScreen extends State<ProfileScreen> {
               color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               press: () async {
+
                 await _editingResult(context);
                 setState(() {});
               },
@@ -144,7 +159,7 @@ class ProfileNameTelegramCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Column(children: [
           Text(
-            "${profile.name}",
+            "${ProfileDataKeeper.profile.name}",
             style: Theme.of(context).textTheme.headline1,
           ),
           SizedBox(
@@ -160,7 +175,7 @@ class ProfileNameTelegramCard extends StatelessWidget {
                 ),
                 SizedBox(width: 5),
                 Text(
-                  "${profile.telegram}",
+                  "${ProfileDataKeeper.profile.telegram}",
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ]),
@@ -171,25 +186,25 @@ class ProfileNameTelegramCard extends StatelessWidget {
 }
 
 _editingResult(BuildContext context) async {
-  ProfileData saved = profile;
-  profile = await Navigator.push(
+  ProfileData saved = ProfileDataKeeper.profile;
+  ProfileDataKeeper.profile = await Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => ProfileEditing()),
   );
 
-  if (profile == null) {
-    profile = saved;
+  if (ProfileDataKeeper.profile == null) {
+    ProfileDataKeeper.profile = saved;
   } else {
-    if (profile.name == "") {
-      profile.name = saved.name;
+    if (ProfileDataKeeper.profile.name == "") {
+      ProfileDataKeeper.profile.name = saved.name;
       // print("backup1");
     }
-    if (profile.telegram == "") {
-      profile.telegram = saved.telegram;
+    if (ProfileDataKeeper.profile.telegram == "") {
+      ProfileDataKeeper.profile.telegram = saved.telegram;
       //  print("backup2");
     }
-    if (profile.aboutMe == "") {
-      profile.aboutMe = saved.aboutMe;
+    if (ProfileDataKeeper.profile.aboutMe == "") {
+      ProfileDataKeeper.profile.aboutMe = saved.aboutMe;
       // print("backup3");
     }
   }

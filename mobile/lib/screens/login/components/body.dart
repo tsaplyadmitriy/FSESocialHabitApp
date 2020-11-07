@@ -1,6 +1,7 @@
+import 'package:async_loader/async_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:social_habit_app/api/login_requests.dart';
+import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/components/existing_account_check.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
@@ -10,21 +11,35 @@ import 'package:social_habit_app/screens/login/components/background.dart';
 import 'package:social_habit_app/screens/login/components/data_keeper.dart';
 import 'package:social_habit_app/screens/signup/signup_screen.dart';
 
+import '../splash_login.dart';
+
 
 
 
 
 class Body extends StatelessWidget {
-  const Body({
+
+
+
+   Body({
     Key key,
   }) : super(key: key);
 
 
+
+
+
   @override
   Widget build(BuildContext context) {
-    String login = "";
-    String password = "";
+
+
+
+
+
+
+
     Size size = MediaQuery.of(context).size; // h and w of screen
+
     return Background(
         child: SingleChildScrollView(
       child: Column(
@@ -41,7 +56,7 @@ class Body extends StatelessWidget {
           ),
           SizedBox(height: size.height * 0.03),
           RoundedInputField(
-            hintText: "Email",
+            hintText: "Login",
             onChanged: (value) {
 
               DataKeeper.login = value;
@@ -51,26 +66,22 @@ class Body extends StatelessWidget {
           RoundedPasswordField(
             onChanged: (value) {
               DataKeeper.password = value;
-              print(value+"/"+password);
+
             },
             hintText: "Password",
           ),
           RoundedButton(
             text: "LOGIN",
             textColor: Colors.white,
+
             press: () async {
 
+              await  Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    LoginSplash( DataKeeper.login, DataKeeper.password)),
+              );
 
-              LoginRequest request= await APIRequests().getUserToken(DataKeeper.login, DataKeeper.password);
-              print(DataKeeper.login+"/"+DataKeeper.password);
-              print(request.error.toString()+ "- error");
-              if(request.error == 0){
-                print(request.token);
-                await  Navigator.pushReplacementNamed(context, "/login_done");
-
-              }else{
-                print("Wrong login or password");
-              }
 
             },
           ),
@@ -88,4 +99,12 @@ class Body extends StatelessWidget {
       ),
     ));
   }
+
+   bool validateEmail(String value) {
+     Pattern pattern =
+         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+     RegExp regex = new RegExp(pattern);
+     return (!regex.hasMatch(value)) ? false : true;
+   }
+
 }
