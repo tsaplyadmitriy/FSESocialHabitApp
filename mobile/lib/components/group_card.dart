@@ -28,8 +28,10 @@ class GroupCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
             TagsHorizontalScroll(list: [group.category]),
-            Row(children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+
               GroupCardNameAndAvatars(size: size, group: group),
               GroupCardImage(size: size),
             ]),
@@ -65,14 +67,9 @@ class GroupCardImage extends StatelessWidget {
     return Container(
       alignment: Alignment.centerRight,
       width: size.width * 0.2,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Image.asset(
-          "assets/images/inno_campus.png",
-          width: size.width * 0.2,
-          alignment: Alignment.centerRight,
-        ),
-      ),
+      child: CircleAvatar(
+          backgroundImage: AssetImage("assets/images/inno_campus.png"),
+          radius: size.width * 0.08),
     );
   }
 }
@@ -90,40 +87,42 @@ class GroupCardNameAndAvatars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size.width * 0.65,
       alignment: Alignment.centerLeft,
-      child: Column(children: [
-        // SizedBox(
-        //   height: size.height * 0.005,
-        // ),
-        Container(
-            alignment: Alignment.centerLeft,
-            //margin: EdgeInsets.only(left:5),
-            child: Text(
-              group.groupName,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            )),
-        Row(children: [
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-          AvatarRound(size: size),
-        ])
-        // Text(
-        //     "Free places: " +
-        //         (group.maxParticipants - group.participants)
-        //             .toString() +
-        //         " / " +
-        //         group.maxParticipants.toString(),
-        //     style:
-        //         TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
-        // SizedBox(
-        //   height: size.height * 0.005,
-        // ),
-      ]),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // SizedBox(
+            //   height: size.height * 0.005,
+            // ),
+            Container(
+                alignment: Alignment.centerLeft,
+                //margin: EdgeInsets.only(left:5),
+                child: Text(
+                  group.groupName,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                )),
+            Row(children: [
+              AvatarRound(size: size),
+              AvatarRound(size: size),
+              AvatarRound(size: size),
+              AvatarRound(size: size),
+              AvatarRound(size: size),
+              AvatarRound(size: size),
+              AvatarRound(size: size),
+            ])
+            // Text(
+            //     "Free places: " +
+            //         (group.maxParticipants - group.participants)
+            //             .toString() +
+            //         " / " +
+            //         group.maxParticipants.toString(),
+            //     style:
+            //         TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+            // SizedBox(
+            //   height: size.height * 0.005,
+            // ),
+          ]),
     );
   }
 }

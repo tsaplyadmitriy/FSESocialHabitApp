@@ -52,19 +52,22 @@ class _ProfileScreen extends State<ProfileScreen> {
     print("tags:"+UserSession().getUserentity.tags.toString());
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 30),
-            decoration: BoxDecoration(
-              gradient: Constants.gradient(),
-            ),
-            child: Center(
-              child: Wrap(
-                direction: Axis.vertical,
+
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 30),
+              decoration: BoxDecoration(
+                gradient: Constants.gradient(),
+              ),
+              child: Center(
+                child: Wrap(
+                  direction: Axis.vertical,
+
 
                 crossAxisAlignment: WrapCrossAlignment.center,
                 //alignment: WrapAlignment.spaceEvenly,
@@ -81,66 +84,58 @@ class _ProfileScreen extends State<ProfileScreen> {
                     child: Center(
                       child: TagsHorizontalScroll(
                         list:  List<String>.from(UserSession().getUserentity.tags),
+
                       ),
                     ),
-                  ),
-                ],
+                  )],
+                ),
               ),
             ),
-          ),
-          Container(
 
+
+
+            Container(
             child: Padding(
-
-              padding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "About me:",
-
-
-                    style: Theme.of(context).textTheme.headline1.apply(
-                          color: Theme.of(context).accentColor,
-                        ),
-
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-
-                   SizedBox(
-                     height: 170,
-                   child:
-                  SingleChildScrollView(
-                    child:
-                   Text(
-                    "${ProfileDataKeeper.profile.aboutMe}",
-
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  ))
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "About me:",
+                      style: Theme.of(context).textTheme.headline1.apply(
+                            color: Theme.of(context).accentColor,
+                          ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      "${ProfileDataKeeper.profile.aboutMe}",
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
                   ],
+                ),
               ),
             ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: SmallButton(
-              text: "Edit",
-              color: Theme.of(context).primaryColor,
-              textColor: Colors.white,
-              press: () async {
 
-                await _editingResult(context);
-                setState(() {});
-              },
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: SmallButton(
+                text: "Edit",
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                press: () async {
+                  await _editingResult(context);
+                  setState(() {});
+                },
+              ),
+
             ),
-          ),
-          SizedBox(height: 5),
-        ],
+            SizedBox(height: 5),
+          ],
+        ),
       ),
     );
   }

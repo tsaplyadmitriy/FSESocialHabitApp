@@ -4,6 +4,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/group_card.dart';
+import 'package:social_habit_app/components/my_sliver.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/screens/findgroup/group_card_page.dart';
@@ -46,6 +47,8 @@ class _FindGroupScreen extends State<FindGroupScreen> {
 
 
     testList.clear();
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
 
@@ -84,15 +87,22 @@ class _FindGroupScreen extends State<FindGroupScreen> {
 
         // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
 
-        child: SingleChildScrollView(
 
-          child: groupList.length>0 ? Column(
-              children: groupList.map((GroupEntity groupEnt) {
+    child: groupList.length>0 ? CustomScrollView(
+    slivers: [
+    MySliverAppBar(
+    darkModeOn: darkModeOn,
+    text: "Find groups",
+    imagePath: "assets/images/inno_campus.png",
+    ),
+      SliverList(
+          delegate: SliverChildListDelegate(groupList.map((GroupEntity groupEnt) {
                 Group group = new Group(groupEnt.groupName, groupEnt.groupDescription, groupEnt.groupTgLink,
                     groupEnt.groupCategory, List<String>.from(groupEnt.groupTags), List<String>.from(groupEnt.members),
                     5, groupEnt.membersLimit);
             return Container(
               padding: EdgeInsets.only(top: 5),
+
                 width: double.infinity,
                 //height: 100,
                 child: GroupCard(
@@ -103,11 +113,14 @@ class _FindGroupScreen extends State<FindGroupScreen> {
                           builder: (BuildContext buildContext) =>
                               GroupCardDialog(group));
                     }));
-          }).toList()):
-          Container(child:Center(child: Text("Loading...",textAlign: TextAlign.center,)))
 
-          ,
-        )));
+          }).toList())
+
+
+    )]):
+    Container(child:Center(child: Text("Loading...",textAlign: TextAlign.center,)))
+    ));
+
   }
 }
 
@@ -235,7 +248,7 @@ class GroupCardNameAndAvatars extends StatelessWidget {
 }
 
 class AvatarRound extends StatelessWidget {
-  const AvatarRound({
+   AvatarRound({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -255,6 +268,8 @@ class AvatarRound extends StatelessWidget {
         ),
       ),
     );
+
+
 
   }
 }

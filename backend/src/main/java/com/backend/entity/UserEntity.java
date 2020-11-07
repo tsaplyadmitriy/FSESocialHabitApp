@@ -2,27 +2,50 @@ package com.backend.entity;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.Objects;
-
+import java.util.*;
 
 public class UserEntity {
-    private @Id String login;
+    @Id
+    private String login;
     private String password;
     private String token;
-    private String firstName = "DefaultFirstName";
-    private String lastName = "DefaultLastName";
+    private String name = "DefaultName";
+    private String tgAlias = "DefaulTg";
+    private String description;
+    private List<String> tags;
     private int age = 18;
-
-
-    public UserEntity(String login, String password, String firstName, String lastName, int age) {
+    private List<String> userGroups;
+    public UserEntity(String login, String password, String name, String tgAlias, String description, List<String> tags, int age) {
         this.login = login;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
+        this.tgAlias = tgAlias;
         this.age = age;
-        token = Objects.toString(31 * (Objects
-                .hashCode(this.login + this.password + this.firstName + this.lastName) + age));
+        token = UUID.randomUUID().toString();
+        userGroups = new ArrayList<>();
+        if (tags == null) {
+            this.tags = new ArrayList<>();
+        }
+        else this.tags = tags;
+        this.description = description;
     }
+
+    public void addGroup(String groupId) {
+        if (!userGroups.contains(groupId)) {
+            userGroups.add(groupId);
+        }
+    }
+
+    public void removeGroup(String groupId) {
+        if (userGroups.contains(groupId)) {
+            userGroups.remove(groupId);
+        }
+    }
+
+    public boolean isMemberOfGroup(String groupId) {
+        return userGroups.contains(groupId);
+    }
+
     public void setLogin(String login) {
         this.login = login;
     }
@@ -47,15 +70,27 @@ public class UserEntity {
         this.token = token;
     }
 
-    public String getFirstName(){return firstName;}
+    public String getName(){return name;}
 
-    public void setFirstName(String firstName){this.firstName = firstName;}
+    public void setName(String name){this.name = name;}
 
-    public String getLastName(){return lastName;}
+    public String getTgAlias(){return tgAlias;}
 
-    public void setLastName(String lastName){this.lastName = lastName;}
+    public void setTgAlias(String tgAlias){this.tgAlias = tgAlias;}
 
     public int getAge(){return age;}
 
     public void setAge(int age){this.age = age;}
+
+    public List<String> getUserGroups(){return userGroups;}
+
+    public void setUserGroups(List<String> userGroups) {this.userGroups = userGroups;}
+
+    public String getDescription(){return description;}
+
+    public void setDescription(String description){this.description = description;}
+
+    public List<String> getTags(){return tags;};
+
+    public void setTags(List<String> tags) {this.tags = tags;}
 }

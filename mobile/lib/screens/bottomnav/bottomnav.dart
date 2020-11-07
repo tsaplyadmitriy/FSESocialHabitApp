@@ -48,6 +48,7 @@ class _MyHomePageState extends State<BottomNavigator> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
     return new WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -79,6 +80,8 @@ class _MyHomePageState extends State<BottomNavigator> {
              ] )]
             : [],
       ),
+
+
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

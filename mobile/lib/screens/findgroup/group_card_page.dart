@@ -43,7 +43,7 @@ class GroupCardDialog extends StatelessWidget {
                 offset: const Offset(0.0, 10.0),
               ),
             ],
-            color: darkModeOn ? Constants.kInactiveColor : Colors.white,
+            color: darkModeOn ? Constants.dInactiveColor : Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(15),
           ),

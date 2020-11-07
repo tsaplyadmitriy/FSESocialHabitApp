@@ -2,16 +2,16 @@ package com.backend.controller;
 
 import com.backend.entity.LoginResponse;
 import com.backend.entity.UserEntity;
-import com.backend.repository.UserEntityRepository;
+import com.backend.repository.SocialHabitAppData;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoginUserEntityController {
-    private final UserEntityRepository repository;
+    private final SocialHabitAppData repository;
 
-    LoginUserEntityController(UserEntityRepository repository) {
+    LoginUserEntityController(SocialHabitAppData repository) {
         this.repository = repository;
     }
 
@@ -20,17 +20,31 @@ public class LoginUserEntityController {
      */
     @RequestMapping(value = "/login", produces = {MediaType.APPLICATION_JSON_VALUE})
     LoginResponse one(@RequestParam("login") String login, @RequestParam("password") String password) {
-        UserEntity logOutUser = repository.findById(login)
-                .orElseThrow(() -> new UserEntityUnauthorizedException(new LoginResponse(1, null, "Wrong login or/and password")));
+        UserEntity logOutUser = repository.findUserById(login);
+        if (logOutUser == null){
+            throw new UserEntityUnauthorizedException(new LoginResponse(1, null, "Wrong login or/and password"));
+        }
         if (logOutUser.getPassword().compareTo(password) != 0) {
             throw new UserEntityUnauthorizedException(new LoginResponse(1, null, "Wrong login or/and password"));
         }
         return new LoginResponse(0, logOutUser.getToken(), "Accepted");
     }
 
-    @GetMapping(value = "/getUserInfo")
+    @GetMapping(value = "/api/user")
     EntityModel<UserEntity> getOne(@RequestParam("token") String token) {
-        UserEntity user = repository.findByToken(token);
+        UserEntity user = repository.findUserByToken(token);
+        if (user == null) {
+            throw new TokenNotFoundException(new LoginResponse(1, null,  "User not found!"));
+        }
+        return EntityModel.of(user);
+    }
+
+    @GetMapping(value = "/api/userByLogin")
+    EntityModel<UserEntity> getByLogin(@RequestParam("login") String login) {
+        UserEntity user = repository.findUserById(login);
+        if (user == null) {
+            throw new TokenNotFoundException(new LoginResponse(1, null,  "User not found!"));
+        }
         return EntityModel.of(user);
     }
 }
