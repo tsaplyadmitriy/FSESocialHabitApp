@@ -8,6 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /*
 **Preload some entities on database for debugging
@@ -20,10 +23,14 @@ class LoadDatabase {
 
     @Bean
     CommandLineRunner initDatabase(SocialHabitAppData repository) {
-
+        List<String> sampleTags = new ArrayList<>();
+        sampleTags.add("Tag1");
+        sampleTags.add("Tag2");
         return args -> {
-            log.info("Preloading " + repository.saveUser(new UserEntity("SomeLogin", "12345", "Alex", "Rakov", 20)));
-            log.info("Preloading " + repository.saveUser(new UserEntity("JohnLogin", "123456789", "John", "Smith", 30)));
+            log.info("Preloading " + repository.saveUser(new UserEntity("SomeLogin", "12345",
+                    "Alex", "Rakov", "Some description", sampleTags, 20)));
+            log.info("Preloading " + repository.saveUser(new UserEntity("JohnLogin", "123456789",
+                    "John", "Smith", "Another description", sampleTags, 25)));
         };
     }
 }

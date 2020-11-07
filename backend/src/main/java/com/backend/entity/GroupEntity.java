@@ -1,7 +1,6 @@
 package com.backend.entity;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -13,32 +12,79 @@ public class GroupEntity {
     private @Id String id;
     private String groupName;
     private String groupDescription = "Default description";
+    private String groupTgLink;
     private int membersLimit;
-    private List<String> members = null;
+    private List<String> membersLogins = null;
     private List<String> groupTags = null;
     private String owner;
     private String groupCategory;
+    private List<ChallengeEntity> challenges;
 
     public GroupEntity(){
         this.id = UUID.randomUUID().toString();
-        members = new ArrayList<>();
+        membersLogins = new ArrayList<>();
         groupTags = new ArrayList<>();
+        challenges = new ArrayList<>();
     }
 
-    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory, String groupDescription, List<String> groupTags) {
+    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory, String groupDescription, String groupTgLink, List<String> groupTags) {
         this.id = UUID.randomUUID().toString();
         this.owner = owner;
         this.groupName = groupName;
         this.groupDescription = groupDescription;
+        this.groupTgLink = groupTgLink;
         this.groupCategory = groupCategory;
         this.membersLimit = membersLimit;
-        this.members = new ArrayList<>();
+        this.membersLogins = new ArrayList<>();
         this.groupTags = new ArrayList<>();
         this.groupTags = groupTags;
         try {
             this.ifOwner(owner).addMember(owner);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+        challenges = new ArrayList<>();
+    }
+
+    public GroupEntity(String owner, String groupName, String groupCategory, String groupTgLink, int membersLimit) {
+        this.id = UUID.randomUUID().toString();
+        this.owner = owner;
+        this.groupName = groupName;
+        this.groupTgLink = groupTgLink;
+        this.groupCategory = groupCategory;
+        this.membersLimit = membersLimit;
+        try {
+            this.ifOwner(owner).addMember(owner);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        membersLogins = new ArrayList<>();
+        groupTags = new ArrayList<>();
+        challenges = new ArrayList<>();
+    }
+
+    public void addNewChallenge(String challengeName, String challengeDescription) throws Exception {
+        if (challenges.contains(challengeName)) {
+            throw new Exception("Challenge with name " + challengeName + " exists");
+        }
+        ChallengeEntity tempChallenge = new ChallengeEntity(challengeName, challengeDescription);
+        for (int i = 0; i < membersLogins.size(); i++) {
+            tempChallenge.addCounterForNewMember(membersLogins.get(i));
+        }
+        challenges.add(tempChallenge);
+    }
+
+    private void addNewMemberToChallenges(String login) {
+        for (int i = 0; i < challenges.size(); i++) {
+            challenges.get(i).addCounterForNewMember(login);
+        }
+    }
+
+    private void deleteMemberFromChallenges(String login) {
+        for (int i = 0; i < challenges.size(); i++) {
+            if (challenges.get(i).getChallengeCounters().containsKey(login)) {
+                challenges.get(i).deleteCounterOfMember(login);
+            }
         }
     }
 
@@ -48,7 +94,7 @@ public class GroupEntity {
         this.groupName = groupName;
         this.membersLimit = membersLimit;
         this.groupCategory = groupCategory;
-        this.members = new ArrayList<>();
+        this.membersLogins = new ArrayList<>();
         this.groupTags = new ArrayList<>();
 
         try {
@@ -66,10 +112,11 @@ public class GroupEntity {
     }
 
     public GroupEntity addMember(String login) throws Exception {
-        if (members.size() >= membersLimit) {
+        if (membersLogins.size() >= membersLimit) {
             throw new Exception("Limit of members is exceeded!");
         }
-        members.add(login);
+        membersLogins.add(login);
+        this.addNewMemberToChallenges(login);
         return this;
     }
 
@@ -77,7 +124,7 @@ public class GroupEntity {
         return owner.compareTo(this.owner) == 0;
     }
 
-    public int getMembersNumber() {return members.size();}
+    public int getMembersNumber() {return membersLogins.size();}
 
     public void addTag(String tag) {
         if (this.groupTags.contains(tag)) {
@@ -87,13 +134,14 @@ public class GroupEntity {
     }
 
     public void deleteMember(String owner, String login) throws Exception {
-        if (!members.contains(login)) {
+        if (!membersLogins.contains(login)) {
             throw new Exception("No user with login=" + login + " in this group!");
         }
         if (!isOwner(owner)) {
             throw new Exception("You are not an owner of this group!");
         }
-        members.remove(login);
+        membersLogins.remove(login);
+        this.deleteMemberFromChallenges(login);
     }
 
     public boolean isValid() {
@@ -101,8 +149,8 @@ public class GroupEntity {
                 || !groupName.matches("\\w.*") || !groupCategory.matches("\\w.*")) {
             return false;
         }
-        if (!members.contains(owner)) {
-            this.members.add(owner);
+        if (!membersLogins.contains(owner)) {
+            this.membersLogins.add(owner);
         }
         return true;
     }
@@ -139,12 +187,12 @@ public class GroupEntity {
         this.membersLimit = membersLimit;
     }
 
-    public List<String> getMembers() {
-        return members;
+    public List<String> getMembersLogins() {
+        return membersLogins;
     }
 
-    public void setMembers(List<String> members) {
-        this.members = members;
+    public void setMembersLogins(List<String> membersLogins) {
+        this.membersLogins = membersLogins;
     }
 
     public List<String> getGroupTags() {
@@ -170,5 +218,9 @@ public class GroupEntity {
     public void setGroupCategory(String groupCategory) {
         this.groupCategory = groupCategory;
     }
+
+    public String getGroupTgLink(){return groupTgLink;}
+
+    public void setGroupTgLink(String groupTgLink){this.groupTgLink = groupTgLink;}
 
 }

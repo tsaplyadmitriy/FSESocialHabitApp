@@ -38,4 +38,13 @@ public class LoginUserEntityController {
         }
         return EntityModel.of(user);
     }
+
+    @GetMapping(value = "/api/userByLogin")
+    EntityModel<UserEntity> getByLogin(@RequestParam("login") String login) {
+        UserEntity user = repository.findUserById(login);
+        if (user == null) {
+            throw new TokenNotFoundException(new LoginResponse(1, null,  "User not found!"));
+        }
+        return EntityModel.of(user);
+    }
 }

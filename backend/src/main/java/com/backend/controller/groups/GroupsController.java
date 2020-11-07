@@ -45,9 +45,9 @@ public class GroupsController {
      */
 
     @PostMapping(value = "/api/addEmptyGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public GroupEntity addEmptyGroupEntity(@RequestParam String owner, @RequestParam String groupName,
+    public GroupEntity addEmptyGroupEntity(@RequestParam String owner, @RequestParam String groupName, @RequestParam String groupTgLink,
                                            @RequestParam String groupCategory, @RequestParam int membersLimit) {
-        GroupEntity group = new GroupEntity(owner, groupName, membersLimit, groupCategory);
+        GroupEntity group = new GroupEntity(owner, groupName, groupCategory, groupTgLink, membersLimit);
         if (!group.isValid()) {
             throw new GroupNotValidException();
         }
@@ -73,24 +73,51 @@ public class GroupsController {
     }
 
     /*
+     * Return entity of group by it's ID
+     */
+
+    @GetMapping(value = "/api/groupById", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity getGroupById(@RequestParam("groupId") String groupId) {
+        GroupEntity group = repository.findGroupById(groupId);
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        return group;
+    }
+
+    /*
      * Add new member to existing group and it's groupId to member.
      */
     @PutMapping(value = "/api/addMemberToGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
     public GroupEntity addMember(@RequestParam("ownerLogin") String owner, @RequestParam("memberLogin") String newMember,
                                  @RequestParam("groupId") String groupId) throws Exception {
-        if (repository.findGroupById(groupId) == null) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserById(newMember);
+        if (group == null) {
             throw new GroupNotValidException();
         }
-
-        UserEntity user = repository.findUserById(newMember);
-
         if (user == null) {
             throw new UsernameNotFoundException(newMember);
         }
-
+        group.ifOwner(owner).addMember(newMember);
         user.addGroup(groupId);
         repository.saveUser(user);
-        return repository.saveGroup(repository.findGroupById(groupId).ifOwner(owner).addMember(newMember));
+        return repository.saveGroup(group);
     }
 
+    /*
+     * Update existing group
+     */
+
+    @PutMapping(value = "/api/updateGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity updateGrooup(@RequestBody GroupEntity updatedGroup) {
+        GroupEntity group = repository.findGroupById(updatedGroup.getId());
+        if (group == null || !updatedGroup.isValid()) {
+            throw new GroupNotValidException();
+        }
+
+        group = updatedGroup;
+
+        return repository.saveGroup(group);
+    }
 }
