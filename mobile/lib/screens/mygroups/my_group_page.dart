@@ -74,8 +74,7 @@ class _MyGroupPageState extends State<MyGroupPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/images/avatar.png"),
+                            backgroundImage: AssetImage("assets/images/male_"),
                             radius: size.width * 0.15,
                           ),
                           Column(

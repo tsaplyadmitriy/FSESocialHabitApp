@@ -36,6 +36,7 @@ ProfileData profile = new ProfileData.withtags(
 class _ProfileScreen extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    bool male = true;
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
       appBar: AppBar(
@@ -64,7 +65,9 @@ class _ProfileScreen extends State<ProfileScreen> {
                   //alignment: WrapAlignment.spaceEvenly,
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/avatar.png"),
+                      backgroundImage: male
+                          ? AssetImage("assets/images/male_avatar.png")
+                          : AssetImage("assets/images/female_avatar.png"),
                       radius: 50.0,
                     ),
                     SizedBox(height: size.height * 0.01),
