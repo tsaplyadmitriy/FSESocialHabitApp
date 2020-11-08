@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:social_habit_app/api/api_requests.dart';
+import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/screens/profile/profile.dart';
+
+import 'groupdata_keeper.dart';
 
 class CreateGroupScreen extends StatefulWidget {
   CreateGroupScreen({Key key, this.title}) : super(key: key);
@@ -20,11 +24,11 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
   ProfileData profile =
       new ProfileData.withtags("", "", "", ["item1", "item2"]);
   double sliderParticipants = 5;
-  Group newGroup = new Group("name", "description", "telega", ["tag1", "tag2"],
-      ["pref1", "pref2"], 1, 7);
+  Group newGroup = new Group("name", "description", "telega", "category",
+      ["pref1", "pref2"], ["user"],1, 7);
   @override
   Widget build(BuildContext context) {
-    newGroup.tags = profile.tags;
+    newGroup.preferences = profile.tags;
 
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
@@ -62,7 +66,15 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                               },
                             ),
                             RoundedInputField(
-                              hintText: "telegram chat",
+                              hintText: "Category",
+                              icon: Icons.category,
+                              width: 0.9,
+                              onChanged: (category) {
+                                newGroup.category = category;
+                              },
+                            ),
+                            RoundedInputField(
+                              hintText: "Discussion group link",
                               icon: Icons.message,
                               width: 0.9,
                               maxCharacters: 30,
@@ -129,7 +141,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: newGroup.tags.map((String tag) {
+                                children: newGroup.preferences.map((String tag) {
                                   return Container(
                                     margin: EdgeInsets.only(
                                       right: 5,
@@ -146,8 +158,8 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                       //label: Text("test"),
                                       onDeleted: () {
                                         setState(() {
-                                          newGroup.tags.remove(tag);
-                                          print(newGroup.tags.length);
+                                          newGroup.preferences.remove(tag);
+                                          print(newGroup.preferences.length);
                                         });
                                       },
                                     ),
@@ -180,7 +192,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                       print(newTag);
                                       setState(() {
                                         if (newTag != "" && newTag != null)
-                                          newGroup.tags.add(newTag);
+                                          newGroup.preferences.add(newTag);
                                       });
                                     },
                                   ),
@@ -198,7 +210,10 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                       color: Theme.of(context)
                                           .unselectedWidgetColor,
                                     ),
-                                    onPressed: () async {},
+                                    onPressed: () async {
+                                      //TODO: ADD IMAGE LOADING
+
+                                    },
                                   ),
                                 ],
                               ),
@@ -234,10 +249,15 @@ class GroupCreationSaveButton extends StatelessWidget {
       child: SmallButton(
         text: "Save",
         widthModifier: 0.94,
-        press: () {
-          // TODO: integrate this with API
-
-          Navigator.pop(context, profile);
+        press: () async{
+          UserEntity userEntity = UserSession().getUserentity;
+          GroupEntity groupEntity = await APIRequests().createUserGroup
+            (userEntity.token, userEntity.login,
+              groupData.groupName, groupData.groupDescription, groupData.telegramLink,groupData.maxParticipants,
+              groupData.preferences, groupData.category);
+          print(groupEntity.groupDescription);
+          //print("new group id"+groupEntity.id);
+          Navigator.pushReplacementNamed(context, Constants.loginDone);
         },
       ),
     );

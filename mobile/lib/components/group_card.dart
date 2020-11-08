@@ -16,7 +16,7 @@ class GroupCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size; // h and w of s    return Card(
 
     return Card(
-      elevation: 15,
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -28,8 +28,10 @@ class GroupCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            TagsHorizontalScroll(list: group.tags),
+
+            TagsHorizontalScroll(list: [group.category]),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+
               GroupCardNameAndAvatars(size: size, group: group),
               GroupCardImage(size: size),
             ]),

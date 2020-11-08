@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:social_habit_app/api/api_requests.dart';
+import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/group_card.dart';
 import 'package:social_habit_app/components/my_sliver.dart';
 import 'package:social_habit_app/constants.dart';
@@ -19,60 +22,96 @@ class MyGroupsScreen extends StatefulWidget {
 List<Group> testList = [];
 
 class _MyGroupsScreen extends State<MyGroupsScreen> {
+  RefreshController controller = RefreshController();
+
+  List<GroupEntity> groupList = [];
+
+  refreshGroups() async{
+    setState(() {});
+    groupList = await APIRequests().getGroupList(UserSession().getUserentity.token);
+    print("groupl"+groupList.toString());
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+
+    super.initState();
+    refreshGroups();
+  }
+
   @override
   Widget build(BuildContext context) {
     testList.clear();
+
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
-    for (int i = 0; i < 3; i++) {
-      testList.add(new Group(
-          "Group " + i.toString(),
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent congue interdum dolor, et ultricies urna ullamcorper eget. Morbi tempor, odio sit amet suscipit posuere, mi lacus condimentum nisl, vitae sagittis velit arcu eu nunc. Curabitur fringilla tortor ac eros iaculis placerat. Maecenas ultricies accumsan turpis, et cursus neque ullamcorper nec. Proin ut fringilla magna, eget sodales lacus. Donec massa erat, interdum vel ultrices ut, ullamcorper eget velit. Pellentesque tincidunt quam ut lorem laoreet, ac cursus mauris dignissim. Proin sit amet dignissim eros. Vestibulum ut ex sit amet arcu finibus posuere. Duis vestibulum dignissim mauris, convallis faucibus metus feugiat et. Sed venenatis mauris id nibh mattis imperdiet. Curabitur posuere imperdiet tempus. Donec pretium ipsum nisi.",
-          "telega",
-          [
-            "smoking",
-            "alcohol",
-            "junk food",
-            "test",
-            "test2",
-            "junk food",
-            "test",
-            "test2"
-          ],
-          ["IT", "JS", "SU"],
-          3,
-          7));
-    }
-    return Container(
 
-        // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
-        child: CustomScrollView(
-      slivers: [
-        MySliverAppBar(
-          darkModeOn: darkModeOn,
+    return SmartRefresher(
+
+
+        enablePullUp: true,
+        controller: controller,
+        enablePullDown: true,
+        onRefresh: () async {
+          print("ref");
+          await refreshGroups();
+          if (mounted) {
+            controller.refreshCompleted();
+          }
+        },
+        onLoading: () async {
+          setState(() {
+
+          });
+          controller.loadComplete();
+        },
+        child: Container(
+        height: double.infinity,
+         margin: EdgeInsets.only(bottom: 0, top: 0, right: 0, left: 0),
+
+            child: groupList.length>0 ?  CustomScrollView(
+          slivers: [
+          MySliverAppBar(
+          darkModeOn : darkModeOn,
           text: "My groups",
           imagePath: "assets/images/group_pic.png",
         ),
-        SliverList(
-          delegate: SliverChildListDelegate(testList.map((Group group) {
-            return Container(
-                width: double.infinity,
-                //height: 100,
-                child: GroupCard(
-                    group: group,
-                    function: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return MyGroupPage(group: group);
-                          },
-                        ),
-                      );
-                    }));
-          }).toList()),
-        )
-      ],
-    ));
+            SliverList(
+                delegate: SliverChildListDelegate(
+
+
+
+
+
+           groupList.map((GroupEntity groupEnt) {
+            Group group = new Group(groupEnt.groupName, groupEnt.groupDescription, groupEnt.groupTgLink,
+                groupEnt.groupCategory, List<String>.from(groupEnt.groupTags), List<String>.from(groupEnt.members),
+                5, groupEnt.membersLimit);
+            print("group"+group.toString());
+        return Container(
+            width: double.infinity,
+            //height: 100,
+            child: GroupCard(
+                group: group,
+                function: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return MyGroupPage(group: group);
+                      },
+                    ),
+                  );
+                }));
+      }).toList())
+
+    )]):Container(child:Center(child: Text("Loading...",textAlign: TextAlign.center,)))
+
+        ));
+
+
   }
 }

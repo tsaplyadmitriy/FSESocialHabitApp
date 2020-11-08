@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Constants {
   //light
-  static const kAccentColor = Color(0xFFe63946);
+  static const kAccentColor = Color(0xFF1d2557);
   static const kPrimaryColor = Color(0xFF1d3557);
   static const kPrimaryLightColor = Color(0xFFa8dadc);
   static const kSecondaryColor = Color(0xff457b9d);
@@ -14,6 +14,16 @@ class Constants {
   static const dPrimaryLightColor = Color(0xFF71A2C1);
   static const dSecondaryColor = Color(0xff71A2C1);
   static const dInactiveColor = Color(0xFF6c757d);
+
+
+  static String loginDone = "/login_done";
+  static String leaveWelcome = "/leave_welcome";
+  static String logIn = "/log_in";
+  static String signUp = "/sign_up";
+
+
+
+  static const apiLink = 'https://fsesocialhabitapp.herokuapp.com';
 
   static Color backgroundColor = Color.fromARGB(100, 242, 242, 242);
 

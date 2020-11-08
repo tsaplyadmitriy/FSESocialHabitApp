@@ -11,9 +11,11 @@ public class UserEntity {
     private String token;
     private String name = "DefaultName";
     private String tgAlias = "DefaulTg";
+    private String description;
+    private List<String> tags;
     private int age = 18;
     private List<String> userGroups;
-    public UserEntity(String login, String password, String name, String tgAlias, int age) {
+    public UserEntity(String login, String password, String name, String tgAlias, String description, List<String> tags, int age) {
         this.login = login;
         this.password = password;
         this.name = name;
@@ -21,10 +23,23 @@ public class UserEntity {
         this.age = age;
         token = UUID.randomUUID().toString();
         userGroups = new ArrayList<>();
+        if (tags == null) {
+            this.tags = new ArrayList<>();
+        }
+        else this.tags = tags;
+        this.description = description;
     }
 
     public void addGroup(String groupId) {
-        userGroups.add(groupId);
+        if (!userGroups.contains(groupId)) {
+            userGroups.add(groupId);
+        }
+    }
+
+    public void removeGroup(String groupId) {
+        if (userGroups.contains(groupId)) {
+            userGroups.remove(groupId);
+        }
     }
 
     public boolean isMemberOfGroup(String groupId) {
@@ -55,9 +70,9 @@ public class UserEntity {
         this.token = token;
     }
 
-    public String name(){return name;}
+    public String getName(){return name;}
 
-    public void name(String name){this.name = name;}
+    public void setName(String name){this.name = name;}
 
     public String getTgAlias(){return tgAlias;}
 
@@ -70,4 +85,12 @@ public class UserEntity {
     public List<String> getUserGroups(){return userGroups;}
 
     public void setUserGroups(List<String> userGroups) {this.userGroups = userGroups;}
+
+    public String getDescription(){return description;}
+
+    public void setDescription(String description){this.description = description;}
+
+    public List<String> getTags(){return tags;};
+
+    public void setTags(List<String> tags) {this.tags = tags;}
 }
