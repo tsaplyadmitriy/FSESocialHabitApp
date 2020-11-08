@@ -47,6 +47,7 @@ class _MyGroupPageState extends State<MyGroupPage> {
     if (challengeList.length == 0) {
       challengeList.add(demoChallenge);
     }
+
     Size size = MediaQuery.of(context).size; // h and w of s    return Card(
     return Scaffold(
       appBar: AppBar(
@@ -74,7 +75,8 @@ class _MyGroupPageState extends State<MyGroupPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CircleAvatar(
-                            backgroundImage: AssetImage("assets/images/male_"),
+                            backgroundImage:
+                                AssetImage("assets/images/male_avatar.png"),
                             radius: size.width * 0.15,
                           ),
                           Column(
@@ -132,5 +134,5 @@ _getNewChallenge(BuildContext context) async {
               participants: 5,
             )),
   );
-  challengeList.add(newChallenge);
+  if (newChallenge != null) challengeList.add(newChallenge);
 }

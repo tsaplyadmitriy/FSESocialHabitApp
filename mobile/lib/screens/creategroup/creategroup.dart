@@ -25,7 +25,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
       new ProfileData.withtags("", "", "", ["item1", "item2"]);
   double sliderParticipants = 5;
   Group newGroup = new Group("name", "description", "telega", "category",
-      ["pref1", "pref2"], ["user"],1, 7);
+      ["pref1", "pref2"], ["user"], 1, 7);
   @override
   Widget build(BuildContext context) {
     newGroup.preferences = profile.tags;
@@ -34,13 +34,13 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
     bool darkModeOn = brightness == Brightness.dark;
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Create group"),
-          shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10))),
-        ),
+        // appBar: AppBar(
+        //   title: Text("Create group"),
+        //   shape: ContinuousRectangleBorder(
+        //       borderRadius: BorderRadius.only(
+        //           bottomLeft: Radius.circular(10),
+        //           bottomRight: Radius.circular(10))),
+        // ),
         //backgroundColor: Colors.transparent,
         resizeToAvoidBottomPadding: false,
         body: Column(
@@ -141,7 +141,8 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: newGroup.preferences.map((String tag) {
+                                children:
+                                    newGroup.preferences.map((String tag) {
                                   return Container(
                                     margin: EdgeInsets.only(
                                       right: 5,
@@ -212,7 +213,6 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                     ),
                                     onPressed: () async {
                                       //TODO: ADD IMAGE LOADING
-
                                     },
                                   ),
                                 ],
@@ -249,12 +249,17 @@ class GroupCreationSaveButton extends StatelessWidget {
       child: SmallButton(
         text: "Save",
         widthModifier: 0.94,
-        press: () async{
+        press: () async {
           UserEntity userEntity = UserSession().getUserentity;
-          GroupEntity groupEntity = await APIRequests().createUserGroup
-            (userEntity.token, userEntity.login,
-              groupData.groupName, groupData.groupDescription, groupData.telegramLink,groupData.maxParticipants,
-              groupData.preferences, groupData.category);
+          GroupEntity groupEntity = await APIRequests().createUserGroup(
+              userEntity.token,
+              userEntity.login,
+              groupData.groupName,
+              groupData.groupDescription,
+              groupData.telegramLink,
+              groupData.maxParticipants,
+              groupData.preferences,
+              groupData.category);
           print(groupEntity.groupDescription);
           //print("new group id"+groupEntity.id);
           Navigator.pushReplacementNamed(context, Constants.loginDone);

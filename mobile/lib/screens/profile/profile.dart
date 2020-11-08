@@ -64,7 +64,8 @@ class _ProfileScreen extends State<ProfileScreen> {
                   //alignment: WrapAlignment.spaceEvenly,
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/avatar.png"),
+                      backgroundImage:
+                          AssetImage("assets/images/male_avatar.png"),
                       radius: 50.0,
                     ),
                     SizedBox(height: size.height * 0.01),

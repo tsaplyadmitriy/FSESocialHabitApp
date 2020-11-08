@@ -24,7 +24,7 @@ class MySliverAppBar extends StatelessWidget {
       stretch: true,
       backgroundColor:
           darkModeOn ? Constants.kSecondaryColor : Constants.kPrimaryLightColor,
-      expandedHeight: 180.0,
+      expandedHeight: 200.0,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: <StretchMode>[
           StretchMode.zoomBackground,

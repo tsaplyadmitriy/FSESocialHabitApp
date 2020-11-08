@@ -84,7 +84,7 @@ class _FindGroupScreen extends State<FindGroupScreen> {
                     MySliverAppBar(
                       darkModeOn: darkModeOn,
                       text: "Find groups",
-                      imagePath: "assets/images/inno_campus.png",
+                      imagePath: "assets/images/group_pic.png",
                     ),
                     SliverList(
                         delegate: SliverChildListDelegate(
@@ -258,7 +258,7 @@ class AvatarRound extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(300.0),
         child: Image.asset(
-          "assets/images/avatar.png",
+          "assets/images/female_avatar.png",
           width: size.width * 0.07,
           //alignment: Alignment.centerRight,
         ),
