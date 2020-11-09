@@ -62,4 +62,10 @@ public class SocialHabitAppData {
     public List<GroupEntity> findAllGroups() {
         return mongoTemplate.findAll(GroupEntity.class);
     }
+
+    public List<GroupEntity> findGroupsByCategory(String category) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("groupCategory").is(category));
+        return mongoTemplate.find(query, GroupEntity.class);
+    }
 }
