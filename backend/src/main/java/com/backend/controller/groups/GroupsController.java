@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -76,7 +77,7 @@ public class GroupsController {
      * Return entity of group by it's ID
      */
 
-    @GetMapping(value = "/api/groupById", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/api/findGroups/groupId", produces = {MediaType.APPLICATION_JSON_VALUE})
     public GroupEntity getGroupById(@RequestParam("groupId") String groupId) {
         GroupEntity group = repository.findGroupById(groupId);
         if (group == null) {
@@ -119,5 +120,27 @@ public class GroupsController {
         group = updatedGroup;
 
         return repository.saveGroup(group);
+    }
+
+    @GetMapping(value = "/api/findGroups/category", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<GroupEntity> getGroupsByCategory(@RequestParam String category) {
+        List<GroupEntity> groups = repository.findGroupsByCategory(category);
+        if (groups == null) {
+            //TODO: Create exception
+            throw new GroupNotValidException();
+        }
+        return groups;
+    }
+
+    @GetMapping(value = "/api/findGroups/login", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<GroupEntity> getGroupsByLogin(@RequestParam String login) {
+        UserEntity user = repository.findUserById(login);
+        if (user == null) throw new UsernameNotFoundException(login);
+        List<String> groupsId = user.getUserGroups();
+        List<GroupEntity> groups = new ArrayList<>();
+        for (int i = 0; i < groupsId.size(); i++) {
+            groups.add(repository.findGroupById(groupsId.get(i)));
+        }
+        return groups;
     }
 }
