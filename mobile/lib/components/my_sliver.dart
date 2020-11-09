@@ -22,6 +22,7 @@ class MySliverAppBar extends StatelessWidget {
       floating: true,
       snap: true,
       stretch: true,
+      automaticallyImplyLeading: false,
       backgroundColor:
           darkModeOn ? Constants.kSecondaryColor : Constants.kPrimaryLightColor,
       expandedHeight: 200.0,

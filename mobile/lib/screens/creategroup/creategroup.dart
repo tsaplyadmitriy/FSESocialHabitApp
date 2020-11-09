@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/api/user_session.dart';
+import 'package:social_habit_app/components/image_picker.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
@@ -26,6 +29,8 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
   double sliderParticipants = 5;
   Group newGroup = new Group("name", "description", "telega", "category",
       ["pref1", "pref2"], ["user"], 1, 7);
+  File _image = File("assets/images/inno_campus.png");
+
   @override
   Widget build(BuildContext context) {
     newGroup.preferences = profile.tags;
@@ -54,171 +59,182 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      Column(crossAxisAlignment: CrossAxisAlignment.stretch,
-                          //mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RoundedInputField(
-                              hintText: "Name of the group",
-                              icon: Icons.star_rate,
-                              width: 0.9,
-                              onChanged: (name) {
-                                newGroup.groupName = name;
-                              },
-                            ),
-                            RoundedInputField(
-                              hintText: "Category",
-                              icon: Icons.category,
-                              width: 0.9,
-                              onChanged: (category) {
-                                newGroup.category = category;
-                              },
-                            ),
-                            RoundedInputField(
-                              hintText: "Discussion group link",
-                              icon: Icons.message,
-                              width: 0.9,
-                              maxCharacters: 30,
-                              onChanged: (telegram) {
-                                newGroup.telegramLink = telegram;
-                              },
-                            ),
-                            RoundedInputField(
-                              hintText: "Group description",
-                              icon: Icons.description,
-                              resizable: true,
-                              exactLines: 10,
-                              width: 0.9,
-                              maxCharacters: 300,
-                              onChanged: (description) {
-                                newGroup.groupDescription = description;
-                              },
-                            ),
-                            TextFieldContainer(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Icon(
-                                        Icons.person,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      Container(
-                                        width: size.width * 0.6,
-                                        child: Slider(
-                                          activeColor:
-                                              Theme.of(context).primaryColor,
-                                          inactiveColor: Theme.of(context)
-                                              .unselectedWidgetColor,
-                                          divisions:
-                                              newGroup.maxParticipants - 2,
-                                          min: 2,
-                                          max: newGroup.maxParticipants
-                                              .toDouble(),
-                                          onChanged: (double value) {
-                                            setState(() {
-                                              sliderParticipants = value;
-                                              newGroup.participants =
-                                                  sliderParticipants.toInt();
-                                            });
-                                          },
-                                          value: sliderParticipants,
-                                          label:
-                                              "${sliderParticipants.toInt()}",
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    "Specify number of participants",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  )
-                                ],
+                      SingleChildScrollView(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            //mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              MyImagePicker(
+                                //TODO pass image here
+                                initialImage: null,
+                                imageCallback: (image) {
+                                  print("reached callback");
+                                  if (image != null) _image = image;
+                                },
                               ),
-                            ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children:
-                                    newGroup.preferences.map((String tag) {
-                                  return Container(
-                                    margin: EdgeInsets.only(
-                                      right: 5,
+                              RoundedInputField(
+                                hintText: "Name of the group",
+                                icon: Icons.star_rate,
+                                width: 0.9,
+                                onChanged: (name) {
+                                  newGroup.groupName = name;
+                                },
+                              ),
+                              RoundedInputField(
+                                hintText: "Category",
+                                icon: Icons.category,
+                                width: 0.9,
+                                onChanged: (category) {
+                                  newGroup.category = category;
+                                },
+                              ),
+                              RoundedInputField(
+                                hintText: "Discussion group link",
+                                icon: Icons.message,
+                                width: 0.9,
+                                maxCharacters: 30,
+                                onChanged: (telegram) {
+                                  newGroup.telegramLink = telegram;
+                                },
+                              ),
+                              RoundedInputField(
+                                hintText: "Group description",
+                                icon: Icons.description,
+                                resizable: true,
+                                exactLines: 10,
+                                width: 0.9,
+                                maxCharacters: 300,
+                                onChanged: (description) {
+                                  newGroup.groupDescription = description;
+                                },
+                              ),
+                              TextFieldContainer(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Icon(
+                                          Icons.person,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        Container(
+                                          width: size.width * 0.6,
+                                          child: Slider(
+                                            activeColor:
+                                                Theme.of(context).primaryColor,
+                                            inactiveColor: Theme.of(context)
+                                                .unselectedWidgetColor,
+                                            divisions:
+                                                newGroup.maxParticipants - 2,
+                                            min: 2,
+                                            max: newGroup.maxParticipants
+                                                .toDouble(),
+                                            onChanged: (double value) {
+                                              setState(() {
+                                                sliderParticipants = value;
+                                                newGroup.participants =
+                                                    sliderParticipants.toInt();
+                                              });
+                                            },
+                                            value: sliderParticipants,
+                                            label:
+                                                "${sliderParticipants.toInt()}",
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    child: Chip(
-                                      backgroundColor:
-                                          Theme.of(context).primaryColorLight,
-                                      label: Text(
-                                        tag,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2,
+                                    Text(
+                                      "Specify number of participants",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children:
+                                      newGroup.preferences.map((String tag) {
+                                    return Container(
+                                      margin: EdgeInsets.only(
+                                        right: 5,
                                       ),
-                                      //label: Text("test"),
-                                      onDeleted: () {
+                                      child: Chip(
+                                        backgroundColor:
+                                            Theme.of(context).primaryColorLight,
+                                        label: Text(
+                                          tag,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline2,
+                                        ),
+                                        //label: Text("test"),
+                                        onDeleted: () {
+                                          setState(() {
+                                            newGroup.preferences.remove(tag);
+                                            //print(newGroup.preferences.length);
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                              Container(
+                                width: size.width * 0.8,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    OutlinedButton.icon(
+                                      style: TextButton.styleFrom(
+                                        //backgroundColor: Constants.kPrimaryColor,
+                                        shape: StadiumBorder(),
+                                      ),
+                                      label: Text("New tag",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1),
+                                      icon: Icon(
+                                        Icons.add_circle,
+                                        color: Theme.of(context)
+                                            .unselectedWidgetColor,
+                                      ),
+                                      onPressed: () async {
+                                        String newTag =
+                                            await _newTag(context, darkModeOn);
+                                        //print(newTag);
                                         setState(() {
-                                          newGroup.preferences.remove(tag);
-                                          print(newGroup.preferences.length);
+                                          if (newTag != "" && newTag != null)
+                                            newGroup.preferences.add(newTag);
                                         });
                                       },
                                     ),
-                                  );
-                                }).toList(),
+                                    // SizedBox(width: size.width * 0.05),
+                                    // OutlinedButton.icon(
+                                    //   style: TextButton.styleFrom(
+                                    //     shape: StadiumBorder(),
+                                    //   ),
+                                    //   label: Text("Add avatar",
+                                    //       style: Theme.of(context)
+                                    //           .textTheme
+                                    //           .bodyText1),
+                                    //   icon: Icon(
+                                    //     Icons.add_circle,
+                                    //     color: Theme.of(context)
+                                    //         .unselectedWidgetColor,
+                                    //   ),
+                                    //   onPressed: () async {
+                                    //     //TODO: ADD IMAGE LOADING
+                                    //   },
+                                    // ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: size.width * 0.8,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  OutlinedButton.icon(
-                                    style: TextButton.styleFrom(
-                                      //backgroundColor: Constants.kPrimaryColor,
-                                      shape: StadiumBorder(),
-                                    ),
-                                    label: Text("New tag",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1),
-                                    icon: Icon(
-                                      Icons.add_circle,
-                                      color: Theme.of(context)
-                                          .unselectedWidgetColor,
-                                    ),
-                                    onPressed: () async {
-                                      String newTag =
-                                          await _newTag(context, darkModeOn);
-                                      print(newTag);
-                                      setState(() {
-                                        if (newTag != "" && newTag != null)
-                                          newGroup.preferences.add(newTag);
-                                      });
-                                    },
-                                  ),
-                                  SizedBox(width: size.width * 0.05),
-                                  OutlinedButton.icon(
-                                    style: TextButton.styleFrom(
-                                      shape: StadiumBorder(),
-                                    ),
-                                    label: Text("Add avatar",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1),
-                                    icon: Icon(
-                                      Icons.add_circle,
-                                      color: Theme.of(context)
-                                          .unselectedWidgetColor,
-                                    ),
-                                    onPressed: () async {
-                                      //TODO: ADD IMAGE LOADING
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ]),
+                            ]),
+                      ),
                     ],
                   ),
                 ),
@@ -260,7 +276,7 @@ class GroupCreationSaveButton extends StatelessWidget {
               groupData.maxParticipants,
               groupData.preferences,
               groupData.category);
-          print(groupEntity.groupDescription);
+          //print(groupEntity.groupDescription);
           //print("new group id"+groupEntity.id);
           Navigator.pushReplacementNamed(context, Constants.loginDone);
         },
