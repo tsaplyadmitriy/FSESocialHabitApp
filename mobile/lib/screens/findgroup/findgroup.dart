@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/group_card.dart';
@@ -13,24 +13,41 @@ import 'package:social_habit_app/group.dart';
 class FindGroupScreen extends StatefulWidget {
   FindGroupScreen({Key key, this.title}) : super(key: key);
 
+
   final String title;
 
+
+  static _FindGroupScreen findGroupState = null;
   @override
-  _FindGroupScreen createState() => _FindGroupScreen();
+  _FindGroupScreen createState() {
+
+   return _FindGroupScreen();
+
+  }
 }
 
 List<Group> testList = [];
-
+List<GroupEntity> groupList = [];
 class _FindGroupScreen extends State<FindGroupScreen> {
-  RefreshController controller = RefreshController();
 
-  List<GroupEntity> groupList = [];
+
+
 
   @override
   void initState() {
 
     super.initState();
     refreshGroups();
+  }
+
+   refreshWithList(List<GroupEntity> list){
+    setState(() {});
+    groupList = list;
+    print("groupl"+groupList.toString());
+    if (mounted) {
+      setState(() {});
+    }
+
   }
 
   refreshGroups() async{
@@ -45,7 +62,8 @@ class _FindGroupScreen extends State<FindGroupScreen> {
   Widget build(BuildContext context) {
 
 
-
+    print("len: "+groupList.length.toString());
+   // refreshGroups();
     testList.clear();
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
@@ -63,40 +81,32 @@ class _FindGroupScreen extends State<FindGroupScreen> {
           3,
           7));
     }
-    return SmartRefresher(
-
-        enablePullUp: true,
-        controller: controller,
-        enablePullDown: true,
-        onRefresh: () async {
-      print("ref");
-      await refreshGroups();
-      if (mounted) {
-        controller.refreshCompleted();
-      }
-    },
-    onLoading: () async {
-    setState(() {
-
-    });
-    controller.loadComplete();
-    },
-    child: Container(
+    return  Container(
 
         //color: Constants.backgroundColor,
 
         // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
 
 
-    child: groupList.length>0 ? CustomScrollView(
+    child: groupList.length>0 ?
+
+    RefreshIndicator(
+
+      onRefresh: () async{
+        await refreshGroups();
+      },
+        child: CustomScrollView(
     slivers: [
     MySliverAppBar(
     darkModeOn: darkModeOn,
     text: "Find groups",
     imagePath: "assets/images/inno_campus.png",
     ),
+
       SliverList(
-          delegate: SliverChildListDelegate(groupList.map((GroupEntity groupEnt) {
+          delegate: SliverChildListDelegate(
+
+              groupList.map((GroupEntity groupEnt) {
                 Group group = new Group(groupEnt.groupName, groupEnt.groupDescription, groupEnt.groupTgLink,
                     groupEnt.groupCategory, List<String>.from(groupEnt.groupTags), List<String>.from(groupEnt.members),
                     5, groupEnt.membersLimit);
@@ -117,9 +127,9 @@ class _FindGroupScreen extends State<FindGroupScreen> {
           }).toList())
 
 
-    )]):
+    )])):
     Container(child:Center(child: Text("Loading...",textAlign: TextAlign.center,)))
-    ));
+    );
 
   }
 }

@@ -174,6 +174,19 @@ class APIRequests{
   }
 
 
+  Future<List<GroupEntity>> getGroupByCategoryList(String category,String token) async{
+    var url = Constants.apiLink+'/api/findGroups/category?category='+category;
+    final response = await http.get(url,headers: {HttpHeaders.authorizationHeader : token});
+    print("resp: \n"+jsonDecode(response.body).toString());
+    Iterable l = jsonDecode(response.body);
+
+    List<GroupEntity>list = (json.decode(response.body) as List).map((i) =>GroupEntity.fromJson(i)).toList();
+    print(list.toString());
+    return  list;
+
+  }
+
+
   Future<UserEntity>  getUserByToken (String token) async{
     String req =  Constants.apiLink+'/api/user?token='+token;
     print(req);
@@ -182,6 +195,9 @@ class APIRequests{
 
     return UserEntity.fromJson(responseJson);
   }
+
+
+
 
 }
 

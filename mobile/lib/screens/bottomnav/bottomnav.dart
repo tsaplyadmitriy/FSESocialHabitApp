@@ -11,7 +11,7 @@ class BottomNavigator extends StatefulWidget {
   BottomNavigator({Key key, this.title}) : super(key: key);
 
   final String title;
-
+  final List<String> list = ["category","category1","category3"];
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -57,14 +57,15 @@ class _MyHomePageState extends State<BottomNavigator> {
         title: Text(pageHeaders.elementAt(_selectedIndex)),
 
         actions: (_selectedIndex == 0)
-            ? <Widget>[
-                IconButton(
-                    icon: Icon(Icons.filter_list_alt),
-                    onPressed: () async{
-                      await Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => FilterTab()));
-                    })
-              ]
+            ?[
+          IconButton(
+            onPressed: () {
+
+              showSearch(context: context, delegate: Search(widget.list));
+            },
+            icon: Icon(Icons.search),
+          )]
+
             : (_selectedIndex == 3)
             ? <Widget>[
               Row(
