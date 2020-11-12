@@ -19,6 +19,10 @@ class FilterTab extends StatefulWidget{
 }
 
 class _FilterTab extends State<FilterTab>{
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +30,7 @@ class _FilterTab extends State<FilterTab>{
         actions: <Widget>[
           IconButton(
             onPressed: () {
+
               showSearch(context: context, delegate: Search(widget.list));
             },
             icon: Icon(Icons.search),
@@ -49,7 +54,10 @@ class _FilterTab extends State<FilterTab>{
 
 class Search extends SearchDelegate {
 
-  static FindGroupScreen findGroupScreen;
+
+  GlobalKey<FindGroupStateScreen> findGroupScreen = GlobalKey<FindGroupStateScreen>();
+
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
@@ -61,6 +69,8 @@ class Search extends SearchDelegate {
       ),
     ];
   }
+
+
 
 
   @override
@@ -88,11 +98,9 @@ class Search extends SearchDelegate {
 
             groupList = await APIRequests().getGroupByCategoryList
               (selectedResult, UserSession().getUserentity.token);
-            for(GroupEntity g in groupList){
 
-              print("group size"+groupList.length.toString());
+            doWeNeedToRefresh = true;
 
-            }
 
             Navigator.pushReplacementNamed(context,Constants.loginDone);
         },

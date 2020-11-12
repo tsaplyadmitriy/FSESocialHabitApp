@@ -11,16 +11,13 @@ import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/screens/profile/editing_profile.dart';
 
-
-class ProfileDataKeeper{
-
+class ProfileDataKeeper {
   static ProfileData profile = new ProfileData.withtags(
       UserSession().getUserentity.name,
       UserSession().getUserentity.tgAlias,
       UserSession().getUserentity.login,
       List<String>.from(UserSession().getUserentity.tags));
 }
-
 
 class ProfileData {
   String name;
@@ -42,17 +39,12 @@ class ProfileScreen extends StatefulWidget {
 
 //List<Group> testList = [];
 
-
-
 class _ProfileScreen extends State<ProfileScreen> {
-
-
   @override
   Widget build(BuildContext context) {
-    print("tags:"+UserSession().getUserentity.tags.toString());
+    print("tags:" + UserSession().getUserentity.tags.toString());
     Size size = MediaQuery.of(context).size; // h and w of
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,34 +60,32 @@ class _ProfileScreen extends State<ProfileScreen> {
                 child: Wrap(
                   direction: Axis.vertical,
 
-
-                crossAxisAlignment: WrapCrossAlignment.center,
-                //alignment: WrapAlignment.spaceEvenly,
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/avatar.png"),
-                    radius: 50.0,
-                  ),
-                  SizedBox(height: size.height * 0.01),
-                  ProfileNameTelegramCard(),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    width: size.width,
-                    child: Center(
-                      child: TagsHorizontalScroll(
-                        list:  List<String>.from(UserSession().getUserentity.tags),
-
-                      ),
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  //alignment: WrapAlignment.spaceEvenly,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage:
+                          AssetImage("assets/images/male_avatar.png"),
+                      radius: 50.0,
                     ),
-                  )],
+                    SizedBox(height: size.height * 0.01),
+                    ProfileNameTelegramCard(),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      width: size.width,
+                      child: Center(
+                        child: TagsHorizontalScroll(
+                          list: List<String>.from(
+                              UserSession().getUserentity.tags),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
-
-
-
             Container(
-            child: Padding(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 20.0, horizontal: 16.0),
                 child: Column(
@@ -119,7 +109,6 @@ class _ProfileScreen extends State<ProfileScreen> {
                 ),
               ),
             ),
-
             Container(
               alignment: Alignment.bottomCenter,
               child: SmallButton(
@@ -131,7 +120,6 @@ class _ProfileScreen extends State<ProfileScreen> {
                   setState(() {});
                 },
               ),
-
             ),
             SizedBox(height: 5),
           ],

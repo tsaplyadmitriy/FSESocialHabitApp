@@ -3,7 +3,7 @@ description: Social Aabit App for FSE Course
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -26,12 +26,13 @@ dependencies:
   percent_indicator: "^2.1.7+2"
   marquee: ^1.6.1
 
-#dependencies
+  #dependencies
   shared_preferences: ^0.5.12+2
   async_loader: ^0.1.1
   cupertino_icons: ^0.1.3
   flutter_svg: ^0.19.0
   rest_data: ^0.3.1
+  image_picker: ^0.6.7+12
 
 dev_dependencies:
   flutter_test:

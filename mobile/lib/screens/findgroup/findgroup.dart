@@ -17,70 +17,69 @@ class FindGroupScreen extends StatefulWidget {
   final String title;
 
 
-  static _FindGroupScreen findGroupState = null;
+  static FindGroupStateScreen findGroupState = null;
   @override
-  _FindGroupScreen createState() {
+  FindGroupStateScreen createState() {
 
-   return _FindGroupScreen();
+   return FindGroupStateScreen();
 
   }
 }
 
 List<Group> testList = [];
 List<GroupEntity> groupList = [];
-class _FindGroupScreen extends State<FindGroupScreen> {
+bool doWeNeedToRefresh = false;
+class FindGroupStateScreen extends State<FindGroupScreen> {
 
 
 
 
   @override
   void initState() {
-
+    print("INIT");
     super.initState();
-    refreshGroups();
+    if(doWeNeedToRefresh ==false){
+      refreshGroups();
+    }else{
+      doWeNeedToRefresh = false;
+    }
   }
 
-   refreshWithList(List<GroupEntity> list){
+
+
+  refreshGroups() async {
+
     setState(() {});
-    groupList = list;
-    print("groupl"+groupList.toString());
+    groupList =
+        await APIRequests().getGroupList(UserSession().getUserentity.token);
+    print("groupl" + groupList.toString());
     if (mounted) {
       setState(() {});
     }
-
   }
 
-  refreshGroups() async{
-    setState(() {});
-    groupList = await APIRequests().getGroupList(UserSession().getUserentity.token);
-    print("groupl"+groupList.toString());
-    if (mounted) {
-      setState(() {});
-    }
-  }
   @override
   Widget build(BuildContext context) {
 
+    print("BUILD");
+    setState(() {
 
-    print("len: "+groupList.length.toString());
-   // refreshGroups();
+    });
     testList.clear();
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
     for (int i = 0; i < 10; i++) {
       testList.add(new Group(
-
-
           "Group # " + i.toString(),
           "Description of this particular group, in this textfield some large text should be produced, but i don't know what to write, so I will just write some words that have no sense on general and in particular.",
-            "telega",
+          "telega",
           "smoking",
-
-
-          ["IT", "hashtag", "not_a_hashtag"],[],
+          ["IT", "hashtag", "not_a_hashtag"],
+          [],
           3,
           7));
     }
+
     return  Container(
 
         //color: Constants.backgroundColor,
@@ -239,7 +238,6 @@ class GroupCardNameAndAvatars extends StatelessWidget {
           AvatarRound(size: size),
           AvatarRound(size: size),
           AvatarRound(size: size),
-
         ])
         // Text(
         //     "Free places: " +
@@ -258,7 +256,7 @@ class GroupCardNameAndAvatars extends StatelessWidget {
 }
 
 class AvatarRound extends StatelessWidget {
-   AvatarRound({
+  AvatarRound({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -272,14 +270,11 @@ class AvatarRound extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(300.0),
         child: Image.asset(
-          "assets/images/avatar.png",
+          "assets/images/female_avatar.png",
           width: size.width * 0.07,
           //alignment: Alignment.centerRight,
         ),
       ),
     );
-
-
-
   }
 }

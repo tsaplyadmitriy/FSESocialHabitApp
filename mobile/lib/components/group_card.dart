@@ -142,7 +142,7 @@ class AvatarRound extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(300.0),
         child: Image.asset(
-          "assets/images/avatar.png",
+          "assets/images/female_avatar.png",
           width: size.width * 0.07,
           //alignment: Alignment.centerRight,
         ),

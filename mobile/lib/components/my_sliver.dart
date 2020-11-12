@@ -22,6 +22,7 @@ class MySliverAppBar extends StatelessWidget {
       floating: true,
       snap: true,
       stretch: true,
+      automaticallyImplyLeading: false,
       backgroundColor:
           darkModeOn ? Constants.kSecondaryColor : Constants.kPrimaryLightColor,
       expandedHeight: 200.0,
@@ -38,7 +39,7 @@ class MySliverAppBar extends StatelessWidget {
         background: Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(imagePath, fit: BoxFit.fitWidth),
+            Image.asset(imagePath, fit: BoxFit.fitHeight),
             const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(

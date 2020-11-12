@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:social_habit_app/components/image_picker.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
 import 'package:social_habit_app/components/smallButton.dart';
@@ -13,9 +17,10 @@ class ProfileEditing extends StatefulWidget {
 }
 
 class _ProfileEditing extends State<ProfileEditing> {
-  // TODO: integrate this with API so the tags are being passed here
+  // TODO: integrate this with API so the tags and image are being passed here
   ProfileData profile =
       new ProfileData.withtags("", "", "", ["item1", "item2"]);
+  File _image;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +49,14 @@ class _ProfileEditing extends State<ProfileEditing> {
               Column(crossAxisAlignment: CrossAxisAlignment.stretch,
                   //mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    MyImagePicker(
+                      //TODO pass image here
+                      initialImage: null,
+                      imageCallback: (image) {
+                        print("reached callback");
+                        if (image != null) _image = image;
+                      },
+                    ),
                     RoundedInputField(
                       hintText: "Name",
                       icon: Icons.person,
@@ -125,19 +138,19 @@ class _ProfileEditing extends State<ProfileEditing> {
                               });
                             },
                           ),
-                          SizedBox(width: size.width * 0.05),
-                          OutlinedButton.icon(
-                            style: TextButton.styleFrom(
-                              shape: StadiumBorder(),
-                            ),
-                            label: Text("New avatar",
-                                style: Theme.of(context).textTheme.bodyText1),
-                            icon: Icon(
-                              Icons.edit,
-                              color: Theme.of(context).unselectedWidgetColor,
-                            ),
-                            onPressed: () async {},
-                          ),
+                          // SizedBox(width: size.width * 0.05),
+                          // OutlinedButton.icon(
+                          //   style: TextButton.styleFrom(
+                          //     shape: StadiumBorder(),
+                          //   ),
+                          //   label: Text("New avatar",
+                          //       style: Theme.of(context).textTheme.bodyText1),
+                          //   icon: Icon(
+                          //     Icons.edit,
+                          //     color: Theme.of(context).unselectedWidgetColor,
+                          //   ),
+                          //   onPressed: () async {},
+                          // ),
                         ],
                       ),
                     ),
@@ -166,7 +179,9 @@ class ProfileEditingSaveButton extends StatelessWidget {
         widthModifier: 0.6,
         press: () {
           print(profile.name);
+
           // TODO: integrate this with API
+          // new avatar is in _image
 
           Navigator.pop(context, profile);
         },

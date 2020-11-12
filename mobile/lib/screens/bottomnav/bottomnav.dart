@@ -27,7 +27,7 @@ class _MyHomePageState extends State<BottomNavigator> {
     "My groups",
     "Profile"
   ];
-  static List<Widget> _widgetOptions = <Widget>[
+  static final  List<Widget> _widgetOptions = <Widget>[
     FindGroupScreen(),
     CreateGroupScreen(),
     MyGroupsScreen(),
