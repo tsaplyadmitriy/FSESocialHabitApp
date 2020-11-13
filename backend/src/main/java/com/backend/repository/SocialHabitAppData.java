@@ -1,6 +1,7 @@
 package com.backend.repository;
 
 import com.backend.controller.UserEntityExistException;
+import com.backend.entity.CategoryEntity;
 import com.backend.entity.GroupEntity;
 import com.backend.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,13 @@ public class SocialHabitAppData {
         Query query = new Query();
         query.addCriteria(Criteria.where("groupCategory").is(category));
         return mongoTemplate.find(query, GroupEntity.class);
+    }
+
+    public List<CategoryEntity> findAllCategories() {
+        return mongoTemplate.findAll(CategoryEntity.class);
+    }
+
+    public CategoryEntity saveCategory(CategoryEntity categoryEntity) {
+        return mongoTemplate.save(categoryEntity);
     }
 }
