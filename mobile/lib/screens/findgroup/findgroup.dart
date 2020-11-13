@@ -13,42 +13,32 @@ import 'package:social_habit_app/group.dart';
 class FindGroupScreen extends StatefulWidget {
   FindGroupScreen({Key key, this.title}) : super(key: key);
 
-
   final String title;
-
 
   static FindGroupStateScreen findGroupState = null;
   @override
   FindGroupStateScreen createState() {
-
-   return FindGroupStateScreen();
-
+    return FindGroupStateScreen();
   }
 }
 
 List<Group> testList = [];
 List<GroupEntity> groupList = [];
 bool doWeNeedToRefresh = false;
+
 class FindGroupStateScreen extends State<FindGroupScreen> {
-
-
-
-
   @override
   void initState() {
     print("INIT");
     super.initState();
-    if(doWeNeedToRefresh ==false){
+    if (doWeNeedToRefresh == false) {
       refreshGroups();
-    }else{
+    } else {
       doWeNeedToRefresh = false;
     }
   }
 
-
-
   refreshGroups() async {
-
     setState(() {});
     groupList =
         await APIRequests().getGroupList(UserSession().getUserentity.token);
@@ -60,11 +50,8 @@ class FindGroupStateScreen extends State<FindGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     print("BUILD");
-    setState(() {
-
-    });
+    setState(() {});
     testList.clear();
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
@@ -80,56 +67,55 @@ class FindGroupStateScreen extends State<FindGroupScreen> {
           7));
     }
 
-    return  Container(
+    return Container(
 
         //color: Constants.backgroundColor,
 
         // margin: EdgeInsets.only(bottom: 0, top: 0, right: 2, left: 2),
 
-
-    child: groupList.length>0 ?
-
-    RefreshIndicator(
-
-      onRefresh: () async{
-        await refreshGroups();
-      },
-        child: CustomScrollView(
-    slivers: [
-    MySliverAppBar(
-    darkModeOn: darkModeOn,
-    text: "Find groups",
-    imagePath: "assets/images/inno_campus.png",
-    ),
-
-      SliverList(
-          delegate: SliverChildListDelegate(
-
-              groupList.map((GroupEntity groupEnt) {
-                Group group = new Group(groupEnt.groupName, groupEnt.groupDescription, groupEnt.groupTgLink,
-                    groupEnt.groupCategory, List<String>.from(groupEnt.groupTags), List<String>.from(groupEnt.members),
-                    5, groupEnt.membersLimit);
-            return Container(
-              padding: EdgeInsets.only(top: 5),
-
-                width: double.infinity,
-                //height: 100,
-                child: GroupCard(
-                    group: group,
-                    function: () async {
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext buildContext) =>
-                              GroupCardDialog(group));
-                    }));
-
-          }).toList())
-
-
-    )])):
-    Container(child:Center(child: Text("Loading...",textAlign: TextAlign.center,)))
-    );
-
+        child: groupList.length > 0
+            ? RefreshIndicator(
+                onRefresh: () async {
+                  await refreshGroups();
+                },
+                child: CustomScrollView(slivers: [
+                  MySliverAppBar(
+                    darkModeOn: darkModeOn,
+                    text: "Find groups",
+                    imagePath: "assets/images/group_pic.png",
+                  ),
+                  SliverList(
+                      delegate: SliverChildListDelegate(
+                          groupList.map((GroupEntity groupEnt) {
+                    Group group = new Group(
+                        groupEnt.groupName,
+                        groupEnt.groupDescription,
+                        groupEnt.groupTgLink,
+                        groupEnt.groupCategory,
+                        List<String>.from(groupEnt.groupTags),
+                        List<String>.from(groupEnt.members),
+                        5,
+                        groupEnt.membersLimit);
+                    return Container(
+                        padding: EdgeInsets.only(top: 5),
+                        width: double.infinity,
+                        //height: 100,
+                        child: GroupCard(
+                            group: group,
+                            function: () async {
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext buildContext) =>
+                                      GroupCardDialog(group));
+                            }));
+                  }).toList()))
+                ]))
+            : Container(
+                child: Center(
+                    child: Text(
+                "Loading...",
+                textAlign: TextAlign.center,
+              ))));
   }
 }
 
