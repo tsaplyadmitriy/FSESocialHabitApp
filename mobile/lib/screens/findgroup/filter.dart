@@ -3,76 +3,106 @@ import 'package:flutter/material.dart';
 import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
+import 'package:social_habit_app/components/smallButton.dart';
+import 'package:social_habit_app/components/text_field_container.dart';
 import 'package:social_habit_app/constants.dart';
 
 import 'findgroup.dart';
 
-class FilterTab extends StatefulWidget{
-
-
-
+class FilterTab extends StatefulWidget {
   @override
   _FilterTab createState() => _FilterTab();
-
-
-
 }
 
-class _FilterTab extends State<FilterTab>{
-
-
-
-
+class _FilterTab extends State<FilterTab> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size; // h and w of s
+    double sliderParticipants = 1;
+
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-
-
-            },
-            icon: Icon(Icons.search),
-          )
-        ],
-        centerTitle: true,
-        title: Text('Search Bar'),
-      ),
-      body: ListView.builder(
-        itemCount: UserSession().getCategoryList.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(
-            UserSession().getCategoryList[index],
-          ),
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.search),
+            )
+          ],
+          centerTitle: true,
+          title: Text('Search Bar'),
         ),
-      ),
-    );
+        // body: ListView.builder(
+        //   itemCount: UserSession().getCategoryList.length,
+        //   itemBuilder: (context, index) => ListTile(
+        //     title: Text(
+        //       UserSession().getCategoryList[index],
+        //     ),
+        //   ),
+        // ),
+        body: Column(children: [
+          Row(children: [
+            SmallButton(
+              text: "Search group names",
+              press: () {},
+            ),
+            SmallButton(
+              text: "Search categories",
+              press: () {},
+            )
+          ]),
+          TextFieldContainer(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    Container(
+                      width: size.width * 0.6,
+                      child: Slider(
+                        activeColor: Theme.of(context).primaryColor,
+                        inactiveColor: Theme.of(context).unselectedWidgetColor,
+                        divisions: 7,
+                        min: 1,
+                        max: 7,
+                        onChanged: (double value) {
+                          setState(() {
+                            sliderParticipants = value;
+                            //TODO: get participants filter here
+                          });
+                        },
+                        value: sliderParticipants,
+                        label: "${sliderParticipants.toInt()}",
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  "Specify number of participants",
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          ),
+        ]));
   }
-
 }
 
 class Search extends SearchDelegate {
-
-
-
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
       IconButton(
         icon: Icon(Icons.close),
         onPressed: () {
-
-
           query = "";
         },
       ),
     ];
   }
-
-
-
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -88,43 +118,32 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-
-
-    if(selectedResult == ''){
+    if (selectedResult == '') {
       selectedResult = query;
-
     }
-    if(!recentList.contains(selectedResult)){
+    if (!recentList.contains(selectedResult)) {
       recentList.add(selectedResult);
     }
-
 
     return Container(
       child: Center(
         child: RoundedButton(
+          text: "Find " + selectedResult,
+          press: () async {
+            groupList = await APIRequests().getGroupByCategoryList(
+                selectedResult, UserSession().getUserentity.token);
 
-
-            text:"Find "+selectedResult,
-          press:() async{
-
-
-
-            groupList = await APIRequests().getGroupByCategoryList
-              (selectedResult, UserSession().getUserentity.token);
-
-            if( !UserSession().getCategoryList.contains(selectedResult)){
-              print("q "+selectedResult);
+            if (!UserSession().getCategoryList.contains(selectedResult)) {
+              print("q " + selectedResult);
               UserSession().getCategoryList.add(selectedResult);
-             await APIRequests().addCategory(UserSession().getUserentity.token, selectedResult);
+              await APIRequests().addCategory(
+                  UserSession().getUserentity.token, selectedResult);
             }
-
-
 
             doWeNeedToRefresh = true;
 
-
-            Navigator.pushReplacementNamed(context,Constants.loginDone);
-        },
+            Navigator.pushReplacementNamed(context, Constants.loginDone);
+          },
         ),
       ),
     );
@@ -139,13 +158,13 @@ class Search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<String> suggestionList = [];
 
-    print("query"+query);
+    print("query" + query);
     query.isEmpty
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(
-      // In the false case
-          (element) => element.toLowerCase().contains(query.toLowerCase()),
-    ));
+            // In the false case
+            (element) => element.toLowerCase().contains(query.toLowerCase()),
+          ));
 
     return ListView.builder(
       itemCount: suggestionList.length,
@@ -155,8 +174,7 @@ class Search extends SearchDelegate {
             suggestionList[index],
           ),
           leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-          onTap: (){
-
+          onTap: () {
             selectedResult = suggestionList[index];
             showResults(context);
           },
