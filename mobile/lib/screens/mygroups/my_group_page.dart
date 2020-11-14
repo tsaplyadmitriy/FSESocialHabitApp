@@ -7,6 +7,7 @@ import 'package:social_habit_app/components/group_card.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
+import 'package:social_habit_app/components/users_list.dart';
 import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/screens/creategroup/creategroup.dart';
 import 'package:social_habit_app/screens/mygroups/challenge_card.dart';
@@ -122,6 +123,12 @@ class _MyGroupPageState extends State<MyGroupPage> {
                   children: challengeList.map((Challenge challenge) {
                 return ChallengeCard(demoChallenge: challenge, size: size);
               }).toList()),
+              SizedBox(height: size.height * 0.1),
+              Text("Users", style: Theme.of(context).textTheme.headline1),
+              UserList(
+                group: group,
+                copyTelegram: true,
+              ),
             ],
           ),
         ),

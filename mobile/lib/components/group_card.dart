@@ -16,42 +16,43 @@ class GroupCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size; // h and w of s    return Card(
 
     return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      child: InkWell(
-        onTap: function,
-        borderRadius: BorderRadius.circular(20.0),
-        child: Container(
-          margin: EdgeInsets.symmetric(vertical: 25, horizontal: 15),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            TagsHorizontalScroll(
-              list: [group.category],
-              tag: false,
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              GroupCardNameAndAvatars(size: size, group: group),
-              GroupCardImage(size: size),
-            ]),
-
-            /*  Row(
-              children: group.preferences.map((String pref) {
-                return Text(
-                  "#" + pref + " ",
-                  style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300),
-                );
-              }).toList(),
-            ) */
-          ]),
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
         ),
-      ),
-    );
+        margin: EdgeInsets.symmetric(vertical: 3, horizontal: 17),
+        child: InkWell(
+          onTap: function,
+          borderRadius: BorderRadius.circular(20.0),
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  TagsHorizontalScroll(
+                    list: [group.category],
+                    tag: false,
+                  ),
+                  GroupCardNameAndAvatars(size: size, group: group),
+
+                  /*  Row(
+                  children: group.preferences.map((String pref) {
+                    return Text(
+                      "#" + pref + " ",
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300),
+                    );
+                  }).toList(),
+            ) */
+                ]),
+                GroupCardImage(size: size),
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -70,7 +71,7 @@ class GroupCardImage extends StatelessWidget {
       width: size.width * 0.2,
       child: CircleAvatar(
           backgroundImage: AssetImage("assets/images/inno_campus.png"),
-          radius: size.width * 0.08),
+          radius: size.width * 0.1),
     );
   }
 }
@@ -93,43 +94,28 @@ class GroupCardNameAndAvatars extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SizedBox(
-            //   height: size.height * 0.005,
-            // ),
             Container(
                 alignment: Alignment.centerLeft,
-                //margin: EdgeInsets.only(left:5),
                 child: Text(
                   group.groupName,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 )),
             Row(children: [
-              AvatarRound(size: size),
-              AvatarRound(size: size),
-              AvatarRound(size: size),
-              AvatarRound(size: size),
-              AvatarRound(size: size),
-              AvatarRound(size: size),
-              AvatarRound(size: size),
+              UserAvatar(size: size),
+              UserAvatar(size: size),
+              UserAvatar(size: size),
+              UserAvatar(size: size),
+              UserAvatar(size: size),
+              UserAvatar(size: size),
+              UserAvatar(size: size),
             ])
-            // Text(
-            //     "Free places: " +
-            //         (group.maxParticipants - group.participants)
-            //             .toString() +
-            //         " / " +
-            //         group.maxParticipants.toString(),
-            //     style:
-            //         TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
-            // SizedBox(
-            //   height: size.height * 0.005,
-            // ),
           ]),
     );
   }
 }
 
-class AvatarRound extends StatelessWidget {
-  const AvatarRound({
+class UserAvatar extends StatelessWidget {
+  const UserAvatar({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -139,7 +125,7 @@ class AvatarRound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: 2),
+      margin: EdgeInsets.only(right: 1),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(300.0),
         child: Image.asset(

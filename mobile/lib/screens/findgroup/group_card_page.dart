@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
+import 'package:social_habit_app/components/users_list.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/group.dart';
 
@@ -58,6 +59,9 @@ class GroupCardDialog extends StatelessWidget {
               //SizedBox(height: size.height * 0.01),
               GroupCardPage_preferences(group: group),
               GroupCardPagedescription(group: group),
+              Text("Users:"),
+              Container(
+                  height: size.height * 0.2, child: UserList(group: group)),
               Container(
                   alignment: Alignment.bottomCenter,
                   child: RoundedButton(
