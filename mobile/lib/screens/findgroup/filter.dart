@@ -24,10 +24,13 @@ class _FilterTab extends State<FilterTab> {
 
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
-
+    String category = "";
     return Scaffold(
         appBar: AppBar(
-          actions: <Widget>[],
+          actions: <Widget>[
+
+
+          ],
           centerTitle: true,
           title: Text('Search'),
         ),
@@ -48,6 +51,10 @@ class _FilterTab extends State<FilterTab> {
                 RoundedInputField(
                   hintText: "Enter your request",
                   icon: (Icons.search),
+                  onChanged: (change){
+                    category = change;
+
+                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,8 +133,20 @@ class _FilterTab extends State<FilterTab> {
                 ),
                 SmallButton(
                     text: "Search",
-                    press: () {
-                      //TODO: logic here,
+                    press: () async {
+                      groupList = await APIRequests().getGroupByCategoryList(
+                          category, UserSession().getUserentity.token);
+
+                      if (!UserSession().getCategoryList.contains(category)) {
+                        print("q " + category);
+                        UserSession().getCategoryList.add(category);
+                        await APIRequests().addCategory(
+                            UserSession().getUserentity.token, category);
+                      }
+
+                      doWeNeedToRefresh = true;
+
+                      Navigator.pushReplacementNamed(context, Constants.loginDone);
                     }),
               ]),
         ));

@@ -60,7 +60,7 @@ class LoginRequest  {
    String age = '18';
 
 
-   UserEntity({login, String password, String token,String name, String description,String tgAlias, String age,List<dynamic> tags,List<dynamic> userGroups}) {
+   UserEntity({String login, String password, String token,String name, String description,String tgAlias, String age,List<dynamic> tags,List<dynamic> userGroups}) {
     this.login = login;
     this.password = password;
     this.token = token;
