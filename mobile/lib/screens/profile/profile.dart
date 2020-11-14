@@ -77,6 +77,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                         child: TagsHorizontalScroll(
                           list: List<String>.from(
                               UserSession().getUserentity.tags),
+                          tag: true,
                         ),
                       ),
                     )

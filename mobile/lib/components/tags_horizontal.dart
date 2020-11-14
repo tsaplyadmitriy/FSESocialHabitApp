@@ -6,12 +6,16 @@ class TagsHorizontalScroll extends StatelessWidget {
   const TagsHorizontalScroll({
     Key key,
     @required this.list,
+    this.tag,
   }) : super(key: key);
 
   final List<String> list;
+  final bool tag;
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -22,7 +26,11 @@ class TagsHorizontalScroll extends StatelessWidget {
           ),
           child: Chip(
               elevation: 3,
-              backgroundColor: Theme.of(context).primaryColorLight,
+              backgroundColor: tag
+                  ? (darkModeOn ? Constants.dPillTag : Constants.kPillTag)
+                  : (darkModeOn
+                      ? Constants.dPillCategory
+                      : Constants.kPillCategory),
               label: Text(string,
                   style: TextStyle(
                     color: Colors.black,

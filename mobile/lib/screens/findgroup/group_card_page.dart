@@ -33,8 +33,8 @@ class GroupCardDialog extends StatelessWidget {
       children: <Widget>[
         Container(
           padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-          margin: EdgeInsets.symmetric(
-              vertical: size.height * 0.05, horizontal: 0),
+          margin:
+              EdgeInsets.symmetric(vertical: size.height * 0.05, horizontal: 0),
           decoration: new BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -51,11 +51,11 @@ class GroupCardDialog extends StatelessWidget {
             //mainAxisSize: MainAxisSize.min, // To make the card compact
             children: <Widget>[
               NameOfGroup(group: group),
-              SizedBox(height: size.height * 0.01),
               TagsHorizontalScroll(
                 list: [group.category],
+                tag: false,
               ),
-              SizedBox(height: size.height * 0.01),
+              //SizedBox(height: size.height * 0.01),
               GroupCardPage_preferences(group: group),
               GroupCardPagedescription(group: group),
               Container(
@@ -132,16 +132,9 @@ class GroupCardPage_preferences extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: group.preferences.map((String pref) {
-        return Text(
-          "#" + pref + "\t",
-          style: TextStyle(
-              fontStyle: FontStyle.italic,
-              fontSize: 12,
-              fontWeight: FontWeight.w400),
-        );
-      }).toList(),
+    return TagsHorizontalScroll(
+      list: group.preferences,
+      tag: true,
     );
   }
 }
