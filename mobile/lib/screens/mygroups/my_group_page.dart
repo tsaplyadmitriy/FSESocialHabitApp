@@ -64,8 +64,14 @@ class _MyGroupPageState extends State<MyGroupPage> {
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             children: [
-              TagsHorizontalScroll(list: [group.category]),
-              TagsHorizontalScroll(list: group.preferences),
+              TagsHorizontalScroll(
+                list: [group.category],
+                tag: false,
+              ),
+              TagsHorizontalScroll(
+                list: group.preferences,
+                tag: true,
+              ),
               Visibility(
                 visible: admin,
                 child: Column(

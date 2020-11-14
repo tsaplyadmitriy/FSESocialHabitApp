@@ -145,7 +145,10 @@ class GroupCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            TagsHorizontalScroll(list: [group.category]),
+            TagsHorizontalScroll(
+              list: [group.category],
+              tag: false,
+            ),
             Row(children: [
               GroupCardNameAndAvatars(size: size, group: group),
               GroupCardImage(size: size),

@@ -33,8 +33,8 @@ class GroupCardDialog extends StatelessWidget {
       children: <Widget>[
         Container(
           padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-          margin: EdgeInsets.symmetric(
-              vertical: size.height * 0.05, horizontal: 0),
+          margin:
+              EdgeInsets.symmetric(vertical: size.height * 0.05, horizontal: 0),
           decoration: new BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -54,6 +54,7 @@ class GroupCardDialog extends StatelessWidget {
               SizedBox(height: size.height * 0.01),
               TagsHorizontalScroll(
                 list: [group.category],
+                tag: true,
               ),
               SizedBox(height: size.height * 0.01),
               GroupCardPage_preferences(group: group),
