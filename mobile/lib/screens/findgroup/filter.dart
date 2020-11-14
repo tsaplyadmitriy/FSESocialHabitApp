@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
+import 'package:social_habit_app/components/rounded_input_field.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
 import 'package:social_habit_app/constants.dart';
@@ -15,21 +16,20 @@ class FilterTab extends StatefulWidget {
 }
 
 class _FilterTab extends State<FilterTab> {
+  double sliderParticipants = 1;
+  bool searchByName = true;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; // h and w of s
-    double sliderParticipants = 1;
+
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
 
     return Scaffold(
         appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.search),
-            )
-          ],
+          actions: <Widget>[],
           centerTitle: true,
-          title: Text('Search Bar'),
+          title: Text('Search'),
         ),
         // body: ListView.builder(
         //   itemCount: UserSession().getCategoryList.length,
@@ -39,55 +39,98 @@ class _FilterTab extends State<FilterTab> {
         //     ),
         //   ),
         // ),
-        body: Column(children: [
-          Row(children: [
-            SmallButton(
-              text: "Search group names",
-              press: () {},
-            ),
-            SmallButton(
-              text: "Search categories",
-              press: () {},
-            )
-          ]),
-          TextFieldContainer(
-            child: Column(
+        body: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                RoundedInputField(
+                  hintText: "Enter your request",
+                  icon: (Icons.search),
+                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.person,
-                      color: Theme.of(context).primaryColor,
+                    SmallButton(
+                      text: "Names",
+                      bold: searchByName,
+                      widthModifier: 0.4,
+                      press: () {
+                        setState(() {
+                          searchByName = true;
+                          print(searchByName);
+                        });
+                      },
+                      color: !searchByName
+                          ? Constants.kPrimaryColor
+                          : (darkModeOn
+                              ? Constants.dSecondaryColor
+                              : Constants.kSecondaryColor),
                     ),
-                    Container(
-                      width: size.width * 0.6,
-                      child: Slider(
-                        activeColor: Theme.of(context).primaryColor,
-                        inactiveColor: Theme.of(context).unselectedWidgetColor,
-                        divisions: 7,
-                        min: 1,
-                        max: 7,
-                        onChanged: (double value) {
-                          setState(() {
-                            sliderParticipants = value;
-                            //TODO: get participants filter here
-                          });
-                        },
-                        value: sliderParticipants,
-                        label: "${sliderParticipants.toInt()}",
-                      ),
+                    SmallButton(
+                      text: "Categories",
+                      widthModifier: 0.4,
+                      bold: !searchByName,
+                      press: () {
+                        setState(() {
+                          searchByName = false;
+                          print(searchByName);
+                        });
+                      },
+                      color: searchByName
+                          ? Constants.kPrimaryColor
+                          : (darkModeOn
+                              ? Constants.dSecondaryColor
+                              : Constants.kSecondaryColor),
                     ),
                   ],
                 ),
-                Text(
-                  "Specify number of participants",
-                  style: Theme.of(context).textTheme.bodyText1,
-                )
-              ],
-            ),
-          ),
-        ]));
+                TextFieldContainer(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.person,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          Container(
+                            width: size.width * 0.6,
+                            child: Slider(
+                              activeColor: Theme.of(context).primaryColor,
+                              inactiveColor:
+                                  Theme.of(context).unselectedWidgetColor,
+                              divisions: 6,
+                              min: 1,
+                              max: 7,
+                              onChanged: (double value) {
+                                setState(() {
+                                  sliderParticipants = value;
+                                  //TODO: get participants filter here
+                                });
+                              },
+                              value: sliderParticipants,
+                              label: "${sliderParticipants.toInt()}",
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        "Minumum number of participants",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      )
+                    ],
+                  ),
+                ),
+                SmallButton(
+                    text: "Search",
+                    press: () {
+                      //TODO: logic here,
+                    }),
+              ]),
+        ));
   }
 }
 

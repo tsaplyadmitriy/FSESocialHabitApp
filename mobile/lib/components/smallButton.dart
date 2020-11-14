@@ -6,6 +6,7 @@ class SmallButton extends StatelessWidget {
   final Function press;
   final Color color, textColor;
   final double widthModifier;
+  final bool bold;
   const SmallButton({
     Key key,
     this.text,
@@ -13,6 +14,7 @@ class SmallButton extends StatelessWidget {
     this.color = Constants.kPrimaryColor,
     this.textColor = Colors.white,
     this.widthModifier = 0.5,
+    this.bold = false,
   }) : super(key: key);
 
   @override
@@ -26,7 +28,14 @@ class SmallButton extends StatelessWidget {
         shape: StadiumBorder(),
         minimumSize: Size(size.width * widthModifier, 50),
       ),
-      child: Text(text),
+      child: Text(
+        text,
+        style: bold
+            ? TextStyle(
+                fontWeight: FontWeight.bold,
+              )
+            : TextStyle(),
+      ),
       onPressed: press,
     );
   }
