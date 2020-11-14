@@ -151,8 +151,9 @@ public class GroupsController {
     }
 
     @PostMapping(value = "/api/addCategory", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public CategoryEntity addCategory(@RequestParam String category) {
+    public List<CategoryEntity> addCategory(@RequestParam String category) {
         CategoryEntity categoryEntity = new CategoryEntity(category);
-        return repository.saveCategory(categoryEntity);
+        repository.saveCategory(categoryEntity);
+        return repository.findAllCategories();
     }
 }
