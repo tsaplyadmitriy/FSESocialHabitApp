@@ -28,6 +28,8 @@ class LoginSplash extends StatelessWidget{
     if (loginRequest.error == 0) {
       UserSession().setUserEntity =
       await APIRequests().getUserByToken(loginRequest.token);
+      UserSession().setCategoriesList = (
+      await APIRequests().getCategoriesList(loginRequest.token)).map((e) => e.categoryName).toList();
 
       print("token: "+UserSession().getUserentity.token);
       //print("user name: "+UserSession().getUserentity.name);

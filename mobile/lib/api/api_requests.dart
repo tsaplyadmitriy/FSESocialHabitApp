@@ -29,6 +29,24 @@ class LoginRequest  {
   }
 
 
+  class CategoryEntity{
+
+     String categoryName;
+    CategoryEntity({this.categoryName});
+
+
+    factory CategoryEntity.fromJson(Map<String,dynamic> json){
+
+      return CategoryEntity(
+        categoryName: json['categoryName']
+
+      );
+
+     }
+
+
+  }
+
  class UserEntity {
     String login;
    String password;
@@ -53,9 +71,6 @@ class LoginRequest  {
 
 
   }
-
-
-
 
     factory UserEntity.fromJson(Map<String, dynamic> json) {
      print(json['age']);
@@ -148,7 +163,8 @@ class APIRequests{
 
 
   Future<GroupEntity> createUserGroup(String token,String login,String groupName, String groupDescription, String groupTGLink,int membersLimit,
-       List<String>groupTags, String groupCategory) async{
+
+      List<String>groupTags, String groupCategory) async{
     var url = Constants.apiLink+"/api/addGroup";
     var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader: token},body:jsonEncode({'owner': login,
       'groupCategory':groupCategory,'groupName': groupName,'groupTGLink':groupTGLink,'groupDescription':groupDescription,'membersLimit':membersLimit,
@@ -195,6 +211,31 @@ class APIRequests{
 
     return UserEntity.fromJson(responseJson);
   }
+
+  Future<List<CategoryEntity>> getCategoriesList(String token) async{
+    var url = Constants.apiLink+'/api/categories';
+    final response = await http.get(url,headers: {HttpHeaders.authorizationHeader : token});
+    Iterable l = jsonDecode(response.body);
+
+    List<CategoryEntity>list = (json.decode(response.body) as List).map((i) =>CategoryEntity.fromJson(i)).toList();
+    print(list.toString());
+    return  list;
+
+  }
+
+  Future<CategoryEntity> addCategory(String token, String category) async {
+
+    var url = Constants.apiLink+"/api/addCategory";
+    var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader : token}
+                          ,body:jsonEncode({'category': category}));
+    final responseJson = jsonDecode(response.body);
+    return CategoryEntity.fromJson(responseJson);
+
+
+  }
+
+
+
 
 
 

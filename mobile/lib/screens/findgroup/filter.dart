@@ -9,7 +9,7 @@ import 'findgroup.dart';
 
 class FilterTab extends StatefulWidget{
 
-  final List<String> list = ['category','category 1','category 2'];
+
 
   @override
   _FilterTab createState() => _FilterTab();
@@ -31,7 +31,7 @@ class _FilterTab extends State<FilterTab>{
           IconButton(
             onPressed: () {
 
-              showSearch(context: context, delegate: Search(widget.list));
+
             },
             icon: Icon(Icons.search),
           )
@@ -40,10 +40,10 @@ class _FilterTab extends State<FilterTab>{
         title: Text('Search Bar'),
       ),
       body: ListView.builder(
-        itemCount: widget.list.length,
+        itemCount: UserSession().getCategoryList.length,
         itemBuilder: (context, index) => ListTile(
           title: Text(
-            widget.list[index],
+            UserSession().getCategoryList[index],
           ),
         ),
       ),
@@ -55,7 +55,6 @@ class _FilterTab extends State<FilterTab>{
 class Search extends SearchDelegate {
 
 
-  GlobalKey<FindGroupStateScreen> findGroupScreen = GlobalKey<FindGroupStateScreen>();
 
 
   @override
@@ -64,6 +63,8 @@ class Search extends SearchDelegate {
       IconButton(
         icon: Icon(Icons.close),
         onPressed: () {
+
+
           query = "";
         },
       ),
@@ -87,17 +88,37 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+
+
+    if(selectedResult == ''){
+      selectedResult = query;
+
+    }
     if(!recentList.contains(selectedResult)){
       recentList.add(selectedResult);
     }
+
+
     return Container(
       child: Center(
         child: RoundedButton(
+
+
             text:"Find "+selectedResult,
           press:() async{
 
+
+
             groupList = await APIRequests().getGroupByCategoryList
               (selectedResult, UserSession().getUserentity.token);
+
+            if( !UserSession().getCategoryList.contains(selectedResult)){
+              print("q "+selectedResult);
+              UserSession().getCategoryList.add(selectedResult);
+             await APIRequests().addCategory(UserSession().getUserentity.token, selectedResult);
+            }
+
+
 
             doWeNeedToRefresh = true;
 
@@ -112,12 +133,13 @@ class Search extends SearchDelegate {
   final List<String> listExample;
   Search(this.listExample);
 
-  List<String> recentList = ["Text 4", "Text 3"];
+  List<String> recentList = [];
 
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> suggestionList = [];
 
+    print("query"+query);
     query.isEmpty
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(
@@ -134,6 +156,7 @@ class Search extends SearchDelegate {
           ),
           leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
           onTap: (){
+
             selectedResult = suggestionList[index];
             showResults(context);
           },

@@ -27,6 +27,8 @@ class SignUpSplash extends StatelessWidget{
   Future<UserEntity> auth(String login, String password,String name) async {
     UserEntity user = await APIRequests().signUpUser(login,password,name);
     UserSession().setUserEntity = user;
+    UserSession().setCategoriesList = (
+        await APIRequests().getCategoriesList(user.token)).map((e) => e.categoryName).toList();
       return user;
     }
 
