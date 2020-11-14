@@ -67,9 +67,13 @@ class _MyHomePageState extends State<BottomNavigator> {
         actions: (_selectedIndex == 0)
             ?[
           IconButton(
-            onPressed: () {
+            onPressed: () async{
 
-              showSearch(context: context, delegate: Search(UserSession().getCategoryList));
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FilterTab()),
+              );
+             // showSearch(context: context, delegate: Search(UserSession().getCategoryList));
             },
             icon: Icon(Icons.search),
           )]

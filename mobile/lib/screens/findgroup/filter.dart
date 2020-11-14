@@ -30,7 +30,7 @@ class _FilterTab extends State<FilterTab>{
         actions: <Widget>[
           IconButton(
             onPressed: () {
-
+              showSearch(context: context, delegate: Search(UserSession().getCategoryList));
 
             },
             icon: Icon(Icons.search),
