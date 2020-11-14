@@ -61,7 +61,12 @@ class GroupCardDialog extends StatelessWidget {
               GroupCardPagedescription(group: group),
               Text("Users:"),
               Container(
-                  height: size.height * 0.2, child: UserList(group: group)),
+                  height: size.height * 0.2,
+                  child: UserList(
+                    mode: "view",
+                    group: group,
+                    copyTelegram: false,
+                  )),
               Container(
                   alignment: Alignment.bottomCenter,
                   child: RoundedButton(

@@ -4,15 +4,27 @@ import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/group.dart';
 
-class UserList extends StatelessWidget {
-  UserList({
+class UserList extends StatefulWidget {
+  const UserList({
     Key key,
     @required this.group,
-    this.copyTelegram,
+    @required this.mode,
+    @required this.copyTelegram,
   }) : super(key: key);
 
   final Group group;
-  bool copyTelegram = false;
+  final bool copyTelegram;
+  final String mode;
+
+  @override
+  _UserListState createState() => _UserListState(this.group, this.mode);
+}
+
+class _UserListState extends State<UserList> {
+  Group group;
+  String mode;
+
+  _UserListState(this.group, this.mode) : super();
 
   final List<UserEntity> users = [
     new UserEntity(
@@ -89,6 +101,8 @@ class UserList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     Size size = MediaQuery.of(context).size; // h and w of
     return SingleChildScrollView(
       child: Container(
@@ -100,7 +114,7 @@ class UserList extends StatelessWidget {
                 children: users.map((UserEntity user) {
               return GestureDetector(
                 onTap: () {
-                  if (copyTelegram) {
+                  if (widget.copyTelegram) {
                     Clipboard.setData(ClipboardData(text: user.tgAlias));
                     showSnackBar(context, user.name);
                   }
@@ -108,18 +122,65 @@ class UserList extends StatelessWidget {
                 child: Card(
                   elevation: 5,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(30.0),
                   ),
                   margin: EdgeInsets.all(3),
                   child: Container(
-                    padding: EdgeInsets.all(3),
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        AvatarRound(size: size),
-                        SizedBox(width: 5),
-                        //TODO: pass admin here so user know who to write
-                        //user.admin? Text(user.name) : Text(user.name + " 👑"),
-                        Text(user.name)
+                        Row(
+                          children: [
+                            AvatarRound(size: size),
+                            SizedBox(width: 5),
+                            //TODO: pass admin here so user know who to write
+                            //user.admin? Text(user.name) : Text(user.name + " 👑"),
+                            Text(user.name)
+                          ],
+                        ),
+                        Row(children: [
+                          Visibility(
+                            visible: mode == "new",
+                            child: IconButton(
+                                icon: new Icon(Icons.add_circle_outline),
+                                onPressed: () {
+                                  users.remove(user);
+                                  //TODO: API here
+
+                                  setState(() {});
+                                }),
+                          ),
+                          Visibility(
+                            visible: mode == "existing",
+                            child: IconButton(
+                                icon: new Icon(Icons.remove_circle_outline),
+                                onPressed: () async {
+                                  String deleted = await _editUser(
+                                      context,
+                                      darkModeOn,
+                                      "Do you want to delete user " +
+                                          user.name +
+                                          "?");
+                                  print(deleted);
+                                  if (deleted == "true") {
+                                    users.remove(user);
+                                    //TODO: API here
+                                    setState(() {});
+                                  }
+                                }),
+                          ),
+                          Visibility(
+                            visible: mode == "new",
+                            child: IconButton(
+                                icon: new Icon(Icons.remove_circle_outline),
+                                onPressed: () {
+                                  users.remove(user);
+                                  //TODO: API here
+                                  setState(() {});
+                                }),
+                          ),
+                        ])
                       ],
                     ),
                   ),
@@ -167,4 +228,51 @@ void showSnackBar(BuildContext context, String name) {
   );
 
   Scaffold.of(context).showSnackBar(snackBar);
+}
+
+Future<String> _editUser(BuildContext context, bool dark, String text) async {
+  String result = "";
+  await showDialog<String>(
+    context: context,
+    child: new AlertDialog(
+      contentPadding: const EdgeInsets.all(16.0),
+      content: new Row(
+        children: <Widget>[new Expanded(child: Text(text))],
+      ),
+      actions: <Widget>[
+        new OutlinedButton(
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: dark ? Colors.white : Colors.black),
+            ),
+            style: OutlinedButton.styleFrom(
+              shape: StadiumBorder(),
+            ),
+            onPressed: () {
+              result = "false";
+              Navigator.pop(context);
+            }),
+        new OutlinedButton(
+            child: Text(
+              'Ok',
+              style: TextStyle(color: dark ? Colors.white : Colors.black),
+            ),
+            style: OutlinedButton.styleFrom(
+              shape: StadiumBorder(),
+              side: BorderSide(
+                width: 2,
+                color: dark
+                    ? Constants.kPrimaryLightColor
+                    : Constants.kPrimaryColor,
+              ),
+            ),
+            onPressed: () {
+              result = "true";
+              //print(editTag);
+              Navigator.pop(context, "true");
+            })
+      ],
+    ),
+  );
+  return result;
 }

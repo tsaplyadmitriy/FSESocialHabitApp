@@ -3,6 +3,7 @@ import 'package:marquee/marquee.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:flutter/material.dart';
+import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/components/group_card.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
@@ -12,6 +13,7 @@ import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/screens/creategroup/creategroup.dart';
 import 'package:social_habit_app/screens/mygroups/challenge_card.dart';
 import 'package:social_habit_app/screens/mygroups/new_challenge.dart';
+import 'package:social_habit_app/screens/mygroups/new_users.dart';
 
 class Challenge {
   int goal;
@@ -110,6 +112,22 @@ class _MyGroupPageState extends State<MyGroupPage> {
                                 },
                                 widthModifier: 0.4,
                               ),
+                              SizedBox(height: size.height * 0.01),
+                              SmallButton(
+                                text: "New users",
+                                press: () async {
+                                  //TODO: refresh current users after popping
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return NewUsers(
+                                        group: group,
+                                      );
+                                    }),
+                                  );
+                                },
+                                widthModifier: 0.4,
+                              ),
                             ],
                           )
                         ]),
@@ -126,6 +144,7 @@ class _MyGroupPageState extends State<MyGroupPage> {
               SizedBox(height: size.height * 0.1),
               Text("Users", style: Theme.of(context).textTheme.headline1),
               UserList(
+                mode: "view",
                 group: group,
                 copyTelegram: true,
               ),
