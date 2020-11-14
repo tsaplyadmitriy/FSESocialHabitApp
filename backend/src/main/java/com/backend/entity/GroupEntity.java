@@ -19,15 +19,17 @@ public class GroupEntity {
     private String owner;
     private String groupCategory;
     private List<ChallengeEntity> challenges;
+    private List<UserEntity> pendingUsers;
 
     public GroupEntity(){
         this.id = UUID.randomUUID().toString();
         membersLogins = new ArrayList<>();
         groupTags = new ArrayList<>();
         challenges = new ArrayList<>();
+        pendingUsers = new ArrayList<>();
     }
 
-    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory, String groupDescription, String groupTgLink, List<String> groupTags) {
+    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory, String groupDescription, String groupTgLink, List<String> groupTags, List<UserEntity> pendingUsers) {
         this.id = UUID.randomUUID().toString();
         this.owner = owner;
         this.groupName = groupName;
@@ -44,6 +46,7 @@ public class GroupEntity {
             ex.printStackTrace();
         }
         challenges = new ArrayList<>();
+        this.pendingUsers = pendingUsers;
     }
 
     public GroupEntity(String owner, String groupName, String groupCategory, String groupTgLink, int membersLimit) {
@@ -223,4 +226,7 @@ public class GroupEntity {
 
     public void setGroupTgLink(String groupTgLink){this.groupTgLink = groupTgLink;}
 
+    public List<UserEntity> getPendingUsers(){return pendingUsers;}
+
+    public void setPendingUsers(List<UserEntity> pendingUsers) {this.pendingUsers = pendingUsers;}
 }
