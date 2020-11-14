@@ -1,5 +1,6 @@
 package com.backend.controller.groups;
 
+import com.backend.entity.CategoryEntity;
 import com.backend.entity.GroupEntity;
 import com.backend.entity.LoginResponse;
 import com.backend.entity.UserEntity;
@@ -142,5 +143,16 @@ public class GroupsController {
             groups.add(repository.findGroupById(groupsId.get(i)));
         }
         return groups;
+    }
+
+    @GetMapping(value = "/api/categories", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<CategoryEntity> getCategories() {
+        return repository.findAllCategories();
+    }
+
+    @PostMapping(value = "/api/addCategory", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public CategoryEntity addCategory(@RequestParam String category) {
+        CategoryEntity categoryEntity = new CategoryEntity(category);
+        return repository.saveCategory(categoryEntity);
     }
 }
