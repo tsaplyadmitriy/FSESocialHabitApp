@@ -53,13 +53,14 @@ class LoginRequest  {
    String token;
    String name = "DefaultFirstName";
    String tgAlias = "DefaultLastName";
+   String description = "Default Description";
    List<dynamic> tags;
 
    List<dynamic> userGroups;
    String age = '18';
 
 
-   UserEntity({login, String password, String token,String name, String tgAlias, String age,List<dynamic> tags,List<dynamic> userGroups}) {
+   UserEntity({login, String password, String token,String name, String description,String tgAlias, String age,List<dynamic> tags,List<dynamic> userGroups}) {
     this.login = login;
     this.password = password;
     this.token = token;
@@ -67,6 +68,7 @@ class LoginRequest  {
     this.age = age;
     this.tags = tags;
     this.userGroups = userGroups;
+    this.description = description;
 
 
 
@@ -81,7 +83,8 @@ class LoginRequest  {
         name: json['name'],
         age: json['age'].toString(),
         userGroups: json['userGroups'],
-        tags: json['tags']
+        tags: json['tags'],
+          description: json['description']
       );
     }
 }
@@ -98,6 +101,7 @@ class LoginRequest  {
    String owner;
    String groupCategory;
     List<dynamic> challenges;
+
 
    GroupEntity({this.groupName, this.groupDescription,
      this.membersLimit,this.members,
@@ -153,7 +157,7 @@ class APIRequests{
   Future<UserEntity> signUpUser(String login, String password,String name) async{
     var url = Constants.apiLink+"/signup";
     var response = await http.post(url, headers:{'Content-type':'application/json'},body:jsonEncode({'login': login, 'password': password,
-      'name':name,'tgAlias':"sampleAlias",'tags':["tag1"],'userGroups':[],'age':18}));
+      'name':name,'tgAlias':"sampleAlias",'description':"sampleDescription",'tags':[],'userGroups':[],'age':18}));
 
     print(response.toString());
     final responseJson = jsonDecode(response.body);
@@ -233,6 +237,16 @@ class APIRequests{
 
 
   }
+
+  // Future<UserEntity> updateUserInfo() async {
+  //   var url = Constants.apiLink+"/api/addCategory";
+  //   var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader : token}
+  //       ,body:jsonEncode({'category': category}));
+  //   final responseJson = jsonDecode(response.body);
+  //   return CategoryEntity.fromJson(responseJson);
+  //
+  //
+  // }
 
 
 

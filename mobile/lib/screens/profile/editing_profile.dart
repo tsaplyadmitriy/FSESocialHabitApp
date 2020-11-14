@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/image_picker.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
@@ -180,6 +181,12 @@ class ProfileEditingSaveButton extends StatelessWidget {
         press: () {
           print(profile.name);
 
+          UserSession().getUserentity.name = profile.name;
+
+          UserSession().getUserentity.tgAlias = profile.telegram;
+          UserSession().getUserentity.tags = profile.tags;
+          UserSession().getUserentity.description = profile.aboutMe;
+
           // TODO: integrate this with API
           // new avatar is in _image
 
@@ -190,47 +197,7 @@ class ProfileEditingSaveButton extends StatelessWidget {
   }
 }
 
-/*
-class ProfileEditingTextFields extends StatelessWidget {
-  const ProfileEditingTextFields({
-    Key key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch,
-        //mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          RoundedInputField(
-            hintText: "Name",
-            icon: Icons.person,
-            width: 0.9,
-            onChanged: (name) {
-              profile.name = name;
-            },
-          ),
-          RoundedInputField(
-            hintText: "telegram",
-            icon: Icons.message,
-            width: 0.9,
-            onChanged: (telegram) {
-              profile.telegram = telegram;
-            },
-          ),
-          RoundedInputField(
-            hintText: "About me",
-            icon: Icons.star,
-            resizable: true,
-            exactLines: 10,
-            width: 0.9,
-            onChanged: (aboutMe) {
-              profile.aboutMe = aboutMe;
-            },
-          ),
-        ]);
-  }
-}
-*/
 Future<String> _newTag(BuildContext context, bool dark) async {
   String editTag;
   await showDialog<String>(
