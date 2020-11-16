@@ -1,14 +1,13 @@
 package com.backend.controller.groups;
 
-import com.backend.entity.CategoryEntity;
-import com.backend.entity.GroupEntity;
-import com.backend.entity.LoginResponse;
-import com.backend.entity.UserEntity;
+import com.backend.entity.*;
 import com.backend.repository.SocialHabitAppData;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,11 @@ public class GroupsController {
         if (user != null) {
             user.addGroup(group.getId());
             repository.saveUser(user);
+            if(!group.getMembersLogins().contains(user)) {
+                group.getMembersLogins().add(user);
+            }
         }
+
         return repository.saveGroup(group);
     }
 
@@ -79,32 +82,12 @@ public class GroupsController {
      */
 
     @GetMapping(value = "/api/findGroups/groupId", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public GroupEntity getGroupById(@RequestParam("groupId") String groupId) {
+    public EntityModel<GroupEntity> getGroupById(@RequestParam("groupId") String groupId) {
         GroupEntity group = repository.findGroupById(groupId);
         if (group == null) {
             throw new GroupNotValidException();
         }
-        return group;
-    }
-
-    /*
-     * Add new member to existing group and it's groupId to member.
-     */
-    @PutMapping(value = "/api/addMemberToGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public GroupEntity addMember(@RequestParam("ownerLogin") String owner, @RequestParam("memberLogin") String newMember,
-                                 @RequestParam("groupId") String groupId) throws Exception {
-        GroupEntity group = repository.findGroupById(groupId);
-        UserEntity user = repository.findUserById(newMember);
-        if (group == null) {
-            throw new GroupNotValidException();
-        }
-        if (user == null) {
-            throw new UsernameNotFoundException(newMember);
-        }
-        group.ifOwner(owner).addMember(newMember);
-        user.addGroup(groupId);
-        repository.saveUser(user);
-        return repository.saveGroup(group);
+        return EntityModel.of(group);
     }
 
     /*
@@ -155,5 +138,14 @@ public class GroupsController {
         CategoryEntity categoryEntity = new CategoryEntity(category);
         repository.saveCategory(categoryEntity);
         return repository.findAllCategories();
+    }
+
+    @PutMapping(value = "/api/addChallenge")
+    public GroupEntity addChallenge(@RequestParam String groupId, @RequestParam String challengeName, @RequestParam String challengeDescription) {
+        GroupEntity group = repository.findGroupById(groupId);
+        if (group != null) {
+            group.addNewChallenge(challengeName, challengeDescription);
+        }
+        return repository.saveGroup(group);
     }
 }

@@ -1,57 +1,47 @@
 package com.backend.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 
 public class ChallengeEntity {
     private String challengeName;
     private String challengeDescription;
-    private HashMap<String, Integer> challengeCounters;
+    private List<ChallengeCounter> challengeCounters;
     private Date challengeDateOfStarting;
 
-    ChallengeEntity(String challengeName, String challengeDescription) {
+    public ChallengeEntity() {
+        challengeCounters = new ArrayList<>();
+    }
+
+    public ChallengeEntity(String challengeName, String challengeDescription) {
         this.challengeName = challengeName;
         this.challengeDescription = challengeDescription;
-        challengeCounters = new HashMap<>();
+        challengeCounters = new ArrayList<>();
         challengeDateOfStarting = new Date();
     }
 
-    public Integer getCounterOfMember(String login) {
-        return challengeCounters.get(login);
-    }
-
-    public void addCounterForNewMember(String login) {
-        if (!challengeCounters.containsKey(login)) {
-            challengeCounters.put(login, 0);
+    public void addCounter(String user) {
+        ChallengeCounter tempCounter = new ChallengeCounter(user, 0);
+        if (this.containUser(user) < 0) {
+            challengeCounters.add(tempCounter);
         }
     }
 
-    public boolean deleteCounterOfMember(String login) {
-        if (challengeCounters.containsKey(login)) {
-            challengeCounters.remove(login);
-            return true;
+    public void deleteCounter(String user) {
+        int userIndex = this.containUser(user);
+        if (userIndex >= 0) {
+            challengeCounters.remove(userIndex);
         }
-        return false;
     }
 
-    public boolean increaseCounter(String login) {
-        if (challengeCounters.containsKey(login)) {
-            Integer tempCouner = challengeCounters.get(login);
-            tempCouner++;
-            challengeCounters.replace(login, tempCouner);
-            return true;
+    public int containUser(String user) {
+        for (int i = 0; i < challengeCounters.size(); i++) {
+            if (challengeCounters.get(i).getUser().compareTo(user) == 0) {
+                return i;
+            }
         }
-        return false;
-    }
-
-    public boolean decreaseCounter(String login) {
-        if (challengeCounters.containsKey(login)) {
-            Integer tempCounter = challengeCounters.get(login);
-            tempCounter++;
-            challengeCounters.replace(login, tempCounter);
-            return true;
-        }
-        return false;
+        return -1;
     }
 
     public void setChallengeName(String challengeName) { this.challengeName = challengeName; }
@@ -62,9 +52,9 @@ public class ChallengeEntity {
 
     public String getChallengeDescription(){return challengeDescription;}
 
-    public void setChallengeCounters(HashMap<String, Integer> challengeCounters){this.challengeCounters = challengeCounters;}
+    public void setChallengeCounters(List<ChallengeCounter> challengeCounters){this.challengeCounters = challengeCounters;}
 
-    public HashMap<String, Integer> getChallengeCounters(){return challengeCounters;}
+    public List<ChallengeCounter> getChallengeCounters(){return challengeCounters;}
 
     public void setChallengeDateOfStarting(Date challengeDateOfStarting){this.challengeDateOfStarting = challengeDateOfStarting;}
 

@@ -14,7 +14,7 @@ public class GroupEntity {
     private String groupDescription = "Default description";
     private String groupTgLink;
     private int membersLimit;
-    private List<String> membersLogins = null;
+    private List<UserEntity> membersLogins = null;
     private List<String> groupTags = null;
     private String owner;
     private String groupCategory;
@@ -29,7 +29,8 @@ public class GroupEntity {
         pendingUsers = new ArrayList<>();
     }
 
-    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory, String groupDescription, String groupTgLink, List<String> groupTags, List<UserEntity> pendingUsers) {
+    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory, String groupDescription,
+                       String groupTgLink, List<String> groupTags, List<UserEntity> pendingUsers, List<ChallengeEntity> challenges, List<UserEntity> membersLogins) {
         this.id = UUID.randomUUID().toString();
         this.owner = owner;
         this.groupName = groupName;
@@ -37,15 +38,10 @@ public class GroupEntity {
         this.groupTgLink = groupTgLink;
         this.groupCategory = groupCategory;
         this.membersLimit = membersLimit;
-        this.membersLogins = new ArrayList<>();
+        this.membersLogins = membersLogins;
         this.groupTags = new ArrayList<>();
         this.groupTags = groupTags;
-        try {
-            this.ifOwner(owner).addMember(owner);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        challenges = new ArrayList<>();
+        this.challenges = challenges;
         this.pendingUsers = pendingUsers;
     }
 
@@ -56,40 +52,12 @@ public class GroupEntity {
         this.groupTgLink = groupTgLink;
         this.groupCategory = groupCategory;
         this.membersLimit = membersLimit;
-        try {
-            this.ifOwner(owner).addMember(owner);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         membersLogins = new ArrayList<>();
         groupTags = new ArrayList<>();
         challenges = new ArrayList<>();
     }
 
-    public void addNewChallenge(String challengeName, String challengeDescription) throws Exception {
-        if (challenges.contains(challengeName)) {
-            throw new Exception("Challenge with name " + challengeName + " exists");
-        }
-        ChallengeEntity tempChallenge = new ChallengeEntity(challengeName, challengeDescription);
-        for (int i = 0; i < membersLogins.size(); i++) {
-            tempChallenge.addCounterForNewMember(membersLogins.get(i));
-        }
-        challenges.add(tempChallenge);
-    }
 
-    private void addNewMemberToChallenges(String login) {
-        for (int i = 0; i < challenges.size(); i++) {
-            challenges.get(i).addCounterForNewMember(login);
-        }
-    }
-
-    private void deleteMemberFromChallenges(String login) {
-        for (int i = 0; i < challenges.size(); i++) {
-            if (challenges.get(i).getChallengeCounters().containsKey(login)) {
-                challenges.get(i).deleteCounterOfMember(login);
-            }
-        }
-    }
 
     public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory) {
         this.id = UUID.randomUUID().toString();
@@ -99,61 +67,23 @@ public class GroupEntity {
         this.groupCategory = groupCategory;
         this.membersLogins = new ArrayList<>();
         this.groupTags = new ArrayList<>();
-
-        try {
-            this.ifOwner(owner).addMember(owner);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
-    public GroupEntity ifOwner(String user) {
-        if (user.compareTo(this.owner) == 0) {
-            return this;
-        }
-        return null;
-    }
 
-    public GroupEntity addMember(String login) throws Exception {
-        if (membersLogins.size() >= membersLimit) {
-            throw new Exception("Limit of members is exceeded!");
+    public void addNewChallenge(String challengeName, String challengeDescription) {
+        ChallengeEntity challengeEntity = new ChallengeEntity(challengeName, challengeDescription);
+        for (int i = 0; i < membersLogins.size(); i++) {
+            challengeEntity.addCounter(membersLogins.get(i).getLogin());
         }
-        membersLogins.add(login);
-        this.addNewMemberToChallenges(login);
-        return this;
-    }
-
-    private boolean isOwner(String owner) {
-        return owner.compareTo(this.owner) == 0;
+        challenges.add(challengeEntity);
     }
 
     public int getMembersNumber() {return membersLogins.size();}
-
-    public void addTag(String tag) {
-        if (this.groupTags.contains(tag)) {
-            return;
-        }
-        groupTags.add(tag);
-    }
-
-    public void deleteMember(String owner, String login) throws Exception {
-        if (!membersLogins.contains(login)) {
-            throw new Exception("No user with login=" + login + " in this group!");
-        }
-        if (!isOwner(owner)) {
-            throw new Exception("You are not an owner of this group!");
-        }
-        membersLogins.remove(login);
-        this.deleteMemberFromChallenges(login);
-    }
 
     public boolean isValid() {
         if (owner == null || membersLimit < 1 || groupName == null
                 || !groupName.matches("\\w.*") || !groupCategory.matches("\\w.*")) {
             return false;
-        }
-        if (!membersLogins.contains(owner)) {
-            this.membersLogins.add(owner);
         }
         return true;
     }
@@ -190,11 +120,11 @@ public class GroupEntity {
         this.membersLimit = membersLimit;
     }
 
-    public List<String> getMembersLogins() {
+    public List<UserEntity> getMembersLogins() {
         return membersLogins;
     }
 
-    public void setMembersLogins(List<String> membersLogins) {
+    public void setMembersLogins(List<UserEntity> membersLogins) {
         this.membersLogins = membersLogins;
     }
 
@@ -229,4 +159,12 @@ public class GroupEntity {
     public List<UserEntity> getPendingUsers(){return pendingUsers;}
 
     public void setPendingUsers(List<UserEntity> pendingUsers) {this.pendingUsers = pendingUsers;}
+
+    public List<ChallengeEntity> getChallenges() {
+        return challenges;
+    }
+
+    public void setChallenges(List<ChallengeEntity> challenges) {
+        this.challenges = challenges;
+    }
 }
