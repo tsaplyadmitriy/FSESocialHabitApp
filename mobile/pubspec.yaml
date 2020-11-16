@@ -34,6 +34,12 @@ dependencies:
   flutter_svg: ^0.19.0
   rest_data: ^0.3.1
   image_picker: ^0.6.7+12
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  image_path: "assets/icon.png"
+  android: true
+  ios: true
 
 dev_dependencies:
   flutter_test:

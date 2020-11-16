@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Social Habit App',
+      title: 'DeHab',
       //home: BottomNavigator(),
       home: WelcomeScreen(),
       routes: {
@@ -24,8 +24,6 @@ class MyApp extends StatelessWidget {
         "/leave_welcome": (_) => new SignUpScreen(),
         "/log_in": (_) => new LoginScreen(),
         "/sign_up": (_) => new SignUpScreen(),
-
-
       },
       theme: ThemeData(
         fontFamily: 'ProductSans',
