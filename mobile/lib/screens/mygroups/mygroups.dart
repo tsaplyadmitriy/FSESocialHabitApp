@@ -70,7 +70,9 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
                     MySliverAppBar(
                       darkModeOn: darkModeOn,
                       text: "My groups",
-                      imagePath: "assets/images/group_pic.png",
+                      imagePath: darkModeOn
+                          ? "assets/images/group_pic.png"
+                          : "assets/images/group_pic_dark.png",
                     ),
                     SliverList(
                         delegate: SliverChildListDelegate(

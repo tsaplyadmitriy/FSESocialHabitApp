@@ -82,7 +82,9 @@ class FindGroupStateScreen extends State<FindGroupScreen> {
                   MySliverAppBar(
                     darkModeOn: darkModeOn,
                     text: "Find groups",
-                    imagePath: "assets/images/group_pic.png",
+                    imagePath: darkModeOn
+                        ? "assets/images/find_group1.png"
+                        : "assets/images/find_group1_dark.png",
                   ),
                   SliverList(
                       delegate: SliverChildListDelegate(
