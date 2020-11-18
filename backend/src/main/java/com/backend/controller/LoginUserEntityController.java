@@ -1,11 +1,14 @@
 package com.backend.controller;
 
+import com.backend.entity.GroupEntity;
 import com.backend.entity.LoginResponse;
 import com.backend.entity.UserEntity;
 import com.backend.repository.SocialHabitAppData;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class LoginUserEntityController {
@@ -55,6 +58,12 @@ public class LoginUserEntityController {
             throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
         }
         oldUser = user;
+        List<String> userGroups = oldUser.getUserGroups();
+        for (int i = 0; i < userGroups.size(); i++) {
+            GroupEntity group = repository.findGroupById(userGroups.get(i));
+            group.updateUserInfo(oldUser);
+            repository.saveGroup(group);
+        }
         return EntityModel.of(repository.saveUser(oldUser));
     }
 }

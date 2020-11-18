@@ -140,12 +140,81 @@ public class GroupsController {
         return repository.findAllCategories();
     }
 
-    @PutMapping(value = "/api/addChallenge")
+    @PutMapping(value = "/api/addChallenge", produces = {MediaType.APPLICATION_JSON_VALUE})
     public GroupEntity addChallenge(@RequestParam String groupId, @RequestParam String challengeName, @RequestParam String challengeDescription) {
         GroupEntity group = repository.findGroupById(groupId);
         if (group != null) {
             group.addNewChallenge(challengeName, challengeDescription);
         }
         return repository.saveGroup(group);
+    }
+
+    @PutMapping(value = "/api/addMember", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity addMember(@RequestParam String groupId, @RequestParam String login) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserById(login);
+        if (group != null && user != null) {
+            user.addGroup(groupId);
+            group.addMember(user);
+        }
+
+        repository.saveUser(user);
+        return repository.saveGroup(group);
+    }
+
+    @PutMapping(value = "/api/addPending", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity addPending(@RequestParam String groupId, @RequestParam String login) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserById(login);
+        if (group != null && user != null) {
+            user.addGroup(groupId);
+            group.addPendingUser(user);
+        }
+
+        return repository.saveGroup(group);
+    }
+
+    @PutMapping(value = "/api/declinePending", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity declinePending(@RequestParam String groupId, @RequestParam String login) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserById(login);
+        if (group != null && user != null) {
+            user.removeGroup(groupId);
+            group.removePendingUser(user);
+        }
+        repository.saveUser(user);
+        return repository.saveGroup(group);
+    }
+
+    @DeleteMapping(value = "/api/removeUserFromGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity removeUserFromGroup(@RequestParam String groupId, @RequestParam String login) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserById(login);
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        if (user != null) {
+            user.removeGroup(groupId);
+            group.removeUser(user);
+            repository.saveUser(user);
+        }
+        return repository.saveGroup(group);
+    }
+
+    @GetMapping(value = "/api/findGroups/getUserGroups", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<GroupEntity> getUserGroups(@RequestParam String login) {
+        UserEntity user = repository.findUserById(login);
+        List<GroupEntity> groups = new ArrayList<>();
+        if (user != null) {
+            List<String> userGroups = user.getUserGroups();
+            for (int i = 0; i < userGroups.size(); i++) {
+                GroupEntity group = repository.findGroupById(userGroups.get(i));
+                if (group != null) {
+                    groups.add(group);
+                }
+            }
+
+        }
+        return groups;
     }
 }

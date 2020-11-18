@@ -69,7 +69,67 @@ public class GroupEntity {
         this.groupTags = new ArrayList<>();
     }
 
+    public void addMember(UserEntity user) {
+        for (int i = 0; i < membersLogins.size(); i++) {
+            if (membersLogins.get(i).getLogin().compareTo(user.getLogin()) == 0) {
+                return;
+            }
+        }
 
+        membersLogins.add(user);
+        for (int i = 0; i < challenges.size(); i++) {
+            challenges.get(i).addCounter(user.getLogin());
+        }
+        removePendingUser(user);
+    }
+
+    public void removeUser(UserEntity user) {
+        for(int i = 0; i < membersLogins.size(); i++) {
+            if(membersLogins.get(i).getLogin().compareTo(user.getLogin()) == 0) {
+                membersLogins.remove(i);
+            }
+        }
+
+        for (int i = 0; i < challenges.size(); i++) {
+            challenges.get(i).deleteCounter(user.getLogin());
+        }
+    }
+
+    public void addPendingUser(UserEntity user) {
+        for (int i = 0; i < pendingUsers.size(); i++) {
+            if (pendingUsers.get(i).getLogin().compareTo(user.getLogin()) == 0) {
+                return;
+            }
+        }
+        pendingUsers.add(user);
+    }
+
+    public void removePendingUser(UserEntity user) {
+        for (int i = 0; i < pendingUsers.size(); i++) {
+            if (pendingUsers.get(i).getLogin().compareTo(user.getLogin()) == 0) {
+                pendingUsers.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void updateUserInfo(UserEntity user) {
+        for (int i = 0; i < membersLogins.size(); i++) {
+            if (membersLogins.get(i).getLogin().compareTo(user.getLogin()) == 0) {
+                membersLogins.remove(i);
+                membersLogins.add(i, user);
+                break;
+            }
+        }
+
+        for (int i = 0; i < pendingUsers.size(); i++) {
+            if (pendingUsers.get(i).getLogin().compareTo(user.getLogin()) == 0) {
+                pendingUsers.remove(i);
+                pendingUsers.add(i, user);
+                break;
+            }
+        }
+    }
     public void addNewChallenge(String challengeName, String challengeDescription) {
         ChallengeEntity challengeEntity = new ChallengeEntity(challengeName, challengeDescription);
         for (int i = 0; i < membersLogins.size(); i++) {
