@@ -4,7 +4,7 @@ import com.backend.entity.LoginResponse;
 
 public class TokenNotFoundException extends RuntimeException {
     LoginResponse loginResponse;
-    TokenNotFoundException(LoginResponse loginResponse) {
+    public TokenNotFoundException(LoginResponse loginResponse) {
         this.loginResponse = loginResponse;
     }
 
