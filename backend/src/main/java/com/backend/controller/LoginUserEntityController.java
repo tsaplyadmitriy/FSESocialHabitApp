@@ -48,8 +48,8 @@ public class LoginUserEntityController {
         return EntityModel.of(user);
     }
 
-    @PutMapping(value = "/api/updateUser")
-    EntityModel<UserEntity> updateUser(UserEntity user) {
+    @PutMapping(value = "/api/updateUser", produces = {MediaType.APPLICATION_JSON_VALUE})
+    EntityModel<UserEntity> updateUser(@RequestBody UserEntity user) {
         UserEntity oldUser = repository.findUserById(user.getLogin());
         if (oldUser == null) {
             throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));

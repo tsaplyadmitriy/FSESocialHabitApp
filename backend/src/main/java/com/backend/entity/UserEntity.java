@@ -13,15 +13,16 @@ public class UserEntity {
     private String tgAlias = "DefaulTg";
     private String description;
     private List<String> tags;
-    private int age = 18;
+    private Integer age = 18;
     private List<String> userGroups;
-    public UserEntity(String login, String password, String name, String tgAlias, String description, List<String> tags, int age) {
+
+    public UserEntity(String login, String password, String name, String tgAlias, String description, List<String> tags, Integer age) {
         this.login = login;
         this.password = password;
         this.name = name;
         this.tgAlias = tgAlias;
         this.age = age;
-        token = UUID.randomUUID().toString();
+        this.token = UUID.randomUUID().toString();
         userGroups = new ArrayList<>();
         if (tags == null) {
             this.tags = new ArrayList<>();
@@ -78,9 +79,9 @@ public class UserEntity {
 
     public void setTgAlias(String tgAlias){this.tgAlias = tgAlias;}
 
-    public int getAge(){return age;}
+    public Integer getAge(){return age;}
 
-    public void setAge(int age){this.age = age;}
+    public void setAge(Integer age){this.age = age;}
 
     public List<String> getUserGroups(){return userGroups;}
 
