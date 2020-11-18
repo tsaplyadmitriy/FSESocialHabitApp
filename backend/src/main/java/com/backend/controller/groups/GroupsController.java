@@ -143,9 +143,10 @@ public class GroupsController {
     @PutMapping(value = "/api/addChallenge", produces = {MediaType.APPLICATION_JSON_VALUE})
     public GroupEntity addChallenge(@RequestParam String groupId, @RequestParam String challengeName, @RequestParam String challengeDescription) {
         GroupEntity group = repository.findGroupById(groupId);
-        if (group != null) {
-            group.addNewChallenge(challengeName, challengeDescription);
+        if (group == null) {
+            throw new GroupNotValidException();
         }
+        group.addNewChallenge(challengeName, challengeDescription);
         return repository.saveGroup(group);
     }
 
@@ -153,12 +154,16 @@ public class GroupsController {
     public GroupEntity addMember(@RequestParam String groupId, @RequestParam String login) {
         GroupEntity group = repository.findGroupById(groupId);
         UserEntity user = repository.findUserById(login);
-        if (group != null && user != null) {
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        if (user != null) {
             user.addGroup(groupId);
             group.addMember(user);
+            repository.saveUser(user);
         }
 
-        repository.saveUser(user);
+
         return repository.saveGroup(group);
     }
 
@@ -166,7 +171,10 @@ public class GroupsController {
     public GroupEntity addPending(@RequestParam String groupId, @RequestParam String login) {
         GroupEntity group = repository.findGroupById(groupId);
         UserEntity user = repository.findUserById(login);
-        if (group != null && user != null) {
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        if (user != null) {
             user.addGroup(groupId);
             group.addPendingUser(user);
         }
@@ -178,11 +186,14 @@ public class GroupsController {
     public GroupEntity declinePending(@RequestParam String groupId, @RequestParam String login) {
         GroupEntity group = repository.findGroupById(groupId);
         UserEntity user = repository.findUserById(login);
-        if (group != null && user != null) {
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        if (user != null) {
             user.removeGroup(groupId);
             group.removePendingUser(user);
+            repository.saveUser(user);
         }
-        repository.saveUser(user);
         return repository.saveGroup(group);
     }
 
