@@ -15,6 +15,8 @@ import 'package:social_habit_app/screens/mygroups/challenge_card.dart';
 import 'package:social_habit_app/screens/mygroups/new_challenge.dart';
 import 'package:social_habit_app/screens/mygroups/new_users.dart';
 
+import 'list.dart';
+
 class Challenge {
   int goal;
   String name;
@@ -147,6 +149,7 @@ class _MyGroupPageState extends State<MyGroupPage> {
                 mode: "view",
                 group: group,
                 copyTelegram: true,
+                users: users.map((e) => e.name).toList(),
               ),
             ],
           ),

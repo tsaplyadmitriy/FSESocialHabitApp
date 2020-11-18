@@ -35,6 +35,7 @@ class RoundedInputField extends StatelessWidget {
             maxHeight: size.height * maxHeight,
           ),
           child: TextField(
+
             textInputAction: TextInputAction.next,
             inputFormatters: [
               LengthLimitingTextInputFormatter(maxCharacters),

@@ -75,15 +75,16 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
                     SliverList(
                         delegate: SliverChildListDelegate(
                             groupList.map((GroupEntity groupEnt) {
+                              print("ent "+groupEnt.members.toString());
                       Group group = new Group(
                           groupEnt.groupName,
                           groupEnt.groupDescription,
                           groupEnt.groupTgLink,
                           groupEnt.groupCategory,
                           List<String>.from(groupEnt.groupTags),
-                          List<String>.from(groupEnt.members),
+                         List<String>.from(groupEnt.members),
                           5,
-                          groupEnt.membersLimit);
+                          groupEnt.membersLimit,[]);
                       //print("group"+group.toString());
                       return Container(
                           width: double.infinity,

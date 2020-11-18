@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:rest_data/rest_data.dart';
+import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/constants.dart';
 
 import 'package:http/http.dart' as http;
@@ -101,11 +102,12 @@ class LoginRequest  {
    String owner;
    String groupCategory;
     List<dynamic> challenges;
+    List<dynamic>  pendingUsers;
 
 
    GroupEntity({this.groupName, this.groupDescription,
      this.membersLimit,this.members,
-     this.groupTags,this.owner,this.groupCategory, this.id,this.groupTgLink,this.challenges});
+     this.groupTags,this.owner,this.groupCategory, this.id,this.groupTgLink,this.challenges,this.pendingUsers});
 
    factory GroupEntity.fromJson(Map<String, dynamic> json) {
 
@@ -119,7 +121,8 @@ class LoginRequest  {
        groupTags: json['groupTags'],
          owner: json['owner'],
          groupCategory: json['groupCategory'],
-       challenges: json['challenges']
+       challenges: json['challenges'],
+         pendingUsers: json['pendingUsers']
      );
    }
 
@@ -168,11 +171,11 @@ class APIRequests{
 
   Future<GroupEntity> createUserGroup(String token,String login,String groupName, String groupDescription, String groupTGLink,int membersLimit,
 
-      List<String>groupTags, String groupCategory) async{
+      List<String>groupTags, String groupCategory,List<String> pendingUsers) async{
     var url = Constants.apiLink+"/api/addGroup";
     var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader: token},body:jsonEncode({'owner': login,
       'groupCategory':groupCategory,'groupName': groupName,'groupTGLink':groupTGLink,'groupDescription':groupDescription,'membersLimit':membersLimit,
-      'groupTags':groupTags}));
+      'groupTags':groupTags,'pendingUsers':pendingUsers}));
 
     print(response.toString());
     final responseJson = jsonDecode(response.body);
@@ -216,37 +219,81 @@ class APIRequests{
     return UserEntity.fromJson(responseJson);
   }
 
+  Future<UserEntity>  getUserByLogin (String token,String login) async{
+    String req =  Constants.apiLink+'/api/userByLogin?login='+login;
+    print(req);
+    final response = await http.get(req,headers: {HttpHeaders.authorizationHeader: token});
+    final responseJson = jsonDecode(response.body);
+
+    return UserEntity.fromJson(responseJson);
+  }
+
+
   Future<List<CategoryEntity>> getCategoriesList(String token) async{
     var url = Constants.apiLink+'/api/categories';
     final response = await http.get(url,headers: {HttpHeaders.authorizationHeader : token});
+
     Iterable l = jsonDecode(response.body);
 
     List<CategoryEntity>list = (json.decode(response.body) as List).map((i) =>CategoryEntity.fromJson(i)).toList();
-    print(list.toString());
     return  list;
 
   }
 
-  Future<CategoryEntity> addCategory(String token, String category) async {
+  Future<List<CategoryEntity>> addCategory(String token, String category) async {
 
     var url = Constants.apiLink+"/api/addCategory";
     var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader : token}
                           ,body:jsonEncode({'category': category}));
-    final responseJson = jsonDecode(response.body);
-    return CategoryEntity.fromJson(responseJson);
+    Iterable l = jsonDecode(response.body);
+
+    List<CategoryEntity>list = (json.decode(response.body) as List).map((i) =>CategoryEntity.fromJson(i)).toList();
+    return  list;
 
 
   }
 
-  // Future<UserEntity> updateUserInfo() async {
-  //   var url = Constants.apiLink+"/api/addCategory";
-  //   var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader : token}
-  //       ,body:jsonEncode({'category': category}));
-  //   final responseJson = jsonDecode(response.body);
-  //   return CategoryEntity.fromJson(responseJson);
-  //
-  //
-  // }
+  Future<UserEntity> updateUserInfo(String token) async {
+    var url = Constants.apiLink+"/api/updateUser";
+    var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader : token}
+        ,body:jsonEncode({
+          'login': UserSession().getUserentity.login,
+          'password': UserSession().getUserentity.password,
+          'name':UserSession().getUserentity.name,
+          'tgAlias':UserSession().getUserentity.tgAlias,
+          'description':UserSession().getUserentity.description,
+          'tags':UserSession().getUserentity.tags,
+          'userGroups':UserSession().getUserentity.userGroups,
+          'age':18}));
+    final responseJson = jsonDecode(response.body);
+    return UserEntity.fromJson(responseJson);
+
+
+  }
+
+
+  Future<GroupEntity> addPendingUser(String token, GroupEntity groupEntity) async{
+
+    var url = Constants.apiLink+"/api/addGroup";
+     groupEntity.pendingUsers.add(UserSession().getUserentity.login);
+    var response = await http.post(url, headers:{'Content-type':'application/json',HttpHeaders.authorizationHeader: token},body:jsonEncode({
+      'owner': groupEntity.owner,
+    'groupCategory':groupEntity.groupCategory,
+      'groupName': groupEntity.groupName,
+      'groupTGLink':groupEntity.groupTgLink,
+      'groupDescription':groupEntity.groupDescription,
+      'membersLimit':groupEntity,
+    'groupTags':groupEntity.groupTags,
+      'pendingUsers':groupEntity.pendingUsers}));
+
+
+    final responseJson = jsonDecode(response.body);
+
+
+    return GroupEntity.fromJson(responseJson);
+
+
+  }
 
 
 

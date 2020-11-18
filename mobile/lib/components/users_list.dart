@@ -10,94 +10,26 @@ class UserList extends StatefulWidget {
     @required this.group,
     @required this.mode,
     @required this.copyTelegram,
+    @required  this.users
   }) : super(key: key);
 
   final Group group;
   final bool copyTelegram;
   final String mode;
+  final List<String>users;
 
   @override
-  _UserListState createState() => _UserListState(this.group, this.mode);
+  _UserListState createState() => _UserListState(this.group, this.mode,this.users);
 }
 
 class _UserListState extends State<UserList> {
   Group group;
   String mode;
+  List<String> users;
 
-  _UserListState(this.group, this.mode) : super();
+  _UserListState(this.group, this.mode,this.users) : super();
 
-  final List<UserEntity> users = [
-    new UserEntity(
-        login: "login1",
-        password: "password1",
-        token: "token1",
-        name: "Dima Tsaplia",
-        description: "Description1",
-        tgAlias: "tg1",
-        age: "18",
-        tags: [],
-        userGroups: []),
-    new UserEntity(
-        login: "login2",
-        password: "password2",
-        token: "token2",
-        name: "Gleb Osotov",
-        description: "Description2",
-        tgAlias: "tg2",
-        age: "18",
-        tags: [],
-        userGroups: []),
-    new UserEntity(
-        login: "login1",
-        password: "password1",
-        token: "token1",
-        name: "Alexey Rakov",
-        description: "Description1",
-        tgAlias: "tg1",
-        age: "18",
-        tags: [],
-        userGroups: []),
-    new UserEntity(
-        login: "login1",
-        password: "password1",
-        token: "token1",
-        name: "Ethan Shaghaie",
-        description: "Description1",
-        tgAlias: "tg1",
-        age: "18",
-        tags: [],
-        userGroups: []),
-    new UserEntity(
-        login: "login1",
-        password: "password1",
-        token: "token1",
-        name: "Evgeny Panov",
-        description: "Description1",
-        tgAlias: "tg1",
-        age: "18",
-        tags: [],
-        userGroups: []),
-    new UserEntity(
-        login: "login1",
-        password: "password1",
-        token: "token1",
-        name: "Ivan Konyukhov",
-        description: "Description1",
-        tgAlias: "tg1",
-        age: "18",
-        tags: [],
-        userGroups: []),
-    new UserEntity(
-        login: "login1",
-        password: "password1",
-        token: "token1",
-        name: "Giancarlo Succi",
-        description: "Description1",
-        tgAlias: "tg1",
-        age: "18",
-        tags: [],
-        userGroups: []),
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,12 +43,13 @@ class _UserListState extends State<UserList> {
           children: [
             //Text("Users:"),
             Column(
-                children: users.map((UserEntity user) {
+                children: users.map((String user) {
+
               return GestureDetector(
                 onTap: () {
                   if (widget.copyTelegram) {
-                    Clipboard.setData(ClipboardData(text: user.tgAlias));
-                    showSnackBar(context, user.name);
+                    Clipboard.setData(ClipboardData(text: user));
+                    showSnackBar(context, user);
                   }
                 },
                 child: Card(
@@ -136,7 +69,7 @@ class _UserListState extends State<UserList> {
                             SizedBox(width: 5),
                             //TODO: pass admin here so user know who to write
                             //user.admin? Text(user.name) : Text(user.name + " 👑"),
-                            Text(user.name)
+                            Text(user)
                           ],
                         ),
                         Row(children: [
@@ -160,7 +93,7 @@ class _UserListState extends State<UserList> {
                                       context,
                                       darkModeOn,
                                       "Do you want to delete user " +
-                                          user.name +
+                                          user +
                                           "?");
                                   print(deleted);
                                   if (deleted == "true") {

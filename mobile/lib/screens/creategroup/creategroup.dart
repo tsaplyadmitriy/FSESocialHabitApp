@@ -28,7 +28,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
       new ProfileData.withtags("", "", "", ["item1", "item2"]);
   double sliderParticipants = 5;
   Group newGroup = new Group("name", "description", "telega", "category",
-      ["pref1", "pref2"], ["user"], 1, 7);
+      ["pref1", "pref2"], [], 1, 7,[]);
   File _image = File("assets/images/inno_campus.png");
 
   @override
@@ -269,7 +269,9 @@ class GroupCreationSaveButton extends StatelessWidget {
               groupData.telegramLink,
               groupData.maxParticipants,
               groupData.preferences,
-              groupData.category);
+              groupData.category,
+              []
+          );
           //print(groupEntity.groupDescription);
           //print("new group id"+groupEntity.id);
           Navigator.pushReplacementNamed(context, Constants.loginDone);

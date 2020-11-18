@@ -64,7 +64,7 @@ class FindGroupStateScreen extends State<FindGroupScreen> {
           ["IT", "hashtag", "not_a_hashtag"],
           [],
           3,
-          7));
+          7,[]));
     }
 
     return Container(
@@ -93,9 +93,9 @@ class FindGroupStateScreen extends State<FindGroupScreen> {
                         groupEnt.groupTgLink,
                         groupEnt.groupCategory,
                         List<String>.from(groupEnt.groupTags),
-                        List<String>.from(groupEnt.members),
+                        groupEnt.members,
                         5,
-                        groupEnt.membersLimit);
+                        groupEnt.membersLimit,[]);
                     return Container(
                         padding: EdgeInsets.only(top: 5),
                         width: double.infinity,

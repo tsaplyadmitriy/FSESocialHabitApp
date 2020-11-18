@@ -133,15 +133,16 @@ class _FilterTab extends State<FilterTab> {
                 ),
                 SmallButton(
                     text: "Search",
+
                     press: () async {
                       groupList = await APIRequests().getGroupByCategoryList(
                           category, UserSession().getUserentity.token);
 
                       if (!UserSession().getCategoryList.contains(category)) {
-                        print("q " + category);
-                        UserSession().getCategoryList.add(category);
-                        await APIRequests().addCategory(
-                            UserSession().getUserentity.token, category);
+
+                          UserSession().setCategoriesList = (await APIRequests().addCategory(
+                            UserSession().getUserentity.token, category)).map((e) => e.categoryName).toList();
+
                       }
 
                       doWeNeedToRefresh = true;
@@ -196,7 +197,7 @@ class Search extends SearchDelegate {
                 selectedResult, UserSession().getUserentity.token);
 
             if (!UserSession().getCategoryList.contains(selectedResult)) {
-              print("q " + selectedResult);
+
               UserSession().getCategoryList.add(selectedResult);
               await APIRequests().addCategory(
                   UserSession().getUserentity.token, selectedResult);
@@ -220,7 +221,7 @@ class Search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<String> suggestionList = [];
 
-    print("query" + query);
+
     query.isEmpty
         ? suggestionList = recentList //In the true case
         : suggestionList.addAll(listExample.where(

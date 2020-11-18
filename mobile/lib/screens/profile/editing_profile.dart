@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/image_picker.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
@@ -60,6 +61,7 @@ class _ProfileEditing extends State<ProfileEditing> {
                     ),
                     RoundedInputField(
                       hintText: "Name",
+
                       icon: Icons.person,
                       width: 0.9,
                       onChanged: (name) {
@@ -178,7 +180,7 @@ class ProfileEditingSaveButton extends StatelessWidget {
       child: SmallButton(
         text: "Save",
         widthModifier: 0.6,
-        press: () {
+        press: () async  {
           print(profile.name);
 
           UserSession().getUserentity.name = profile.name;
@@ -186,6 +188,9 @@ class ProfileEditingSaveButton extends StatelessWidget {
           UserSession().getUserentity.tgAlias = profile.telegram;
           UserSession().getUserentity.tags = profile.tags;
           UserSession().getUserentity.description = profile.aboutMe;
+
+
+          await APIRequests().updateUserInfo(UserSession().getUserentity.token);
 
           // TODO: integrate this with API
           // new avatar is in _image
