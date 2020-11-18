@@ -16,7 +16,7 @@ public class UserEntity {
     private Integer age = 18;
     private List<String> userGroups;
 
-    public UserEntity(String login, String password, String token, String name, String tgAlias, String description, List<String> tags, Integer age) {
+    public UserEntity(String login, String password, String token, String name, String tgAlias, String description, List<String> tags, List<String> userGroups, Integer age) {
         this.login = login;
         this.password = password;
         this.name = name;
@@ -26,7 +26,12 @@ public class UserEntity {
             this.token = UUID.randomUUID().toString();
         }
         else this.token = token;
-        userGroups = new ArrayList<>();
+
+        if (userGroups == null) {
+            this.userGroups = new ArrayList<>();
+        }
+        else this.userGroups = userGroups;
+
         if (tags == null) {
             this.tags = new ArrayList<>();
         }
