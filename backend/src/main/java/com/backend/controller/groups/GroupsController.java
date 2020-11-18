@@ -52,7 +52,7 @@ public class GroupsController {
     @PostMapping(value = "/api/addEmptyGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
     public GroupEntity addEmptyGroupEntity(@RequestParam String owner, @RequestParam String groupName, @RequestParam String groupTgLink,
                                            @RequestParam String groupCategory, @RequestParam int membersLimit) {
-        GroupEntity group = new GroupEntity(owner, groupName, groupCategory, groupTgLink, membersLimit);
+        GroupEntity group = new GroupEntity(null, owner, groupName, groupCategory, groupTgLink, membersLimit);
         if (!group.isValid()) {
             throw new GroupNotValidException();
         }

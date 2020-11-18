@@ -27,9 +27,9 @@ class LoadDatabase {
         sampleTags.add("Tag1");
         sampleTags.add("Tag2");
         return args -> {
-            log.info("Preloading " + repository.saveUser(new UserEntity("SomeLogin", "12345",
+            log.info("Preloading " + repository.saveUser(new UserEntity("SomeLogin", "12345", null,
                     "Alex", "Rakov", "Some description", sampleTags, 20)));
-            log.info("Preloading " + repository.saveUser(new UserEntity("JohnLogin", "123456789",
+            log.info("Preloading " + repository.saveUser(new UserEntity("JohnLogin", "123456789", null,
                     "John", "Smith", "Another description", sampleTags, 25)));
         };
     }

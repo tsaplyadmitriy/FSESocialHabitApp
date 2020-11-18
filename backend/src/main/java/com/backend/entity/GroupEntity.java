@@ -29,9 +29,12 @@ public class GroupEntity {
         pendingUsers = new ArrayList<>();
     }
 
-    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory, String groupDescription,
+    public GroupEntity(String id, String owner, String groupName, int membersLimit, String groupCategory, String groupDescription,
                        String groupTgLink, List<String> groupTags, List<UserEntity> pendingUsers, List<ChallengeEntity> challenges, List<UserEntity> membersLogins) {
-        this.id = UUID.randomUUID().toString();
+        if (id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+        else this.id = id;
         this.owner = owner;
         this.groupName = groupName;
         this.groupDescription = groupDescription;
@@ -45,8 +48,11 @@ public class GroupEntity {
         this.pendingUsers = pendingUsers;
     }
 
-    public GroupEntity(String owner, String groupName, String groupCategory, String groupTgLink, int membersLimit) {
-        this.id = UUID.randomUUID().toString();
+    public GroupEntity(String id, String owner, String groupName, String groupCategory, String groupTgLink, int membersLimit) {
+        if (id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+        else this.id = id;
         this.owner = owner;
         this.groupName = groupName;
         this.groupTgLink = groupTgLink;
@@ -59,8 +65,11 @@ public class GroupEntity {
 
 
 
-    public GroupEntity(String owner, String groupName, int membersLimit, String groupCategory) {
-        this.id = UUID.randomUUID().toString();
+    public GroupEntity(String id, String owner, String groupName, int membersLimit, String groupCategory) {
+        if (id == null) {
+            this.id = UUID.randomUUID().toString();
+        }
+        else this.id = id;
         this.owner = owner;
         this.groupName = groupName;
         this.membersLimit = membersLimit;
