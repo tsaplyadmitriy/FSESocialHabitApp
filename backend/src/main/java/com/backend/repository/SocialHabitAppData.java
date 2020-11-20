@@ -36,7 +36,8 @@ public class SocialHabitAppData {
     public UserEntity findUserById(String login) {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(login));
-        return mongoTemplate.findOne(query, UserEntity.class);
+        UserEntity user = mongoTemplate.findOne(query, UserEntity.class);
+        return user;
     }
 
     public UserEntity updateOneUser(UserEntity user) {

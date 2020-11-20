@@ -1,11 +1,14 @@
 package com.backend.controller;
 
+import com.backend.entity.GroupEntity;
 import com.backend.entity.LoginResponse;
 import com.backend.entity.UserEntity;
 import com.backend.repository.SocialHabitAppData;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class LoginUserEntityController {
@@ -48,13 +51,22 @@ public class LoginUserEntityController {
         return EntityModel.of(user);
     }
 
-    @PutMapping(value = "/api/updateUser")
-    EntityModel<UserEntity> updateUser(UserEntity user) {
-        UserEntity oldUser = repository.findUserById(user.getLogin());
+    @PutMapping(value = "/api/updateUser", produces = {MediaType.APPLICATION_JSON_VALUE})
+    EntityModel<UserEntity> updateUser(@RequestParam String token, @RequestParam String name,
+                                       @RequestParam String description, @RequestParam String tgAlias,
+                                       @RequestParam List<String> tags) {
+
+        UserEntity oldUser = repository.findUserByToken(token);
         if (oldUser == null) {
             throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
         }
-        oldUser = user;
+        oldUser.updateProfileInfo(name, description, tgAlias, tags);
+        List<String> userGroups = oldUser.getUserGroups();
+        for (int i = 0; i < userGroups.size(); i++) {
+            GroupEntity group = repository.findGroupById(userGroups.get(i));
+            group.updateUserInfo(oldUser);
+            repository.saveGroup(group);
+        }
         return EntityModel.of(repository.saveUser(oldUser));
     }
 }

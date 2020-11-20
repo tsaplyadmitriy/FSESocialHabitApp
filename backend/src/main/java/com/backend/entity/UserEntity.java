@@ -13,16 +13,25 @@ public class UserEntity {
     private String tgAlias = "DefaulTg";
     private String description;
     private List<String> tags;
-    private int age = 18;
+    private Integer age = 18;
     private List<String> userGroups;
-    public UserEntity(String login, String password, String name, String tgAlias, String description, List<String> tags, int age) {
+
+    public UserEntity(String login, String password, String token, String name, String tgAlias, String description, List<String> tags, List<String> userGroups, Integer age) {
         this.login = login;
         this.password = password;
         this.name = name;
         this.tgAlias = tgAlias;
         this.age = age;
-        token = UUID.randomUUID().toString();
-        userGroups = new ArrayList<>();
+        if (token == null) {
+            this.token = UUID.randomUUID().toString();
+        }
+        else this.token = token;
+
+        if (userGroups == null) {
+            this.userGroups = new ArrayList<>();
+        }
+        else this.userGroups = userGroups;
+
         if (tags == null) {
             this.tags = new ArrayList<>();
         }
@@ -30,6 +39,12 @@ public class UserEntity {
         this.description = description;
     }
 
+    public void updateProfileInfo(String name, String description, String tgAlias, List<String> tags) {
+        if (name != null) this.name = name;
+        if (description != null) this.description = description;
+        if (tgAlias != null) this.tgAlias = tgAlias;
+        if (tags != null) this.tags = tags;
+    }
     public void addGroup(String groupId) {
         if (!userGroups.contains(groupId)) {
             userGroups.add(groupId);
@@ -78,9 +93,9 @@ public class UserEntity {
 
     public void setTgAlias(String tgAlias){this.tgAlias = tgAlias;}
 
-    public int getAge(){return age;}
+    public Integer getAge(){return age;}
 
-    public void setAge(int age){this.age = age;}
+    public void setAge(Integer age){this.age = age;}
 
     public List<String> getUserGroups(){return userGroups;}
 
@@ -90,7 +105,7 @@ public class UserEntity {
 
     public void setDescription(String description){this.description = description;}
 
-    public List<String> getTags(){return tags;};
+    public List<String> getTags(){return tags;}
 
     public void setTags(List<String> tags) {this.tags = tags;}
 }

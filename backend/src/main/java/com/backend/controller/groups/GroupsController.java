@@ -1,5 +1,6 @@
 package com.backend.controller.groups;
 
+import com.backend.controller.TokenNotFoundException;
 import com.backend.entity.*;
 import com.backend.repository.SocialHabitAppData;
 import org.springframework.hateoas.EntityModel;
@@ -52,7 +53,7 @@ public class GroupsController {
     @PostMapping(value = "/api/addEmptyGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
     public GroupEntity addEmptyGroupEntity(@RequestParam String owner, @RequestParam String groupName, @RequestParam String groupTgLink,
                                            @RequestParam String groupCategory, @RequestParam int membersLimit) {
-        GroupEntity group = new GroupEntity(owner, groupName, groupCategory, groupTgLink, membersLimit);
+        GroupEntity group = new GroupEntity(null, owner, groupName, groupCategory, groupTgLink, membersLimit);
         if (!group.isValid()) {
             throw new GroupNotValidException();
         }
@@ -140,12 +141,86 @@ public class GroupsController {
         return repository.findAllCategories();
     }
 
-    @PutMapping(value = "/api/addChallenge")
+    @PutMapping(value = "/api/addChallenge", produces = {MediaType.APPLICATION_JSON_VALUE})
     public GroupEntity addChallenge(@RequestParam String groupId, @RequestParam String challengeName, @RequestParam String challengeDescription) {
         GroupEntity group = repository.findGroupById(groupId);
-        if (group != null) {
-            group.addNewChallenge(challengeName, challengeDescription);
+        if (group == null) {
+            throw new GroupNotValidException();
         }
+        group.addNewChallenge(challengeName, challengeDescription);
         return repository.saveGroup(group);
+    }
+
+    @PutMapping(value = "/api/addMember", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity addMember(@RequestParam String groupId, @RequestParam String token) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserByToken(token);
+        if (user == null) throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        user.addGroup(groupId);
+        group.addMember(user);
+        repository.saveUser(user);
+
+        return repository.saveGroup(group);
+    }
+
+    @PutMapping(value = "/api/addPending", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity addPending(@RequestParam String groupId, @RequestParam String token) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserByToken(token);
+        if (user == null) throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        user.addGroup(groupId);
+        group.addPendingUser(user);
+
+        return repository.saveGroup(group);
+    }
+
+    @PutMapping(value = "/api/declinePending", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity declinePending(@RequestParam String groupId, @RequestParam String token) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserByToken(token);
+        if (user == null) throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+
+        user.removeGroup(groupId);
+        group.removePendingUser(user);
+        repository.saveUser(user);
+        return repository.saveGroup(group);
+    }
+
+    @DeleteMapping(value = "/api/removeUserFromGroup", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public GroupEntity removeUserFromGroup(@RequestParam String groupId, @RequestParam String token) {
+        GroupEntity group = repository.findGroupById(groupId);
+        UserEntity user = repository.findUserByToken(token);
+        if (user == null) throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
+        if (group == null) {
+            throw new GroupNotValidException();
+        }
+        user.removeGroup(groupId);
+        group.removeUser(user);
+        repository.saveUser(user);
+        return repository.saveGroup(group);
+    }
+
+    @GetMapping(value = "/api/findGroups/getUserGroups", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<GroupEntity> getUserGroups(@RequestParam String token) {
+        UserEntity user = repository.findUserByToken(token);
+        if (user == null) throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
+        List<GroupEntity> groups = new ArrayList<>();
+        List<String> userGroups = user.getUserGroups();
+        for (int i = 0; i < userGroups.size(); i++) {
+            GroupEntity group = repository.findGroupById(userGroups.get(i));
+            if (group != null) {
+                groups.add(group);
+            }
+        }
+        return groups;
     }
 }
