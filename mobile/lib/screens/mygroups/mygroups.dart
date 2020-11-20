@@ -6,9 +6,10 @@ import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/group_card.dart';
 import 'package:social_habit_app/components/my_sliver.dart';
 import 'package:social_habit_app/constants.dart';
-import 'package:social_habit_app/group.dart';
+
 import 'package:social_habit_app/screens/findgroup/group_card_page.dart';
 import 'package:social_habit_app/screens/mygroups/my_group_page.dart';
+import 'package:social_habit_app/screens/mygroups/user_list_holder.dart';
 
 class MyGroupsScreen extends StatefulWidget {
   MyGroupsScreen({Key key, this.title}) : super(key: key);
@@ -20,7 +21,7 @@ class MyGroupsScreen extends StatefulWidget {
   _MyGroupsScreen createState() => _MyGroupsScreen();
 }
 
-List<Group> testList = [];
+List<GroupEntity> testList = [];
 
 class _MyGroupsScreen extends State<MyGroupsScreen> {
   List<GroupEntity> groupList = [];
@@ -28,8 +29,8 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
   refreshGroups() async {
     setState(() {});
     groupList =
-        await APIRequests().getGroupList(UserSession().getUserentity.token);
-
+        await APIRequests().getUserGroups();
+    UserSession().getUserentity.userGroups = groupList;
     if (mounted) {
       setState(() {});
     }
@@ -74,17 +75,9 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
                     ),
                     SliverList(
                         delegate: SliverChildListDelegate(
-                            groupList.map((GroupEntity groupEnt) {
-                              print("ent "+groupEnt.members.toString());
-                      Group group = new Group(
-                          groupEnt.groupName,
-                          groupEnt.groupDescription,
-                          groupEnt.groupTgLink,
-                          groupEnt.groupCategory,
-                          List<String>.from(groupEnt.groupTags),
-                         List<String>.from(groupEnt.members),
-                          5,
-                          groupEnt.membersLimit,[]);
+                            groupList.map((GroupEntity group) {
+
+
                       //print("group"+group.toString());
                       return Container(
                           width: double.infinity,
@@ -96,6 +89,8 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
+                                      UserListHolder.pending = group.pendingUsers;
+                                      UserListHolder.members = group.members;
                                       return MyGroupPage(group: group);
                                     },
                                   ),
@@ -106,7 +101,7 @@ class _MyGroupsScreen extends State<MyGroupsScreen> {
                 : Container(
                     child: Center(
                         child: Text(
-                    "Loading...",
+                    "No groups here",
                     textAlign: TextAlign.center,
                   )))));
   }

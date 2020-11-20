@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
-import 'package:social_habit_app/group.dart';
+
 
 class GroupCard extends StatelessWidget {
-  final Group group;
+  final GroupEntity group;
   final Function function;
   const GroupCard({
     Key key,
@@ -31,7 +32,7 @@ class GroupCard extends StatelessWidget {
               children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   TagsHorizontalScroll(
-                    list: [group.category],
+                    list: [group.groupCategory],
                     tag: false,
                   ),
                   GroupCardNameAndAvatars(size: size, group: group),
@@ -84,7 +85,7 @@ class GroupCardNameAndAvatars extends StatelessWidget {
   }) : super(key: key);
 
   final Size size;
-  final Group group;
+  final GroupEntity group;
 
   @override
   Widget build(BuildContext context) {

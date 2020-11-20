@@ -145,7 +145,7 @@ class _FilterTab extends State<FilterTab> {
 
                       }
 
-                      doWeNeedToRefresh = true;
+                      FindGroupScreen.doWeNeedToRefresh = true;
 
                       Navigator.pushReplacementNamed(context, Constants.loginDone);
                     }),
@@ -203,7 +203,7 @@ class Search extends SearchDelegate {
                   UserSession().getUserentity.token, selectedResult);
             }
 
-            doWeNeedToRefresh = true;
+            FindGroupScreen.doWeNeedToRefresh = true;
 
             Navigator.pushReplacementNamed(context, Constants.loginDone);
           },

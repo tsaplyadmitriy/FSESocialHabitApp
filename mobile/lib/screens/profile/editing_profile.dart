@@ -190,9 +190,9 @@ class ProfileEditingSaveButton extends StatelessWidget {
           UserSession().getUserentity.description = profile.aboutMe;
 
 
-          await APIRequests().updateUserInfo(UserSession().getUserentity.token);
+          UserEntity newEnt = await APIRequests().updateUserInfo(UserSession().getUserentity.token);
+          print("newEnt "+newEnt.login.toString());
 
-          // TODO: integrate this with API
           // new avatar is in _image
 
           Navigator.pop(context, profile);

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/constants.dart';
 
 class TagsHorizontalScroll extends StatelessWidget {

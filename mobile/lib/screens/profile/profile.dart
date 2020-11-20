@@ -8,7 +8,7 @@ import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/constants.dart';
-import 'package:social_habit_app/group.dart';
+
 import 'package:social_habit_app/screens/profile/editing_profile.dart';
 
 class ProfileDataKeeper {

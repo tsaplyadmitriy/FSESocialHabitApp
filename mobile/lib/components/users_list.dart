@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:social_habit_app/api/api_requests.dart';
+import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/constants.dart';
-import 'package:social_habit_app/group.dart';
+import 'package:social_habit_app/screens/mygroups/user_list_holder.dart';
+
 
 class UserList extends StatefulWidget {
   const UserList({
@@ -13,19 +15,19 @@ class UserList extends StatefulWidget {
     @required  this.users
   }) : super(key: key);
 
-  final Group group;
+  final GroupEntity group;
   final bool copyTelegram;
   final String mode;
-  final List<String>users;
+  final List<UserEntity>users;
 
   @override
   _UserListState createState() => _UserListState(this.group, this.mode,this.users);
 }
 
 class _UserListState extends State<UserList> {
-  Group group;
+  GroupEntity group;
   String mode;
-  List<String> users;
+  List<UserEntity> users;
 
   _UserListState(this.group, this.mode,this.users) : super();
 
@@ -33,6 +35,17 @@ class _UserListState extends State<UserList> {
 
   @override
   Widget build(BuildContext context) {
+    if(mode=="new"){
+      users = UserListHolder.pending;
+    }
+    if(mode=="existing"||mode=="view"){
+
+      users = UserListHolder.members;
+    }
+    print("Namebuild:"+group.members.map((e) => e.login).toList().toString()+"/"
+        +group.pendingUsers.map((e) => e.login).toList().toString());
+
+
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
     Size size = MediaQuery.of(context).size; // h and w of
@@ -43,13 +56,14 @@ class _UserListState extends State<UserList> {
           children: [
             //Text("Users:"),
             Column(
-                children: users.map((String user) {
+                children: users.map((UserEntity user) {
 
+                  print("name:"+user.name+" "+UserSession().getUserentity.name);
               return GestureDetector(
                 onTap: () {
                   if (widget.copyTelegram) {
-                    Clipboard.setData(ClipboardData(text: user));
-                    showSnackBar(context, user);
+                    Clipboard.setData(ClipboardData(text: user.tgAlias));
+                    showSnackBar(context, user.tgAlias);
                   }
                 },
                 child: Card(
@@ -68,8 +82,8 @@ class _UserListState extends State<UserList> {
                             AvatarRound(size: size),
                             SizedBox(width: 5),
                             //TODO: pass admin here so user know who to write
-                            //user.admin? Text(user.name) : Text(user.name + " 👑"),
-                            Text(user)
+                            !(user.login==group.owner)? Text(user.name) : Text(user.name + " 👑"),
+                            //Text(user.name)
                           ],
                         ),
                         Row(children: [
@@ -77,40 +91,64 @@ class _UserListState extends State<UserList> {
                             visible: mode == "new",
                             child: IconButton(
                                 icon: new Icon(Icons.add_circle_outline),
-                                onPressed: () {
-                                  users.remove(user);
-                                  //TODO: API here
+                                onPressed: () async{
 
-                                  setState(() {});
-                                }),
+                                  String deleted = await _editUser(
+                                      context,
+                                      darkModeOn,
+                                      "Do you want to add user " +
+                                          user.name +
+                                          "?");
+                                  print(deleted);
+                                  if (deleted == "true") {
+
+
+                                  GroupEntity g = await APIRequests().addUser(user.token, group);
+                                 // group = g;
+                                  UserListHolder.members.add(user);
+                                  UserListHolder.pending.remove(user);
+
+
+                                  Navigator.pop(context);
+                                }}),
                           ),
                           Visibility(
                             visible: mode == "existing",
-                            child: IconButton(
+                            child: !(user.login==UserSession().getUserentity.login)?IconButton(
                                 icon: new Icon(Icons.remove_circle_outline),
                                 onPressed: () async {
                                   String deleted = await _editUser(
                                       context,
                                       darkModeOn,
                                       "Do you want to delete user " +
-                                          user +
+                                          user.name +
                                           "?");
                                   print(deleted);
                                   if (deleted == "true") {
-                                    users.remove(user);
-                                    //TODO: API here
-                                    setState(() {});
+                                    UserListHolder.members.remove(user);
+                                    await APIRequests().deleteUserFromGroup(user.token, group);
+                                    Navigator.pop(context);
                                   }
-                                }),
+                                }):SizedBox(height: 50,),
                           ),
                           Visibility(
                             visible: mode == "new",
                             child: IconButton(
                                 icon: new Icon(Icons.remove_circle_outline),
-                                onPressed: () {
+                                onPressed: () async{
+                                  String deleted = await _editUser(
+                                      context,
+                                      darkModeOn,
+                                      "Do you want to delete user " +
+                                          user.name +
+                                          "?");
+                                  print(deleted);
+                                  if (deleted == "true") {
+
                                   users.remove(user);
                                   //TODO: API here
                                   setState(() {});
+                                  }
                                 }),
                           ),
                         ])

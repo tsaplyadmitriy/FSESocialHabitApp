@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:social_habit_app/api/api_requests.dart';
+import 'package:social_habit_app/api/user_session.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/components/users_list.dart';
 import 'package:social_habit_app/constants.dart';
-import 'package:social_habit_app/group.dart';
+
 
 class GroupCardDialog extends StatelessWidget {
-  Group group;
+  GroupEntity group;
 
-  GroupCardDialog(Group group) {
+
+  GroupCardDialog(GroupEntity group) {
     this.group = group;
   }
 
@@ -53,7 +56,7 @@ class GroupCardDialog extends StatelessWidget {
             children: <Widget>[
               NameOfGroup(group: group),
               TagsHorizontalScroll(
-                list: [group.category],
+                list: [group.groupCategory],
                 tag: false,
               ),
               //SizedBox(height: size.height * 0.01),
@@ -66,13 +69,25 @@ class GroupCardDialog extends StatelessWidget {
                     mode: "view",
                     group: group,
                     copyTelegram: false,
+                    users: group.members
                   )),
               Container(
                   alignment: Alignment.bottomCenter,
                   child: RoundedButton(
-                    text: "Apply",
-                    press: () {
+                    text:( !group.members.map((e) => e.login).toList().contains(UserSession().getUserentity.login)
+                        &&!group.pendingUsers.map((e) => e.login).toList().contains(UserSession().getUserentity.login))?"Apply":"Go to group page",
+                    press: () async{
+
+                      if( !group.members.map((e) => e.login).toList().contains(UserSession().getUserentity.login)
+                          &&!group.pendingUsers.map((e) => e.login).toList().contains(UserSession().getUserentity.login)){
+                      GroupEntity updated = await APIRequests().addPendingUser(UserSession().getUserentity.token, group);
+                      print("updated"+updated.pendingUsers.toString());
                       Navigator.of(context).pop(true);
+
+                      }else{
+                        //TODO go to group page
+
+                      }
                     },
                     color: Constants.kPrimaryColor,
                   )
@@ -111,7 +126,7 @@ class GroupCardPagedescription extends StatelessWidget {
     @required this.group,
   }) : super(key: key);
 
-  final Group group;
+  final GroupEntity group;
 
   @override
   Widget build(BuildContext context) {
@@ -137,12 +152,12 @@ class GroupCardPage_preferences extends StatelessWidget {
     @required this.group,
   }) : super(key: key);
 
-  final Group group;
+  final GroupEntity group;
 
   @override
   Widget build(BuildContext context) {
     return TagsHorizontalScroll(
-      list: group.preferences,
+      list: group.groupTags,
       tag: true,
     );
   }
@@ -154,7 +169,7 @@ class NameOfGroup extends StatelessWidget {
     @required this.group,
   }) : super(key: key);
 
-  final Group group;
+  final GroupEntity group;
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,6 @@ import 'package:social_habit_app/components/rounded_input_field.dart';
 import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
 import 'package:social_habit_app/constants.dart';
-import 'package:social_habit_app/group.dart';
 import 'package:social_habit_app/screens/profile/profile.dart';
 
 import 'groupdata_keeper.dart';
@@ -27,19 +26,24 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
   ProfileData profile =
       new ProfileData.withtags("", "", "", ["item1", "item2"]);
   double sliderParticipants = 5;
-  Group newGroup = new Group("name", "description", "telega", "category",
-      ["pref1", "pref2"], [], 1, 7,[]);
+  GroupEntity newGroup =  GroupEntity(groupName: "name",groupDescription: "description",membersLimit: 7,members: [],
+  groupTags: [""],owner: UserSession().getUserentity.name,groupCategory: "category",id: "1",groupTgLink: "tg",challenges: [],pendingUsers: []);
+
+
   File _image = File("assets/images/inno_campus.png");
 
   @override
   Widget build(BuildContext context) {
-    newGroup.preferences = profile.tags;
+    newGroup.groupTags = profile.tags;
+    newGroup.memberNumber = 7;
+    newGroup.owner = UserSession().getUserentity.name;
 
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
     Size size = MediaQuery.of(context).size; // h and w of
 
-    return Container(
+    return Scaffold(
+        body:Container(
 
         child: Column(
 
@@ -79,7 +83,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                 icon: Icons.category,
                                 width: 0.9,
                                 onChanged: (category) {
-                                  newGroup.category = category;
+                                  newGroup.groupCategory = category;
                                 },
                               ),
                               RoundedInputField(
@@ -88,7 +92,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                 width: 0.9,
                                 maxCharacters: 30,
                                 onChanged: (telegram) {
-                                  newGroup.telegramLink = telegram;
+                                  newGroup.groupTgLink = telegram;
                                 },
                               ),
                               RoundedInputField(
@@ -121,14 +125,14 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                             inactiveColor: Theme.of(context)
                                                 .unselectedWidgetColor,
                                             divisions:
-                                                newGroup.maxParticipants - 2,
+                                                newGroup.membersLimit - 2,
                                             min: 2,
-                                            max: newGroup.maxParticipants
+                                            max: newGroup.membersLimit
                                                 .toDouble(),
                                             onChanged: (double value) {
                                               setState(() {
                                                 sliderParticipants = value;
-                                                newGroup.participants =
+                                                newGroup.memberNumber =
                                                     sliderParticipants.toInt();
                                               });
                                             },
@@ -151,7 +155,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   children:
-                                      newGroup.preferences.map((String tag) {
+                                      newGroup.groupTags.map((String tag) {
                                     return Container(
                                       margin: EdgeInsets.only(
                                         right: 5,
@@ -168,7 +172,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                         //label: Text("test"),
                                         onDeleted: () {
                                           setState(() {
-                                            newGroup.preferences.remove(tag);
+                                            newGroup.groupTags.remove(tag);
                                             //print(newGroup.preferences.length);
                                           });
                                         },
@@ -202,7 +206,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
                                         //print(newTag);
                                         setState(() {
                                           if (newTag != "" && newTag != null)
-                                            newGroup.preferences.add(newTag);
+                                            newGroup.groupTags.add(newTag);
                                         });
                                       },
                                     ),
@@ -237,7 +241,7 @@ class _CreateGroupScreen extends State<CreateGroupScreen> {
             GroupCreationSaveButton(groupData: newGroup),
             SizedBox(height: size.height * 0.01),
           ],
-        ));
+        )));
   }
 }
 
@@ -247,7 +251,7 @@ class GroupCreationSaveButton extends StatelessWidget {
     @required this.groupData,
   }) : super(key: key);
 
-  final Group groupData;
+  final GroupEntity groupData;
 
   @override
   Widget build(BuildContext context) {
@@ -261,17 +265,11 @@ class GroupCreationSaveButton extends StatelessWidget {
         widthModifier: 0.94,
         press: () async {
           UserEntity userEntity = UserSession().getUserentity;
-          GroupEntity groupEntity = await APIRequests().createUserGroup(
-              userEntity.token,
-              userEntity.login,
-              groupData.groupName,
-              groupData.groupDescription,
-              groupData.telegramLink,
-              groupData.maxParticipants,
-              groupData.preferences,
-              groupData.category,
-              []
-          );
+
+          print("login"+userEntity.login+" limit"+groupData.memberNumber.toString()+" name"+groupData.groupName);
+          APIRequests().createUserGroup(userEntity.token, userEntity.login, groupData.groupName, groupData.groupDescription,
+              groupData.groupTgLink, groupData.memberNumber, groupData.groupTags, groupData.groupCategory);
+
           //print(groupEntity.groupDescription);
           //print("new group id"+groupEntity.id);
           Navigator.pushReplacementNamed(context, Constants.loginDone);

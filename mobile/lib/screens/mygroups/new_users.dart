@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/components/users_list.dart';
-import 'package:social_habit_app/group.dart';
+
 
 
 
@@ -11,14 +11,14 @@ import 'package:social_habit_app/group.dart';
 
 class NewUsers extends StatefulWidget {
   NewUsers({Key key, this.group}) : super(key: key);
-  final Group group;
+  final GroupEntity group;
 
   @override
   _NewUsersState createState() => _NewUsersState(this.group);
 }
 
 class _NewUsersState extends State<NewUsers> {
-  Group group;
+  GroupEntity group;
   _NewUsersState(this.group) : super();
 
 
@@ -117,14 +117,14 @@ class _NewUsersState extends State<NewUsers> {
             mode: "new",
             group: group,
             copyTelegram: false,
-            users: group.pendingUsers,
+
           ),
           Text("Current users:"),
           UserList(
             mode: "existing",
             group: group,
             copyTelegram: false,
-            users: group.groupParticipants,
+
           ),
         ]),
       )),

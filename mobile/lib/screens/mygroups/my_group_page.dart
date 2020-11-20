@@ -9,11 +9,12 @@ import 'package:social_habit_app/components/smallButton.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
 import 'package:social_habit_app/components/users_list.dart';
-import 'package:social_habit_app/group.dart';
+
 import 'package:social_habit_app/screens/creategroup/creategroup.dart';
 import 'package:social_habit_app/screens/mygroups/challenge_card.dart';
 import 'package:social_habit_app/screens/mygroups/new_challenge.dart';
 import 'package:social_habit_app/screens/mygroups/new_users.dart';
+import 'package:social_habit_app/screens/mygroups/user_list_holder.dart';
 
 import 'list.dart';
 
@@ -31,7 +32,7 @@ class Challenge {
 }
 
 class MyGroupPage extends StatefulWidget {
-  final Group group;
+  final GroupEntity group;
 
   const MyGroupPage({Key key, this.group}) : super(key: key);
   @override
@@ -41,7 +42,7 @@ class MyGroupPage extends StatefulWidget {
 List<Challenge> challengeList = [];
 
 class _MyGroupPageState extends State<MyGroupPage> {
-  Group group;
+  GroupEntity group;
   bool admin = true;
 
   Challenge demoChallenge = new Challenge(7, "Dont smoke for a week", 5);
@@ -70,11 +71,11 @@ class _MyGroupPageState extends State<MyGroupPage> {
           child: Column(
             children: [
               TagsHorizontalScroll(
-                list: [group.category],
+                list: [group.groupCategory],
                 tag: false,
               ),
               TagsHorizontalScroll(
-                list: group.preferences,
+                list: group.groupTags,
                 tag: true,
               ),
               Visibility(
@@ -149,7 +150,7 @@ class _MyGroupPageState extends State<MyGroupPage> {
                 mode: "view",
                 group: group,
                 copyTelegram: true,
-                users: users.map((e) => e.name).toList(),
+                users: UserListHolder.members,
               ),
             ],
           ),

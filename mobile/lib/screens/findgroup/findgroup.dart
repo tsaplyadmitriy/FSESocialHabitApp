@@ -8,9 +8,10 @@ import 'package:social_habit_app/components/my_sliver.dart';
 import 'package:social_habit_app/components/tags_horizontal.dart';
 import 'package:social_habit_app/constants.dart';
 import 'package:social_habit_app/screens/findgroup/group_card_page.dart';
-import 'package:social_habit_app/group.dart';
+
 
 class FindGroupScreen extends StatefulWidget {
+  static bool doWeNeedToRefresh = true;
   FindGroupScreen({Key key, this.title}) : super(key: key);
 
   final String title;
@@ -22,19 +23,21 @@ class FindGroupScreen extends StatefulWidget {
   }
 }
 
-List<Group> testList = [];
+List<GroupEntity> testList = [];
 List<GroupEntity> groupList = [];
-bool doWeNeedToRefresh = false;
+
 
 class FindGroupStateScreen extends State<FindGroupScreen> {
   @override
   void initState() {
     print("INIT");
     super.initState();
-    if (doWeNeedToRefresh == false) {
+    print(FindGroupScreen.doWeNeedToRefresh);
+    if (FindGroupScreen.doWeNeedToRefresh == true) {
+      print("ch");
       refreshGroups();
     } else {
-      doWeNeedToRefresh = false;
+      FindGroupScreen.doWeNeedToRefresh = false;
     }
   }
 
@@ -55,17 +58,6 @@ class FindGroupStateScreen extends State<FindGroupScreen> {
     testList.clear();
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
-    for (int i = 0; i < 10; i++) {
-      testList.add(new Group(
-          "Group # " + i.toString(),
-          "Description of this particular group, in this textfield some large text should be produced, but i don't know what to write, so I will just write some words that have no sense on general and in particular.",
-          "telega",
-          "smoking",
-          ["IT", "hashtag", "not_a_hashtag"],
-          [],
-          3,
-          7,[]));
-    }
 
     return Container(
 
@@ -86,16 +78,8 @@ class FindGroupStateScreen extends State<FindGroupScreen> {
                   ),
                   SliverList(
                       delegate: SliverChildListDelegate(
-                          groupList.map((GroupEntity groupEnt) {
-                    Group group = new Group(
-                        groupEnt.groupName,
-                        groupEnt.groupDescription,
-                        groupEnt.groupTgLink,
-                        groupEnt.groupCategory,
-                        List<String>.from(groupEnt.groupTags),
-                        groupEnt.members,
-                        5,
-                        groupEnt.membersLimit,[]);
+                          groupList.map((GroupEntity group) {
+
                     return Container(
                         padding: EdgeInsets.only(top: 5),
                         width: double.infinity,
