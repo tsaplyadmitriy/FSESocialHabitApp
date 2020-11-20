@@ -39,6 +39,12 @@ public class UserEntity {
         this.description = description;
     }
 
+    public void updateProfileInfo(String name, String description, String tgAlias, List<String> tags) {
+        if (name != null) this.name = name;
+        if (description != null) this.description = description;
+        if (tgAlias != null) this.tgAlias = tgAlias;
+        if (tags != null) this.tags = tags;
+    }
     public void addGroup(String groupId) {
         if (!userGroups.contains(groupId)) {
             userGroups.add(groupId);

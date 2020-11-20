@@ -162,7 +162,7 @@ public class GroupsController {
         user.addGroup(groupId);
         group.addMember(user);
         repository.saveUser(user);
-        
+
         return repository.saveGroup(group);
     }
 

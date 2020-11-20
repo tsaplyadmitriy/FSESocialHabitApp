@@ -52,12 +52,15 @@ public class LoginUserEntityController {
     }
 
     @PutMapping(value = "/api/updateUser", produces = {MediaType.APPLICATION_JSON_VALUE})
-    EntityModel<UserEntity> updateUser(@RequestBody UserEntity user) {
-        UserEntity oldUser = repository.findUserByToken(user.getToken());
+    EntityModel<UserEntity> updateUser(@RequestParam String token, @RequestParam String name,
+                                       @RequestParam String description, @RequestParam String tgAlias,
+                                       @RequestParam List<String> tags) {
+
+        UserEntity oldUser = repository.findUserByToken(token);
         if (oldUser == null) {
             throw new TokenNotFoundException(new LoginResponse(1, null, "User not found!"));
         }
-        oldUser = user;
+        oldUser.updateProfileInfo(name, description, tgAlias, tags);
         List<String> userGroups = oldUser.getUserGroups();
         for (int i = 0; i < userGroups.size(); i++) {
             GroupEntity group = repository.findGroupById(userGroups.get(i));
