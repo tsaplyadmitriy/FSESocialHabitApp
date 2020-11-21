@@ -270,7 +270,7 @@ class EasterEggDialog extends StatelessWidget {
               DeveloperCard(
                   name: "Ehsan Shagaei",
                   imagePath: "assets/easteregg/ehsan.png",
-                  description: "@EhsanSH2754",
+                  description: "Back-end",
                   telegram: "@EhsanSH2754"),
               DeveloperCard(
                   name: "Evgeny Panov",
