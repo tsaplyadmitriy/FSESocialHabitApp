@@ -402,6 +402,21 @@ class APIRequests{
   }
 
 
+  Future<ChallengeEntity> addChallenge(GroupEntity groupEntity,String challengeName,String challengeDescription) async {
+    var url = Constants.apiLink+"/api/addChallenge";
+
+
+    var response = await http.put(url, headers:{HttpHeaders.authorizationHeader : UserSession().getUserentity.token}
+        ,body:{'groupId':groupEntity.id.toString(),'challengeName':challengeName,'challengeDescription':challengeDescription});
+
+    final responseJson = jsonDecode(response.body);
+    print(responseJson.toString());
+
+    return ChallengeEntity.fromJson(responseJson);
+
+  }
+
+
 
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_habit_app/api/api_requests.dart';
 import 'package:social_habit_app/components/rounded_button.dart';
 import 'package:social_habit_app/components/rounded_input_field.dart';
 import 'package:social_habit_app/components/text_field_container.dart';
@@ -6,17 +7,19 @@ import 'package:social_habit_app/screens/mygroups/my_group_page.dart';
 
 class NewChallengeScreen extends StatefulWidget {
   final int participants;
+  final GroupEntity group;
 
-  const NewChallengeScreen({Key key, this.participants}) : super(key: key);
+  const NewChallengeScreen({Key key, this.participants,this.group}) : super(key: key);
   @override
   _NewChallengeScreenState createState() =>
-      _NewChallengeScreenState(this.participants);
+      _NewChallengeScreenState(this.participants,this.group);
 }
 
 class _NewChallengeScreenState extends State<NewChallengeScreen> {
   double sliderGoal = 5;
   int participants;
-  _NewChallengeScreenState(this.participants) : super();
+  GroupEntity groupEntity;
+  _NewChallengeScreenState(this.participants,this.groupEntity) : super();
   //int participants = 0;
   Challenge newChallenge = new Challenge(5, "placeholder", 1);
 
@@ -102,8 +105,10 @@ class _NewChallengeScreenState extends State<NewChallengeScreen> {
                             ),
                             RoundedButton(
                                 text: "Save",
-                                press: () {
+                                press: () async{
                                   print(newChallenge.name);
+
+                                  await APIRequests().addChallenge(groupEntity, newChallenge.name, newChallenge.name);
                                   Navigator.pop(context, newChallenge);
                                 })
                           ]),

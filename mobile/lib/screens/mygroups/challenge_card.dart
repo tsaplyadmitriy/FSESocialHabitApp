@@ -98,6 +98,10 @@ class _ChallengeCardState extends State<ChallengeCard> {
                       ),
                       child: Text("Success for today"),
                       onPressed: () {
+
+
+
+
                         setState(() {
                           if (demoChallenge.currentProgress[0] <
                               demoChallenge.goal)
